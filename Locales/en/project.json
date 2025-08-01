@@ -1,0 +1,86 @@
+{
+    "title": {
+        "Works": "← Works"
+    },
+
+    "card": {
+        "Directions": "Type",
+        "Project": "Project",
+        "Type": "Industry",
+        "Year": "Year",
+        "Live": "Live",
+        "Information": "Information",
+        "Live Text": "Website",
+        "Goal": "Goal",
+        "Tasks": "Tasks",
+        "Problems": "Problems"
+    },
+
+    "clowi": {
+        "Directions Text": "Website, App",
+        "Information Text": "Is an intuitive web service created for designers and developers who want to easily work with colors, text and images. The main focus of the service is convenient tools for selecting, generating and managing palettes, gradients and individual colors, as well as additional functions for text and photos.",
+        "Goal Text": "The main goal of this web service is to create a convenient, functional and visually understandable tool for specialists working with color and text: web developers, UI/UX designers, layout designers. The service should combine several key functions in one application. The main emphasis in the project is on practicality, ease of use and adaptation to different devices.",
+        "Tasks Text 1": "Studying the needs of the target audience and analyzing existing solutions",
+        "Tasks Text 2": "Defining a set of functions and their implementation on individual pages",
+        "Tasks Text 3": "User interface design",
+        "Tasks Text 4": "Selecting and configuring the technology stack",
+        "Tasks Text 5": "Realization of functional pages of the application",
+        "Tasks Text 6": "Testing, adaptation and publication",
+        "Tasks Text 7": "Ensuring scalability",
+        "Problems Text": "During the development of the service, the main problems were maintaining a uniform visual style between functionally different pages, choosing a neutral but expressive color scheme, and ensuring simple and logical user interaction with the interface. Solving these problems required a number of iterations, constant testing and adjustments."
+    },
+
+    "ecolink": {
+        "Directions Text": "Website, Branding",
+        "Information Text": "Is an innovative brand specializing in high quality wind turbines and systems for renewable energy generation. Our goal is to provide reliable and efficient solutions for converting wind energy into clean electricity, contributing to the transition to a sustainable and environmentally friendly future.",
+        "Goal Text": "Develop a modern, technologically advanced and trustworthy website for a wind turbine manufacturing company that emphasizes product innovation, brand sustainability and attracts potential partners, investors and customers.",
+        "Tasks Text 1": "Create a visual style that reflects the connection between technology and ecology",
+        "Tasks Text 2": "Design simple and logical navigation for different audiences: from equipment buyers to B2B partners",
+        "Tasks Text 3": "Increase trust through design",
+        "Problems Text": "Difficulty in presenting technical information. It was necessary to translate dry engineering data into an accessible, visually pleasing presentation. It was necessary to maintain a balance between corporate identity and eco-friendly aesthetics."
+    },
+
+    "dlaife": {
+        "Directions Text": "Website",
+        "Information Text": "An online platform connecting talented artists and art connoisseurs. The project is a stylish, minimalist site for buying original paintings, posters and art objects. The main task of the design is to emphasize the visual content without overloading the interface with unnecessary details.",
+        "Goal Text": "Create a stylish and intuitive e-commerce website for an online platform selling original paintings, posters and art objects from contemporary artists. The main task is to emphasize the value of visual content and make the buying process as easy and pleasant as possible.",
+        "Tasks Text 1": "Develop a minimalistic visual style where art is the center of attention",
+        "Tasks Text 2": "Design an easy and logical user journey from inspiration to purchase",
+        "Tasks Text 3": "Integrate filters by style, color, format, author for easy search",
+        "Problems Text 1": "One of the key tasks was to overcome visual overload. Art requires «air», so the design had to be organized in such a way that it did not distract from the works themselves, but only emphasized them.",
+        "Problems Text 2": "The diversity of content was also a challenge: the paintings differed in style, format, color and image quality. It was necessary to create a unified presentation system that visually unifies all the objects and makes them equal in the catalog.",
+        "Problems Text 3": "In addition, it was important to get away from the feeling of a simple showcase. The site had to not just sell, but evoke an emotional response, create an atmosphere and show art as part of personal space and lifestyle."
+    },
+
+    "coltsadeus": {
+        "Directions Text": "Website",
+        "Information Text": "A modern online store of designer jewelry for those who choose style, originality and expressiveness in details. The project combines visual elegance, a thoughtful user journey and an easy, intuitive interface.",
+        "Goal Text": "To create an aesthetically pleasing, modern online store for designer costume jewelry that emphasizes the uniqueness of the pieces, reinforces brand recognition, and provides a simple and inspiring user experience.",
+        "Tasks Text 1": "Develop a visual style that reflects the character of jewelry — emphasis on details, textures and individuality",
+        "Tasks Text 2": "Create a convenient catalog structure with filters by collections, materials and colors",
+        "Tasks Text 3": "Design product cards with large photos, descriptions, zooming and selection of related products",
+        "Problems Text 1": "One of the tasks was to maintain visual balance: costume jewelry requires accents, but the site should not seem overloaded. We had to build a clean and elegant composition, in which the products look spectacular, and the interface remains light and does not interfere with perception.",
+        "Problems Text 2": "It was also necessary to take into account the diversity of the assortment — the collections differed in style, aesthetics and target audience. It was necessary to create a universal yet expressive visual language that works equally well across the entire range.",
+        "Problems Text 3": "Finally, it was important to get away from the feel of a generic online store. The project had to convey the mood of the brand and evoke emotions — so that the purchase would be perceived as an inspiring experience, not just a transaction."
+    },
+
+    "nataliaShpedt(portfolio)": {
+        "Directions Text": "Website",
+        "Information Text": "A minimalistic portfolio website designed to present interior projects in a visually clean and expressive format. The interface emphasizes the aesthetics of the work: the focus on images, concise typography and well-considered structure allow for the most effective presentation of the designer’s style and approach.",
+        "Goal Text": "Create a personal portfolio website that not only showcases the interior designer’s projects, but also forms a strong professional impression, emphasizes individual style and helps to attract new clients and partners.",
+        "Tasks Text 1": "Develop a visually restrained yet expressive design that emphasizes photographs of interiors",
+        "Tasks Text 2": "Build the emotional and visual rhythm of the site — so that the user feels the aesthetics and confidence in the specialist’s approach",
+        "Problems Text 1": "One of the tasks was to create an interface that does not argue with the designer’s work, but emphasizes it. It was necessary to keep the visual environment clean and neutral while keeping the content highly expressive.",
+        "Problems Text 2": "Finally, it was important to convey not just a portfolio, but a sense of a personal brand — a style of thinking, neatness, taste. The site had to give the impression of thoughtfulness and trust even before the first contact with the designer."
+    },
+
+    "arturio": {
+        "Directions Text": "Website",
+        "Information Text 1": "A modern art space that brings together exhibitions, events and the creative community.",
+        "Information Text 2": "The project website reflects the spirit of minimalism and freedom: a clean interface, emphasis on visual content and easy navigation allow the user to focus on art. The design emphasizes the atmosphere of the space and makes interaction with the platform intuitive and enjoyable.",
+        "Goal Text": "To create a visually expressive and technologically simple website for a modern art space — a platform that brings together exhibitions, events, artists and creative audiences. The main task is to convey the atmosphere of the space and make interaction with the site intuitive.",
+        "Tasks Text 1": "Develop a stylish and minimalistic visual language that does not compete with art content, but emphasizes it",
+        "Tasks Text 2": "Create emotional engagement through visual storytelling, photo and multimedia materials",
+        "Problems Text": "One of the challenges was the balance between minimalism and expressiveness. It was necessary to create a clean interface that does not visually interfere with the perception of art, but at the same time preserves the character and atmosphere of the space."
+    }
+}
