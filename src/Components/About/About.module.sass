@@ -1,0 +1,43 @@
+@use '../styles/variables' as vars
+@use '../Styles/_mixin.adaptive' as m
+    
+.about
+    padding-top: 110px
+    margin-bottom: 220px
+    @include m.respond(mobile)
+        width: 100%
+        padding-top: 240px
+
+.title
+    @include m.respond(mobile)
+        margin-bottom: 35px
+
+.mainContainer
+    width: 28%
+    @include m.respond(laptop_m)
+        width: 35%
+    @include m.respond(tablet)
+        width: 45%
+    @include m.respond(mobile)
+        width: 100%
+
+.h2
+    position: absolute
+    left: 1.5%
+    font-family: "Inter-ExtraBold"
+    width: 100px
+    // word-break: break-word
+    @include m.respond(laptop)
+        position: static
+        left: auto
+        margin-bottom: 12px
+        width: 100%
+
+.h3Info
+    font-family: "Inter-ExtraBold"
+
+.downloadLink
+    text-decoration: underline
+
+.img
+    width: 100%

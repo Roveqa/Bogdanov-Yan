@@ -1,0 +1,22 @@
+{
+    "title": {
+        "h1": "Hi, I'm Yan Bogdanov — a UI/UX designer & web developer.",
+        "work": "Work"
+    },
+
+    "text": {
+        "mainText1": "I collaborate with visionary startups, ambitious entrepreneurs, and creative teams to transform raw ideas into polished, high-performing digital products. From early-stage concepts and wireframes to full-scale websites and complex interfaces — i bring clarity, usability, and visual elegance to every step of the product journey.",
+        "mainText2": "With a unique blend of design thinking, user psychology, and technical execution, i bridge the gap between aesthetics and functionality. I don’t just make things look good — i make them work beautifully. Every interface i design is guided by empathy, crafted for real-world use, and engineered to perform smoothly across devices.",
+        "mainText3": "Whether you’re launching a brand-new product, revamping a legacy system, or optimizing your user flow for conversions — i’ll help you create a digital experience that feels effortless, intuitive, and purpose-driven.",
+        "mainText4": "My work is grounded in collaboration, built on modern technologies, and fueled by a passion for solving real problems with elegant digital design. Let’s work together to turn your vision into something users not only understand — but genuinely enjoy.",
+        "workText1": "Is an intuitive web service created for designers and developers who want to easily work with colors, text and images. The main focus of the service is convenient tools for selecting, generating and managing palettes, gradients and individual colors, as well as additional functions for text and photos.",
+        "workText2": "Is an innovative brand specializing in high quality wind turbines and systems for renewable energy generation. Our goal is to provide reliable and efficient solutions for converting wind energy into clean electricity, contributing to the transition to a sustainable and environmentally friendly future.",
+        "workText3": "An online platform connecting talented artists and art connoisseurs. The project is a stylish, minimalist site for buying original paintings, posters and art objects. The main task of the design is to emphasize the visual content without overloading the interface with unnecessary details.",
+        "workText4": "A modern online store of designer jewelry for those who choose style, originality and expressiveness in details. The project combines visual elegance, a thoughtful user journey and an easy, intuitive interface."
+    },
+
+    "button": {
+        "scroll": "Scroll ↓",
+        "seeCase": "See case →"
+    }
+}

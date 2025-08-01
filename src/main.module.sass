@@ -1,0 +1,271 @@
+@use './Components/Styles/_variables.sass' as vars
+// @use './Components/Styles/mixin_adaptive.sass' as include
+// @use './Components/Styles/_mixin.adaptive'
+@use './Components/Styles/_mixin.adaptive' as m
+
+
+// Reset
+
+*, *:before, *:after
+  box-sizing: border-box
+
+html, body, div, span, object, iframe, figure, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, code, em, img, small, strike, strong, sub, sup, tt, b, u, i, ol, ul, li, fieldset, form, label, table, caption, tbody, tfoot, thead, tr, th, td, main, canvas, embed, footer, header, nav, section, video
+  margin: 0
+  padding: 0
+  border: 0
+  font-size: 100%
+  font: inherit
+  vertical-align: baseline
+  text-rendering: optimizeLegibility
+  -webkit-font-smoothing: antialiased
+  text-size-adjust: none
+
+footer, header, nav, section, main
+  display: block
+
+button 
+  all: unset
+
+input
+  all: unset
+
+select
+  all: unset
+
+textarea
+    all: unset
+
+body
+  line-height: 1
+
+ol, ul
+  list-style: none
+
+blockquote, q
+  quotes: none
+
+blockquote:before, blockquote:after, q:before, q:after
+  content: ''
+  content: none
+
+table
+  border-collapse: collapse
+  border-spacing: 0
+
+input
+  -webkit-appearance: none
+  border-radius: 0
+
+
+
+// Colors
+
+// $white: #FBFBFB
+// $black: #000000
+// $grey-border: #ADADAD
+// $grey-text: #464646
+// $grey-line: #606060
+// $light-grey-text: #7A7A7A
+// $pink: #F360B9
+
+
+
+// Fonts
+
+@font-face 
+    font-family: "Inter-Regular"
+    src: url('./assets/Fonts/Inter-Regular.woff2') format("woff")
+
+@font-face 
+    font-family: "Inter-Medium"
+    src: url('./assets/Fonts/Inter-Medium.woff2') format("woff")
+
+@font-face 
+    font-family: "Inter-SemiBold"
+    src: url('./assets/Fonts/Inter-SemiBold.woff2') format("woff")
+
+@font-face 
+    font-family: "Inter-Bold"
+    src: url('./assets/Fonts/Inter-Bold.woff2') format("woff") 
+
+@font-face 
+    font-family: "Inter-ExtraBold"
+    src: url('./assets/Fonts/Inter-ExtraBold.woff2') format("woff") 
+
+@font-face 
+    font-family: "Inter-ExtraBoldItalic"
+    src: url('./assets/Fonts/Inter-ExtraBoldItalic.woff2') format("woff")
+
+@font-face 
+    font-family: "Inter-Black"
+    src: url('./assets/Fonts/Inter-Black.woff2') format("woff") 
+
+
+h1 
+    font-family: "Inter-Black"
+    font-size: 18px
+    line-height: 105%
+    letter-spacing: -0.04em
+    color: vars.$black
+
+h2
+    font-family: "Inter-ExtraBold"
+    font-size: 17px
+    line-height: 100%
+    letter-spacing: -0.04em
+    color: vars.$black
+
+h3
+    font-family: "Inter-ExtraBold"
+    font-size: 16px
+    line-height: 100%
+    letter-spacing: -0.04em
+    color: vars.$black
+
+p
+    font-family: "Inter-Bold"
+    font-size: 16px
+    line-height: 105%
+    letter-spacing: -0.04em
+    color: vars.$black
+
+    &:not(:last-child)
+        margin-bottom: 12px
+
+ul
+    padding-left: 20px
+
+li
+    font-family: "Inter-Bold"
+    font-size: 16px
+    line-height: 105%
+    letter-spacing: -0.04em
+    color: vars.$black
+    list-style-type: disc
+
+.link
+    font-family: "Inter-ExtraBold"
+    font-size: 16px
+    line-height: 100%
+    letter-spacing: -0.04em
+    text-decoration: none
+    color: vars.$black
+    cursor: pointer
+    display: inline-block
+
+.titleLink
+    text-decoration: none
+
+
+
+// Margin
+
+.margin_4px
+    margin-bottom: 4px
+
+.margin_5px
+    margin-bottom: 5px
+
+.margin_6px
+    margin-bottom: 6px
+
+.margin_8px
+    margin-bottom: 8px
+
+.margin_10px
+    margin-bottom: 10px
+
+.margin_12px
+    margin-bottom: 12px
+
+.margin_14px
+    margin-bottom: 14px
+
+.margin_20px
+    margin-bottom: 20px
+
+.margin_25px
+    margin-bottom: 25px
+
+.margin_30px
+    margin-bottom: 30px
+
+.margin_35px
+    margin-bottom: 35px
+
+.margin_40px
+    margin-bottom: 40px
+
+.margin_50px
+    margin-bottom: 50px
+
+.margin_60px
+    margin-bottom: 60px
+
+.margin_90px
+    margin-bottom: 90px
+
+.margin_110px
+    margin-bottom: 110px
+
+.margin_120px
+    margin-bottom: 120px
+
+.margin_200px
+    margin-bottom: 200px
+
+.margin_300px
+    margin-bottom: 300px
+
+
+
+// General
+
+// html
+//     scroll-behavior: smooth
+
+body
+    margin: 0 9.4%
+    background: vars.$white
+    @include m.respond(laptop)
+        margin: 0 5%
+    @include m.respond(mobile)
+        margin: 0 2.6%
+    &::-webkit-scrollbar
+        display: none
+
+.border 
+    border: .3px solid vars.$grey-border
+
+input
+    width: 100%
+    border-bottom: 1px solid vars.$black
+    padding: 5px 0
+    color: vars.$light-grey-text
+    font-family: "Inter-Medium"
+    font-size: 14px
+
+select
+    width: 100%
+    border-bottom: 1px solid vars.$black
+    padding: 5px 0
+    color: vars.$light-grey-text
+    font-family: "Inter-Medium"
+    font-size: 14px
+
+textarea
+    width: 327px
+    border: 1px solid vars.$black
+    padding: 6px 2.3%
+    min-height: 190px
+    max-height: 300px
+    color: vars.$light-grey-text
+    font-family: "Inter-Medium"
+    font-size: 14px
+    white-space: pre-wrap
+    word-wrap: break-word
+
+hr
+    background: vars.$grey-line
+    height: 1px
+    margin: 0

@@ -1,0 +1,22 @@
+@use '../styles/variables' as vars
+@use '../Styles/_mixin.adaptive' as m
+    
+.PrivacyPolicy
+    padding-top: 110px
+    margin-bottom: 220px
+    @include m.respond(mobile)
+        width: 100%
+        padding-top: 240px
+
+.title
+    @include m.respond(mobile)
+        margin-bottom: 35px
+
+.mainContainer
+    width: 28%
+    @include m.respond(laptop_m)
+        width: 35%
+    @include m.respond(tablet)
+        width: 45%
+    @include m.respond(mobile)
+        width: 100%

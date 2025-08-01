@@ -1,0 +1,30 @@
+{
+    "title": {
+        "h2": "Контакты",
+        "h2Social": "Социальные сети",
+        "h2General": "Общие вопросы",
+        "h2Form": "Напишите мне"
+    },
+
+    "text": {
+        "All Rights Reserved": "Все права защищены",
+        "Privacy policy,": "Политика конфиденциальности,",
+        "Cookie Policy": "Политика cookie",
+        "agree to the": "согласен с",
+        "Privacy policy": "Политикой конфиденциальности"
+    },
+
+    "form": {
+        "placeholders": {
+            "name": "Введите ваше имя*",
+            "email": "Введите ваш Email*",
+            "service": "Выберите услугу*",
+            "budget": "Ожидаемый бюджет",
+            "message": "Сообщение"
+        }
+    },
+
+    "button": {
+        "Send message": "Отправить →"
+    }
+}

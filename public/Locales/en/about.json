@@ -1,0 +1,49 @@
+{
+    "title": {
+        "h1": "About me",
+        "Personal information": "Personal information",
+        "Experience": "Experience",
+        "Hard skills": "Hard skills",
+        "Soft skills": "Soft skills",
+        "Technology stack": "Technology stack",
+        "CV": "CV",
+
+        "EX name 1": "maryco",
+        "EX name 2": "Freelance",
+        "EX date 1": "2024 — Present",
+        "EX date 2": "2022 — Present"
+    },
+
+    "text": {
+        "PI 1": "I work with visionary startups, ambitious entrepreneurs and creative teams to turn raw ideas into thoughtful, effective and aesthetically pleasing digital products. From initial sketches and user scenarios to a full-blown visual system and interface, I help bring structure, logic and visual clarity at every stage.",
+        "PI 2": "It’s important to me to not just create beautiful — I strive to make useful things. Using a combination of design thinking, user psychology, and technical precision, I find a balance between aesthetics and functionality. Every interface I work on is created with empathy, tested in practice, and optimized for all devices and usage scenarios.",
+        "PI 3": "I’m constantly evolving — studying user behavior, learning new tools, tracking trends, and deepening my understanding of the businesses I work with. This allows me to stay agile, relevant and bring real value to teams and projects.",
+        "PI 4": "Whether you’re launching a new product, relaunching an old one, or looking to improve the user journey, I’ll help you create a digital experience that works easily, feels logical, and gets results.",
+        "PI 5": "My work is not a flow of tasks, but a partnership. Based on transparency, modern technology and a genuine interest in solving real problems with smart, simple and beautiful design.",
+    
+        "EX maryco 1": "I participate in digital product development as part of a studio team, where I am responsible for creating lendings, multi-page websites, redesigning existing platforms and developing concepts for new projects.",
+        "EX maryco 2": "My main tools are Figma, Tilda and manual code integration (HTML, CSS, JS) to find a balance between visual idea and technical realization. I also create guidelines and UI-kits that simplify further development and ensure consistency of interfaces.",
+        "EX maryco 3": "Within projects, I often take part in product decisions, build user scenarios and look for result-oriented visual solutions.",
+        
+        "EX Freelance 1": "Over the past few years I’ve been working as a freelance UX/UI designer, helping both businesses and private clients launch and develop digital products. In freelancing, I’ve not only pumped flexibility and responsibility, but also gained hands-on experience in a wide variety of task formats:",
+        "EX Freelance li 1": "Creating lendings for product and service launches",
+        "EX Freelance li 2": "Designed adaptive interfaces",
+        "EX Freelance li 3": "Developed visual concepts and prototypes",
+        "EX Freelance li 4": "Design presentations",
+        "EX Freelance li 5": "Created infographics",
+        "EX Freelance li 6": "Worked with the Tilda platform, as well as with React/HTML/CSS layout",
+        "EX Freelance li 7": "Interacted directly with clients and participated in briefings",
+
+        "HS 1": "Proficient in Figma — from UX prototypes to system UI design. Deep understanding of user experience, adaptive grid and visual hierarchy principles.",
+        "HS 2": "I create websites on Tilda, Webflow and Framer, including customizing animations, adapting blocks, as well as integrating code into the project. I am proficient in HTML, CSS and basic React, which allows me to take into account technical details at the design stage and make layouts ready for development.",
+        "HS 3": "Additionally, I set up basic SEO optimization: proper titles, readable URLs, meta tags, alt-texts, and page structure so that sites not only look good but are indexed effectively.",
+    
+        "SS 1": "In my work I value dialog, flexibility and the ability to understand the essence of the task. I can listen, ask the right questions and translate business goals into visual solutions.",
+        "SS 2": "I work in a structured way, respect deadlines and can independently build a process from the brief to the final result. Easily fit into a team, understand how to speak the same language with developers, managers and customers.",
+        "SS 3": "I am always open to feedback, learn new things with interest and try to grow from project to project. For me it is important not only «what» to do, but also «how» — with attention to details, the user and the overall goal."
+    },
+
+    "button": {
+        "Download": "Download"
+    }
+}

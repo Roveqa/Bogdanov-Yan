@@ -1,0 +1,144 @@
+// @import "../../main.module.sass";
+@use '../styles/variables' as vars
+@use '../Styles/_mixin.adaptive' as m
+
+    
+header
+    position: fixed
+    top: 18px
+    left: 50%
+    transform: translateX(-50%)
+    z-index: 100
+    width: 97%
+    height: 22px
+    mix-blend-mode: difference
+    display: flex
+    justify-content: space-between
+    align-content: flex-start
+    @include m.respond(mobile)
+        // display: none
+        width: 95%
+        mix-blend-mode: normal
+        top: 16px
+        
+
+.logo
+    width: 100px
+    fill: vars.$white
+    @include m.respond(mobile)
+        fill: vars.$black
+
+.bmButton
+    display: none
+    @include m.respond(mobile)
+        display: block
+        position: fixed
+        top: 0
+        right: 0
+        z-index: 110
+        width: 30px
+        height: 30px
+        background: vars.$black
+
+.buttonActive
+    border-radius: 100px
+
+nav 
+    display: flex
+    gap: 6px
+    @include m.respond(mobile)
+        flex-direction: column
+        align-items: flex-start
+        gap: 14px
+
+
+.link
+    position: relative
+    z-index: 10
+    font-family: "Inter-Bold"
+    font-size: 18px
+    line-height: 105%
+    letter-spacing: -0.04em
+    color: vars.$white
+    text-decoration: none
+    &:hover
+        text-decoration: underline
+    @include m.respond(mobile)
+        color: vars.$black
+        font-size: 24px
+        font-family: "Inter-Black"
+
+.activeLink
+    text-decoration: underline
+
+.bm
+    @include m.respond(mobile)
+        position: absolute
+        z-index: 105
+        top: -16px
+        right: -100%
+        isolation: isolate
+        height: 100vh
+        width: 80%
+        background: vars.$white
+        mix-blend-mode: normal
+        display: flex
+        align-items: center
+        justify-content: center
+        border-left: 1px solid vars.$grey-border
+        transition: transform 0s linear 
+
+.bm.active
+    transform: translateX(-122%)
+
+
+.localeStatus
+    position: absolute
+    top: 0
+    right: 0
+    height: 100vh  
+    display: flex
+    align-items: end
+    @include m.respond(mobile)
+        transform: translateX(-15%)
+
+.content
+    display: flex
+    align-items: flex-end
+    flex-direction: column
+    gap: 10px
+    margin-bottom: 30px
+    @include m.respond(mobile)
+        margin-bottom: 15px
+
+.languageWrapper
+    display: flex
+
+.localeStatus p 
+    margin-bottom: 0
+
+.language
+    color: vars.$white
+    font-family: "Inter-Bold"
+    font-size: 16px
+    line-height: 105%
+    letter-spacing: -0.04em
+    cursor: pointer
+    @include m.respond(mobile)
+        color: vars.$black
+        font-size: 18px
+    &.active
+        text-decoration: underline
+
+.languageLine
+    color: vars.$white
+    font-family: "Inter-Bold"
+    font-size: 16px
+    line-height: 105%
+    letter-spacing: -0.04em
+    @include m.respond(mobile)
+        color: vars.$black
+        font-size: 18px
+
+.time
+    color: vars.$light-grey-text

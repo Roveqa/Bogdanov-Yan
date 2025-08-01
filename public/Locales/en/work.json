@@ -1,0 +1,43 @@
+{
+    "card": {
+        "Directions": "Type",
+        "Project": "Project",
+        "Type": "Industry",
+        "Year": "Year",
+        "Case": "Case",
+        "Information": "Information",
+        "Case Text": "See more →"
+    },
+
+
+    "clowi": {
+        "Directions Text": "Website, App",
+        "Information Text": "Is an intuitive web service created for designers and developers who want to easily work with colors, text and images. The main focus of the service is convenient tools for selecting, generating and managing palettes, gradients and individual colors, as well as additional functions for text and photos."
+    },
+
+    "ecolink": {
+        "Directions Text": "Website, Branding",
+        "Information Text": "Is an innovative brand specializing in high quality wind turbines and systems for renewable energy generation. Our goal is to provide reliable and efficient solutions for converting wind energy into clean electricity, contributing to the transition to a sustainable and environmentally friendly future."
+    },
+
+    "dlaife": {
+        "Directions Text": "Website",
+        "Information Text": "An online platform connecting talented artists and art connoisseurs. The project is a stylish, minimalist site for buying original paintings, posters and art objects. The main task of the design is to emphasize the visual content without overloading the interface with unnecessary details."
+    },
+
+    "coltsadeus": {
+        "Directions Text": "Website",
+        "Information Text": "A modern online store of designer jewelry for those who choose style, originality and expressiveness in details. The project combines visual elegance, a thoughtful user journey and an easy, intuitive interface."
+    },
+
+    "natalia Shpedt (portfolio)": {
+        "Directions Text": "Website",
+        "Information Text": "A minimalistic portfolio website designed to present interior projects in a visually clean and expressive format. The interface emphasizes the aesthetics of the work: the focus on images, concise typography and well-considered structure allow for the most effective presentation of the designer's style and approach."
+    },
+
+    "arturio": {
+        "Directions Text": "Website",
+        "Information 1 Text": "A modern art space that brings together exhibitions, events and the creative community.",
+        "Information 2 Text": "The project website reflects the spirit of minimalism and freedom: a clean interface, emphasis on visual content and easy navigation allow the user to focus on art. The design emphasizes the atmosphere of the space and makes interaction with the platform intuitive and enjoyable."
+    }
+}

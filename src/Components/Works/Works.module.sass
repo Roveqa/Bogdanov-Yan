@@ -1,0 +1,93 @@
+@use '../styles/variables' as vars
+@use '../Styles/_mixin.adaptive' as m
+
+.works 
+  padding-top: 110px
+  @include m.respond(mobile)
+    padding-top: 240px
+
+.title
+  @include m.respond(mobile)
+   margin-bottom: 35px
+
+.mainContainer 
+  width: 100%
+
+
+.info 
+  width: 100%
+  display: grid
+  grid-template-columns: 1fr 1fr
+  grid-template-rows: auto
+  gap: 10px
+  @include m.respond(laptop_m)
+    grid-template-columns: 1fr
+    grid-template-rows: auto
+  @include m.respond(mobile)
+    gap: 18px
+
+.infoWrapper 
+  grid-column: 1 / 2
+  display: flex
+  gap: 20px
+  @include m.respond(laptop_m)
+    grid-column: 1 / 3
+    grid-row: 1 / 2
+  @include m.respond(mobile)
+    flex-direction: column
+    gap: 18px
+
+
+.infoType 
+  width: 100%
+  display: flex
+  flex-direction: column
+  align-items: flex-start
+
+
+.titleType 
+  font-family: "Inter-Regular"
+  font-size: 14px
+  color: vars.$grey-text
+  display: flex
+
+
+.information 
+  grid-column: 2 / 3
+  @include m.respond(laptop_m)
+    grid-column: 1 / 3
+    grid-row: 2 / 3
+  @include m.respond(mobile)
+    height: auto
+
+
+.imageWrapper 
+  position: relative
+  width: 100%
+  aspect-ratio: 16 / 9
+  overflow: hidden
+  @include m.respond(mobile)
+    margin-bottom: 50px
+
+
+.imageBase, .imageHover 
+  width: 100%
+  height: 100%
+  display: block
+  object-fit: cover
+  transition: opacity 0.3s ease
+  position: absolute
+  top: 0
+  left: 0
+
+
+.imageBase 
+  z-index: 1
+
+.imageHover 
+  z-index: 2
+  opacity: 0
+
+
+.visible 
+  opacity: 1

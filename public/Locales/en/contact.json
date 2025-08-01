@@ -1,0 +1,30 @@
+{
+    "title": {
+        "h2": "Contsacts",
+        "h2Social": "Socials",
+        "h2General": "General inquiries",
+        "h2Form": "Text me"
+    },
+
+    "text": {
+        "All Rights Reserved": "All Rights Reserved",
+        "Privacy policy,": "Privacy policy",
+        "Cookie Policy": "Cookie Policy",
+        "agree to the": "agree to the",
+        "Privacy policy": "Privacy policy"
+    },
+
+    "form": {
+        "placeholders": {
+            "name": "Enter your name*",
+            "email": "Enter your email*",
+            "service": "Select a service*",
+            "budget": "Expected budget",
+            "message": "Message"
+        }
+    },
+
+    "button": {
+        "Send message": "Send message →"
+    }
+}
