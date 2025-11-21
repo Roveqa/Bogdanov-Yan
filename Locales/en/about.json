@@ -7,11 +7,15 @@
         "Soft skills": "Soft skills",
         "Technology stack": "Technology stack",
         "CV": "CV",
+        "Education": "Education",
 
         "EX name 1": "maryco",
         "EX name 2": "Freelance",
         "EX date 1": "2024 — Present",
-        "EX date 2": "2022 — Present"
+        "EX date 2": "2022 — Present",
+
+        "Ed date 1": "2025 — Present",
+        "Ed date 2": "2021 — 2025"
     },
 
     "text": {
@@ -40,7 +44,10 @@
     
         "SS 1": "In my work I value dialog, flexibility and the ability to understand the essence of the task. I can listen, ask the right questions and translate business goals into visual solutions.",
         "SS 2": "I work in a structured way, respect deadlines and can independently build a process from the brief to the final result. Easily fit into a team, understand how to speak the same language with developers, managers and customers.",
-        "SS 3": "I am always open to feedback, learn new things with interest and try to grow from project to project. For me it is important not only «what» to do, but also «how» — with attention to details, the user and the overall goal."
+        "SS 3": "I am always open to feedback, learn new things with interest and try to grow from project to project. For me it is important not only «what» to do, but also «how» — with attention to details, the user and the overall goal.",
+  
+        "Ed 1": "Novosibirsk State Pedagogical University (NSPU)",
+        "Ed 2": "Novosibirsk State University of Economics and Management (NSUEM) (SPE)"
     },
 
     "button": {
