@@ -1,0 +1,226 @@
+.case-study
+  position: relative
+  width: 100%
+  padding-top: 240px
+  padding-bottom: 400px
+  background: #ffffff
+  color: #111111
+
+.case-study__intro
+  display: flex
+  justify-content: space-between
+  align-items: flex-start
+  gap: 24px
+  width: 100%
+  padding: 0 20px 40px
+  font-size: 14px
+  line-height: 1.36
+  letter-spacing: -0.42px
+
+.case-study__title
+  margin: 0
+  color: #111111
+  white-space: nowrap
+
+.case-study__intro-panel
+  display: flex
+  flex-direction: column
+  gap: 24px
+  width: 357px
+  max-width: 100%
+
+.case-study__intro-block
+  display: flex
+  flex-direction: column
+  gap: 4px
+
+.case-study__label
+  margin: 0
+  color: rgba(0, 0, 0, 0.4)
+
+.case-study__text
+  margin: 0
+  color: #111111
+  text-wrap: balance
+
+.case-study__intro-links
+  display: flex
+  gap: 24px
+
+.case-study__link
+  color: #111111
+  text-decoration: underline
+  text-underline-offset: 2px
+
+.case-study__body
+  display: flex
+  flex-direction: column
+  width: 100%
+  padding-bottom: 24px
+
+.case-study__section-image
+  display: block
+  width: 100%
+  height: auto
+
+.case-study__section-image--crop
+  aspect-ratio: 1710 / 1200
+  object-fit: cover
+  object-position: right center
+
+.case-study__section-video
+  display: block
+  width: 100%
+  height: auto
+
+.case-study__stats
+  display: flex
+  gap: 1px
+  width: 100%
+  background: #ffffff
+  font-size: 14px
+  line-height: 1.36
+  letter-spacing: -0.42px
+
+.case-study__stat
+  display: flex
+  flex: 1 0 0
+  flex-direction: column
+  justify-content: space-between
+  min-width: 0
+  height: 680px
+  padding: 32px
+  background: #f5f5f6
+
+.case-study__split
+  display: flex
+  width: 100%
+  aspect-ratio: 1710 / 840
+
+.case-study__split-panel
+  position: relative
+  display: flex
+  flex: 1 0 0
+  min-width: 0
+  align-items: center
+  justify-content: center
+  overflow: hidden
+
+.case-study__split-photo
+  position: absolute
+  inset: 0
+  width: 100%
+  height: 100%
+  object-fit: cover
+
+.case-study__component
+  position: relative
+  z-index: 1
+  max-width: 80%
+  height: auto
+
+.case-study__component--button-export
+  width: 300px
+
+.case-study__section
+  position: relative
+  display: flex
+  align-items: center
+  justify-content: center
+  width: 100%
+  aspect-ratio: 1710 / 1000
+  overflow: hidden
+
+.case-study__section--export
+  aspect-ratio: 1710 / 1600
+  display: flex
+  align-items: center
+  justify-content: center
+
+.case-study__section-photo
+  position: absolute
+  inset: 0
+  width: 100%
+  height: 100%
+  object-fit: cover
+
+.case-study__logo
+  position: relative
+  z-index: 1
+  width: 380px
+  max-width: 70%
+  height: auto
+
+.case-study__swatches
+  width: 100%
+  aspect-ratio: 1710 / 1600
+  overflow: hidden
+  background: #000000
+
+.case-study__swatches-video
+  display: block
+  width: 100%
+  height: 100%
+  object-fit: cover
+
+.case-study__tagline
+  position: relative
+  width: 100%
+  aspect-ratio: 1710 / 1460
+  overflow: hidden
+
+.case-study__icons
+  width: 100%
+  aspect-ratio: 1710 / 1080
+  overflow: hidden
+  background: #f1f1f1
+
+.case-study__icons-video
+  display: block
+  width: 100%
+  height: 100%
+  object-fit: cover
+
+.case-study__next
+  display: flex
+  justify-content: flex-end
+  width: 100%
+  padding: 0 20px
+
+.case-study__next-link
+  font-size: 14px
+  line-height: 1.36
+  letter-spacing: -0.42px
+  color: #111111
+
+@media (max-width: 768px)
+  .case-study
+    padding-top: 96px
+
+  .case-study__intro
+    flex-direction: column
+    gap: 16px
+
+  .case-study__stats
+    flex-direction: column
+
+  .case-study__stat
+    height: auto
+    min-height: 320px
+
+  .case-study__split
+    flex-direction: column
+    aspect-ratio: unset
+
+  .case-study__split-panel
+    flex: 0 0 auto
+    aspect-ratio: 855 / 840
+
+  .case-study__split--reverse-mobile
+    flex-direction: column-reverse
+
+  .case-study__logo
+    width: 220px
+
+  .case-study__component--button-export
+    width: 220px

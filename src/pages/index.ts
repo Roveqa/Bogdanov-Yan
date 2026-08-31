@@ -1,0 +1,5 @@
+export { AboutPage } from './about'
+export { CaseStudyPage } from './case-study'
+export { HomePage } from './home'
+export { NotFoundPage } from './not-found'
+export { WorksPage } from './works'

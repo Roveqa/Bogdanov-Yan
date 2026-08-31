@@ -1,0 +1,1 @@
+// Icon asset registry placeholder.

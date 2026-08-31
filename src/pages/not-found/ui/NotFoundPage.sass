@@ -1,0 +1,39 @@
+.not-found-page
+  position: relative
+  display: flex
+  flex-direction: column
+  width: 100%
+  min-height: 100vh
+  padding-top: 240px
+  padding-bottom: 64px
+  background: #ffffff
+  color: #111111
+
+.not-found-page__code
+  display: flex
+  flex: 1 0 auto
+  align-items: center
+  justify-content: center
+  margin: 0
+  font-size: 14px
+  line-height: 1.36
+  letter-spacing: -0.42px
+  text-align: center
+  transform: translateY(-15%)
+
+.not-found-page__link
+  display: block
+  padding: 0 20px
+  width: 100%
+  overflow: hidden
+  font-size: calc((100vw - 40px) / 6.1725)
+  line-height: 1
+  letter-spacing: calc((100vw - 40px) / 6.1725 * -0.03)
+  color: #111111
+  text-decoration: underline
+  text-underline-offset: 0.02em
+  white-space: nowrap
+
+@media (max-width: 768px)
+  .not-found-page
+    padding-top: 96px

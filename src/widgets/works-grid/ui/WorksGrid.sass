@@ -1,0 +1,24 @@
+.works-grid
+  display: flex
+  flex-direction: column
+  gap: 240px
+  width: 100%
+
+.works-grid__row
+  display: flex
+  align-items: flex-start
+  justify-content: center
+  gap: 1px
+  width: 100%
+
+.works-grid__row > *
+  flex: 1 0 0
+  min-width: 0
+
+@media (max-width: 768px)
+  .works-grid
+    gap: 96px
+
+  .works-grid__row
+    flex-direction: column
+    gap: 96px

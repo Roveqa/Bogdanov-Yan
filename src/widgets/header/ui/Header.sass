@@ -1,0 +1,135 @@
+.header
+  position: fixed
+  top: 0
+  left: 0
+  z-index: 30
+  width: 100%
+  background: transparent
+
+.header__inner
+  width: min(100% - 32px, 1280px)
+  margin: 0 auto
+  display: flex
+  align-items: center
+  justify-content: center
+  gap: 16px
+  padding: 16px 0
+
+.header__nav
+  display: flex
+  align-items: center
+  gap: 16px
+
+.header__logo,
+.header__link,
+.header__trigger
+  position: relative
+  color: rgba(17, 17, 17, 0.4)
+  transition: color 180ms ease
+
+.header__logo--active,
+.header__link:hover,
+.header__link--active,
+.header__trigger:hover
+  color: #111111
+
+.header--invert .header__logo,
+.header--invert .header__link,
+.header--invert .header__trigger
+  color: rgba(255, 255, 255, 0.55)
+
+.header--invert .header__logo--active,
+.header--invert .header__link:hover,
+.header--invert .header__link--active,
+.header--invert .header__trigger:hover
+  color: #ffffff
+
+.header__trigger
+  padding: 0
+  border: 0
+  background: transparent
+  cursor: pointer
+
+.header__item
+  position: relative
+
+.header__contact-panel,
+.header__language-panel
+  position: absolute
+  top: 100%
+  padding-top: 12px
+  opacity: 0
+  pointer-events: none
+  transform: translateY(-6px)
+  transition: opacity 180ms ease, transform 180ms ease
+
+.header__contact-panel--open,
+.header__language-panel--open
+  opacity: 1
+  pointer-events: auto
+  transform: translateY(0)
+
+.header__contact-panel
+  left: 0
+  z-index: 40
+  display: grid
+  grid-template-columns: repeat(3, max-content)
+  column-gap: 16px
+  color: #111111
+
+.header__contact-column
+  display: flex
+  flex-direction: column
+  gap: 4px
+
+.header__contact-time-row
+  display: flex
+  flex-direction: row
+  align-items: center
+  gap: 4px
+
+.header__contact-link,
+.header__contact-time,
+.header__contact-zone
+  color: #111111
+  white-space: nowrap
+
+.header__language-panel
+  right: 0
+  z-index: 40
+
+.header__language-option
+  padding: 0
+  border: 0
+  background: transparent
+  color: #111111
+  opacity: 0.4
+  cursor: pointer
+  transition: opacity 180ms ease
+
+.header__language-option:hover
+  opacity: 1
+
+.header__overlay
+  position: fixed
+  inset: 0
+  z-index: 10
+  opacity: 0
+  pointer-events: none
+  background: rgba(255, 255, 255, 0.2)
+  backdrop-filter: blur(80px)
+  transition: opacity 180ms ease
+
+.header__overlay--open
+  opacity: 1
+
+@media (max-width: 768px)
+  .header__inner
+    width: min(100% - 24px, 1280px)
+
+  .header__nav
+    gap: 12px
+
+  .header__contact-panel
+    grid-template-columns: 1fr
+    row-gap: 12px

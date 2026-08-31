@@ -1,0 +1,1 @@
+// Image scale transition placeholder.

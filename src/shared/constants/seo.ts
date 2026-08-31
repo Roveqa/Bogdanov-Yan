@@ -1,0 +1,1 @@
+// SEO constants placeholder.

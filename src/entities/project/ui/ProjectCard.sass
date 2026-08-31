@@ -1,0 +1,91 @@
+.project-card
+  container-type: inline-size
+  display: flex
+  flex-direction: column
+  gap: 12px
+  width: 100%
+  color: inherit
+  text-decoration: none
+
+.project-card__media
+  position: relative
+  width: 100%
+  height: calc(var(--card-h0) * 1px + (100cqw - var(--card-w0) * 1px) * var(--card-h0) / var(--card-w0) * 0.88)
+  overflow: hidden
+  background-color: #e5e8ec
+
+.project-card__zoom
+  position: absolute
+  inset: 0
+  transition: transform 450ms ease
+
+.project-card:hover .project-card__zoom
+  transform: scale(1.04)
+
+.project-card__image,
+.project-card__overlay
+  position: absolute
+  inset: 0
+  width: 100%
+  height: 100%
+  object-fit: cover
+  object-position: center
+  pointer-events: none
+
+.project-card__hover-overlay
+  position: absolute
+  inset: 0
+  z-index: 1
+  display: flex
+  align-items: center
+  justify-content: center
+  background: rgba(0, 0, 0, 0)
+  backdrop-filter: blur(0)
+  transition: background-color 300ms ease, backdrop-filter 300ms ease
+
+.project-card:hover .project-card__hover-overlay
+  background: rgba(0, 0, 0, 0.16)
+  backdrop-filter: blur(20px)
+
+.project-card__site-link
+  color: #111111
+  font-size: 14px
+  line-height: 1.36
+  letter-spacing: -0.42px
+  text-decoration: underline
+  text-underline-offset: 2px
+  opacity: 0
+  transition: opacity 300ms ease
+
+.project-card:hover .project-card__site-link
+  opacity: 1
+
+.project-card__site-link--plain
+  text-decoration: none
+
+.project-card__caption
+  display: flex
+  align-items: flex-start
+  justify-content: space-between
+  gap: 24px
+  width: 100%
+  padding: 0 12px
+  font-size: 14px
+  line-height: 1.36
+  letter-spacing: -0.42px
+
+.project-card__title
+  flex-shrink: 0
+  color: #111111
+
+.project-card__description
+  flex-shrink: 0
+  width: 175px
+  color: rgba(0, 0, 0, 0.4)
+
+@media (max-width: 768px)
+  .project-card__caption
+    padding: 0 4px
+
+  .project-card__description
+    width: 140px

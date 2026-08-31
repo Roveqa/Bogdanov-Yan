@@ -1,0 +1,1 @@
+// OG image helper placeholder.

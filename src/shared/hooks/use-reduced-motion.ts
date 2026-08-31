@@ -1,0 +1,1 @@
+// Reduced motion hook placeholder.

@@ -1,0 +1,1 @@
+// Navigation feature types placeholder.
