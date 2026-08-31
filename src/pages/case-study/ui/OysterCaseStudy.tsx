@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom'
 
+import { withBase } from '@shared/lib/browser/asset-url'
 import { navigationRoutes } from '@content/site/navigation'
 
 const stats = [
@@ -45,7 +46,7 @@ export function OysterCaseStudy() {
           alt=""
           className="case-study__section-image"
           loading="lazy"
-          src="/case-studies/oyster/images/hero.png"
+          src={withBase('/case-studies/oyster/images/hero.png')}
         />
 
         <div className="case-study__stats">

@@ -5,6 +5,6 @@ export const siteMeta = {
   titleSeparator: '—',
   defaultDescription:
     'Premium portfolio foundation for a UI/UX designer with scalable architecture, multilingual support, and design-system-ready theming.',
-  defaultOgImagePath: '/og/og-default.jpg',
+  defaultOgImagePath: 'og/og-default.jpg',
   twitterCard: 'summary_large_image',
 } as const

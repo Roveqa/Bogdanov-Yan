@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 
 import * as THREE from 'three'
 
+import { withBase } from '@shared/lib/browser/asset-url'
+
 import './HomePage.sass'
 
 const cases = [
@@ -10,26 +12,26 @@ const cases = [
     href: '/works/rennu',
     name: 'Rennu',
     images: [
-      '/home-animation/rennu-1.jpg',
-      '/home-animation/rennu-2.jpg',
-      '/home-animation/rennu-3.jpg',
-      '/home-animation/rennu-4.jpg',
+      withBase('/home-animation/rennu-1.jpg'),
+      withBase('/home-animation/rennu-2.jpg'),
+      withBase('/home-animation/rennu-3.jpg'),
+      withBase('/home-animation/rennu-4.jpg'),
     ],
   },
   {
     href: '/works/ecolos',
     name: 'Ecolos',
     images: [
-      '/home-animation/ecolos-1.jpg',
-      '/home-animation/ecolos-2.jpg',
-      '/home-animation/ecolos-3.jpg',
-      '/home-animation/ecolos-4.jpg',
+      withBase('/home-animation/ecolos-1.jpg'),
+      withBase('/home-animation/ecolos-2.jpg'),
+      withBase('/home-animation/ecolos-3.jpg'),
+      withBase('/home-animation/ecolos-4.jpg'),
     ],
   },
   {
     href: '/works/oyster',
     name: 'ОИСТЕР',
-    images: ['/home-animation/oyster-1.png'],
+    images: [withBase('/home-animation/oyster-1.png')],
   },
 ] as const
 

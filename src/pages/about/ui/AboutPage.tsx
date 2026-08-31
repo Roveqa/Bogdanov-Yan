@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
+import { withBase } from '@shared/lib/browser/asset-url'
 import { Footer } from '@widgets/footer'
 
 import './AboutPage.sass'
@@ -73,51 +74,51 @@ const skillGroups = [
 const vinylRecords = [
   {
     title: 'Joji — Piss in the Wind',
-    cover: '/about/vinyl/joji-piss-in-the-wind.jpg',
+    cover: withBase('/about/vinyl/joji-piss-in-the-wind.jpg'),
   },
   {
     title: 'Tyler, The Creator — Chromakopia',
-    cover: '/about/vinyl/tyler-chromakopia.jpg',
+    cover: withBase('/about/vinyl/tyler-chromakopia.jpg'),
   },
   {
     title: 'Fred again — Actual Life (April 14 – December 17 2020)',
-    cover: '/about/vinyl/fred-again-actual-life.jpg',
+    cover: withBase('/about/vinyl/fred-again-actual-life.jpg'),
   },
   {
     title: 'ooes — Мои (твои) тёмные желания',
-    cover: '/about/vinyl/ooes-dark-desires.jpg',
+    cover: withBase('/about/vinyl/ooes-dark-desires.jpg'),
   },
   {
     title: 'Gorillaz — The Fall',
-    cover: '/about/vinyl/gorillaz-the-fall.jpg',
+    cover: withBase('/about/vinyl/gorillaz-the-fall.jpg'),
   },
   {
     title: 'Radiohead — OK Computer',
-    cover: '/about/vinyl/radiohead-ok-computer.jpg',
+    cover: withBase('/about/vinyl/radiohead-ok-computer.jpg'),
   },
   {
     title: 'Billie Eilish — dont smile at me',
-    cover: '/about/vinyl/billie-eilish-dont-smile-at-me.jpg',
+    cover: withBase('/about/vinyl/billie-eilish-dont-smile-at-me.jpg'),
   },
   {
     title: 'Shirō Sagisu — Bleach Original Soundtrack vol 1-2',
-    cover: '/about/vinyl/shiro-sagisu-bleach-vol-1-2.jpg',
+    cover: withBase('/about/vinyl/shiro-sagisu-bleach-vol-1-2.jpg'),
   },
   {
     title: 'Skrillex — Quest for Fire',
-    cover: '/about/vinyl/skrillex-quest-for-fire.jpg',
+    cover: withBase('/about/vinyl/skrillex-quest-for-fire.jpg'),
   },
   {
     title: 'Biicla — HYPER HOUSE',
-    cover: '/about/vinyl/biicla-hyper-house.jpg',
+    cover: withBase('/about/vinyl/biicla-hyper-house.jpg'),
   },
   {
     title: 'Tyler, The Creator — IGOR',
-    cover: '/about/vinyl/tyler-igor.jpg',
+    cover: withBase('/about/vinyl/tyler-igor.jpg'),
   },
   {
     title: 'Twenty One Pilots — Blurryface',
-    cover: '/about/vinyl/twenty-one-pilots-blurryface.jpg',
+    cover: withBase('/about/vinyl/twenty-one-pilots-blurryface.jpg'),
   },
 ] as const
 
@@ -231,7 +232,7 @@ export function AboutPage() {
       />
 
       <div className="about-page__hero" data-header-invert="true">
-        <img alt="Yan Bogdanov" className="about-page__hero-image" src="/about/hero.jpg" />
+        <img alt="Yan Bogdanov" className="about-page__hero-image" src={withBase('/about/hero.jpg')} />
       </div>
 
       <section className="about-page__row about-page__row--intro">
@@ -251,7 +252,7 @@ export function AboutPage() {
       </section>
 
       <div className="about-page__portrait">
-        <img alt="" className="about-page__portrait-image" src="/about/portrait.png" />
+        <img alt="" className="about-page__portrait-image" src={withBase('/about/portrait.png')} />
       </div>
 
       <section className="about-page__experience">

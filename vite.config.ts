@@ -6,6 +6,7 @@ import { defineConfig } from 'vite'
 const rootDir = fileURLToPath(new URL('.', import.meta.url))
 
 export default defineConfig({
+  base: '/Bogdanov-Yan/',
   plugins: [react()],
   resolve: {
     alias: {

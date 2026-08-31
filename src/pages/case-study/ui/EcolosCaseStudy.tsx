@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom'
 
+import { withBase } from '@shared/lib/browser/asset-url'
 import { navigationRoutes } from '@content/site/navigation'
 
 const stats = [
@@ -52,7 +53,7 @@ export function EcolosCaseStudy() {
           alt=""
           className="case-study__section-image"
           loading="lazy"
-          src="/case-studies/ecolos/images/hero-monitor.png"
+          src={withBase('/case-studies/ecolos/images/hero-monitor.png')}
         />
 
         <div className="case-study__stats">
@@ -68,14 +69,14 @@ export function EcolosCaseStudy() {
           alt=""
           className="case-study__section-image"
           loading="lazy"
-          src="/case-studies/ecolos/images/hardhat-closeup.png"
+          src={withBase('/case-studies/ecolos/images/hardhat-closeup.png')}
         />
 
         <img
           alt=""
           className="case-study__section-image"
           loading="lazy"
-          src="/case-studies/ecolos/images/objects-monitor.png"
+          src={withBase('/case-studies/ecolos/images/objects-monitor.png')}
         />
 
         <video
@@ -84,49 +85,49 @@ export function EcolosCaseStudy() {
           loop
           muted
           playsInline
-          src="/case-studies/ecolos/images/browser-scroll-video.mp4"
+          src={withBase('/case-studies/ecolos/images/browser-scroll-video.mp4')}
         />
 
         <img
           alt=""
           className="case-study__section-image"
           loading="lazy"
-          src="/case-studies/ecolos/images/stats-text.svg"
+          src={withBase('/case-studies/ecolos/images/stats-text.svg')}
         />
 
         <img
           alt=""
           className="case-study__section-image"
           loading="lazy"
-          src="/case-studies/ecolos/images/services-cta.svg"
+          src={withBase('/case-studies/ecolos/images/services-cta.svg')}
         />
 
         <img
           alt=""
           className="case-study__section-image"
           loading="lazy"
-          src="/case-studies/ecolos/images/form-cta.svg"
+          src={withBase('/case-studies/ecolos/images/form-cta.svg')}
         />
 
         <img
           alt=""
           className="case-study__section-image"
           loading="lazy"
-          src="/case-studies/ecolos/images/form-worker.png"
+          src={withBase('/case-studies/ecolos/images/form-worker.png')}
         />
 
         <img
           alt=""
           className="case-study__section-image"
           loading="lazy"
-          src="/case-studies/ecolos/images/laptop-stats.png"
+          src={withBase('/case-studies/ecolos/images/laptop-stats.png')}
         />
 
         <img
           alt=""
           className="case-study__section-image"
           loading="lazy"
-          src="/case-studies/ecolos/images/case-cards.png"
+          src={withBase('/case-studies/ecolos/images/case-cards.png')}
         />
 
         <video
@@ -135,14 +136,14 @@ export function EcolosCaseStudy() {
           loop
           muted
           playsInline
-          src="/case-studies/ecolos/images/loader-icon-video.mp4"
+          src={withBase('/case-studies/ecolos/images/loader-icon-video.mp4')}
         />
 
         <img
           alt=""
           className="case-study__section-image"
           loading="lazy"
-          src="/case-studies/ecolos/images/icons-row.svg"
+          src={withBase('/case-studies/ecolos/images/icons-row.svg')}
         />
 
         <video
@@ -151,28 +152,28 @@ export function EcolosCaseStudy() {
           loop
           muted
           playsInline
-          src="/case-studies/ecolos/images/phone-scroll-video.mp4"
+          src={withBase('/case-studies/ecolos/images/phone-scroll-video.mp4')}
         />
 
         <img
           alt=""
           className="case-study__section-image"
           loading="lazy"
-          src="/case-studies/ecolos/images/services-grid.svg"
+          src={withBase('/case-studies/ecolos/images/services-grid.svg')}
         />
 
         <img
           alt=""
           className="case-study__section-image"
           loading="lazy"
-          src="/case-studies/ecolos/images/partners.png"
+          src={withBase('/case-studies/ecolos/images/partners.png')}
         />
 
         <img
           alt=""
           className="case-study__section-image"
           loading="lazy"
-          src="/case-studies/ecolos/images/jacket-closeup.png"
+          src={withBase('/case-studies/ecolos/images/jacket-closeup.png')}
         />
       </div>
 

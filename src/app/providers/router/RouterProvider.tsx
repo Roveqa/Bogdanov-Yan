@@ -10,7 +10,7 @@ import { WorksPage } from '@pages/works'
 
 export function AppRouter() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/Bogdanov-Yan">
       <Routes>
         <Route element={<BaseLayout />}>
           <Route path={routePaths.home} element={<HomePage />} />
