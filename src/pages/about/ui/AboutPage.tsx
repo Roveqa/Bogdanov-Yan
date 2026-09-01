@@ -129,6 +129,7 @@ function VinylTable() {
     <>
       <div className="about-page__dark-row">
         <div className="about-page__dark-copy">
+          <span className="about-page__dark-mobile-label">Vinyl</span>
           <p className="about-page__paragraph about-page__paragraph--light">
             It&rsquo;s a small collection of records that I&rsquo;m gradually building up.
             It&rsquo;s music for different moods—ranging from calm, atmospheric tracks to more
@@ -140,26 +141,34 @@ function VinylTable() {
           </p>
         </div>
 
-        <ul className="about-page__list">
-          {vinylRecords.map((record) => (
-            <li
-              key={record.title}
-              className="about-page__list-item"
-              onMouseEnter={() => setHoveredVinylCover(record.cover)}
-              onMouseLeave={() => setHoveredVinylCover(null)}
-            >
-              <span
-                className={
-                  hoveredVinylCover && hoveredVinylCover !== record.cover
-                    ? 'about-page__list-item-text about-page__list-item-text--dimmed'
-                    : 'about-page__list-item-text'
-                }
+        <div className="about-page__dark-list-col">
+          <span className="about-page__dark-mobile-label">Name</span>
+
+          <ul className="about-page__list">
+            {vinylRecords.map((record) => (
+              <li
+                key={record.title}
+                className="about-page__list-item"
+                onMouseEnter={() => {
+                  setHoveredVinylCover(record.cover)
+                }}
+                onMouseLeave={() => {
+                  setHoveredVinylCover(null)
+                }}
               >
-                {record.title}
-              </span>
-            </li>
-          ))}
-        </ul>
+                <span
+                  className={
+                    hoveredVinylCover && hoveredVinylCover !== record.cover
+                      ? 'about-page__list-item-text about-page__list-item-text--dimmed'
+                      : 'about-page__list-item-text'
+                  }
+                >
+                  {record.title}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
 
       <div className="about-page__vinyl-preview">
@@ -241,9 +250,9 @@ export function AboutPage() {
         <div className="about-page__row-content">
           <p className="about-page__row-label">Personal information</p>
 
-          <div className="about-page__col">
+          <div className="about-page__col about-page__col--spaced">
             {introParagraphs.map((paragraph) => (
-              <p key={paragraph} className="about-page__paragraph about-page__paragraph--intro">
+              <p key={paragraph} className="about-page__paragraph">
                 {paragraph}
               </p>
             ))}
@@ -311,11 +320,13 @@ export function AboutPage() {
           {skillGroups.map((group) => (
             <div key={group.label} className="about-page__skill-group">
               <p className="about-page__row-label">{group.label}</p>
-              {group.paragraphs.map((paragraph) => (
-                <p key={paragraph} className="about-page__paragraph">
-                  {paragraph}
-                </p>
-              ))}
+              <div className="about-page__col about-page__col--spaced">
+                {group.paragraphs.map((paragraph) => (
+                  <p key={paragraph} className="about-page__paragraph">
+                    {paragraph}
+                  </p>
+                ))}
+              </div>
             </div>
           ))}
 
