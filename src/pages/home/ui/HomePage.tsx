@@ -141,14 +141,13 @@ export function HomePage() {
       camera.lookAt(0, 0, 0)
     }
 
-    const meshBaseRotation = isVertical ? -Math.PI / 2 : 0
+    const meshBaseRotation = 0
 
-    // Each mesh is still slideWidth x slideHeight in its own local frame, just
-    // rotated -90° so its content reads upright under the rolled camera. That
-    // rotation swaps which of its own dimensions actually spans the world axis
-    // slides travel along, so layout spacing must use slideHeight instead of
-    // slideWidth once rotated.
+    // No per-mesh rotation: meshes keep their default orientation, so local X
+    // is still the along-scroll axis (matching offset spacing) and local Y is
+    // the cross axis (left/right on mobile, top/bottom on desktop).
     const alongSize = isVertical ? config.slideHeight : config.slideWidth
+    const crossSize = isVertical ? config.slideWidth * 0.42 : config.slideHeight
 
     const meshes: SlideMesh[] = []
     const textures: THREE.Texture[] = []
@@ -261,12 +260,8 @@ export function HomePage() {
 
     const buildScene = () => {
       for (let index = 0; index < totalSlides; index += 1) {
-        // Rotating the mesh -90° puts its own "width" dimension on the cross
-        // (left/right) axis on mobile, so shrink just that number to leave a
-        // side margin — same width value used for stacking spacing (alongSize)
-        // is untouched.
-        const width = isVertical ? config.slideWidth * 0.42 : config.slideWidth
-        const height = config.slideHeight
+        const width = alongSize
+        const height = crossSize
         const geometry = new THREE.PlaneGeometry(width, height, 20, 10)
         const material = new THREE.MeshBasicMaterial({
           color: '#ffffff',
@@ -331,7 +326,7 @@ export function HomePage() {
       const original = mesh.userData.originalVertices
       const distortion = config.distortionStrength * strength
       const shear = config.shearStrength * strength
-      const halfHeight = config.slideHeight / 2
+      const halfHeight = crossSize / 2
 
       for (let index = 0; index < positions.count; index += 1) {
         const x = original[index * 3] ?? 0
