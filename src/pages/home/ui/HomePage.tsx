@@ -751,7 +751,7 @@ function MobileCarousel() {
       100,
     )
     camera.position.z = 5
-    camera.up.set(1, 0, 0)
+    camera.up.set(-1, 0, 0)
     camera.lookAt(0, 0, 0)
 
     const meshes: MobileSlideMesh[] = []
@@ -842,7 +842,7 @@ function MobileCarousel() {
       }
 
       texture.center.set(0.5, 0.5)
-      texture.rotation = Math.PI / 2
+      texture.rotation = -Math.PI / 2
     }
 
     const preloadTextures = async () => {
