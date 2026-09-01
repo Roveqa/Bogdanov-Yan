@@ -7,7 +7,24 @@ import { withBase } from '@shared/lib/browser/asset-url'
 
 import './HomePage.sass'
 
-const cases = [
+function toSlides(
+  cases: readonly {
+    href: string
+    images: readonly string[]
+    name: string
+  }[],
+) {
+  return cases.flatMap((caseItem) =>
+    caseItem.images.map((image, imageIndex) => ({
+      caseNumber: imageIndex + 1,
+      href: caseItem.href,
+      image,
+      name: caseItem.name,
+    })),
+  )
+}
+
+const desktopCases = [
   {
     href: '/works/rennu',
     name: 'Rennu',
@@ -35,14 +52,39 @@ const cases = [
   },
 ] as const
 
-const slides = cases.flatMap((caseItem) =>
-  caseItem.images.map((image, imageIndex) => ({
-    caseNumber: imageIndex + 1,
-    href: caseItem.href,
-    image,
-    name: caseItem.name,
-  })),
-)
+// Mobile uses its own image set (public/home-animation/mobile/) since those
+// cards are portrait and cropped for a vertical layout, unlike desktop's
+// landscape crops.
+const mobileCases = [
+  {
+    href: '/works/rennu',
+    name: 'Rennu',
+    images: [
+      withBase('/home-animation/mobile/rennu-1.jpg'),
+      withBase('/home-animation/mobile/rennu-2.jpg'),
+      withBase('/home-animation/mobile/rennu-3.jpg'),
+      withBase('/home-animation/mobile/rennu-4.jpg'),
+    ],
+  },
+  {
+    href: '/works/ecolos',
+    name: 'Ecolos',
+    images: [
+      withBase('/home-animation/mobile/ecolos-1.jpg'),
+      withBase('/home-animation/mobile/ecolos-2.jpg'),
+      withBase('/home-animation/mobile/ecolos-3.jpg'),
+      withBase('/home-animation/mobile/ecolos-4.jpg'),
+    ],
+  },
+  {
+    href: '/works/oyster',
+    name: 'ОИСТЕР',
+    images: [withBase('/home-animation/mobile/oyster-1.png')],
+  },
+] as const
+
+const desktopSlides = toSlides(desktopCases)
+const mobileSlides = toSlides(mobileCases)
 
 function zeroPad(value: number) {
   return String(value).padStart(2, '0')
@@ -156,7 +198,7 @@ function DesktopCarousel() {
     const textureLoader = new THREE.TextureLoader()
     const velocityHistory = [0, 0, 0, 0, 0]
 
-    const totalSlides = slides.length
+    const totalSlides = desktopSlides.length
     const slideOffsets: number[] = []
 
     let loopLength = 0
@@ -252,7 +294,7 @@ function DesktopCarousel() {
 
     const preloadTextures = async () => {
       const loadedTextures = await Promise.all(
-        slides.map(({ image }) => textureLoader.loadAsync(image)),
+        desktopSlides.map(({ image }) => textureLoader.loadAsync(image)),
       )
 
       loadedTextures.forEach((texture) => {
@@ -279,10 +321,10 @@ function DesktopCarousel() {
         mesh.userData = {
           baseScaleX: 1,
           baseScaleY: 1,
-          caseNumber: slides[index].caseNumber,
-          href: slides[index].href,
+          caseNumber: desktopSlides[index].caseNumber,
+          href: desktopSlides[index].href,
           index,
-          name: slides[index].name,
+          name: desktopSlides[index].name,
           offset: slideOffsets[index] ?? 0,
           originalVertices: [...geometry.attributes.position.array],
         }
@@ -586,10 +628,10 @@ function DesktopCarousel() {
 
       if (closestIndex !== activeSlideIndex) {
         activeSlideIndex = closestIndex
-        titleElement.textContent = slides[activeSlideIndex].name
-        countElement.textContent = zeroPad(slides[activeSlideIndex].caseNumber)
+        titleElement.textContent = desktopSlides[activeSlideIndex].name
+        countElement.textContent = zeroPad(desktopSlides[activeSlideIndex].caseNumber)
 
-        activeHref = slides[activeSlideIndex].href
+        activeHref = desktopSlides[activeSlideIndex].href
         canvas.style.cursor = activeHref ? 'pointer' : 'default'
         infoElement.classList.toggle('home-page__info--clickable', Boolean(activeHref))
       }
@@ -615,9 +657,9 @@ function DesktopCarousel() {
         return
       }
 
-      titleElement.textContent = slides[0].name
+      titleElement.textContent = desktopSlides[0].name
       countElement.textContent = zeroPad(1)
-      activeHref = slides[0].href
+      activeHref = desktopSlides[0].href
       canvas.style.cursor = activeHref ? 'pointer' : 'default'
       infoElement.classList.toggle('home-page__info--clickable', Boolean(activeHref))
 
@@ -676,9 +718,10 @@ function DesktopCarousel() {
 
 // The mobile carousel is a deliberately simpler engine than desktop's: same
 // infinite-loop scroll physics (momentum, autoscroll, focus fade/scale), but
-// the camera is rolled 90° so slides read top-to-bottom, each slide's texture
-// is UV-rotated 90° to stay upright, and there is no bend/shear distortion or
-// cursor-drift — fewer moving parts to keep this side easy to tweak.
+// slides stack directly along world Y (no camera roll or texture rotation
+// needed — the mobile image set is already cropped portrait), and there is
+// no bend/shear distortion or cursor-drift — fewer moving parts to keep this
+// side easy to tweak.
 const mobileConfig = {
   autoScrollDelay: 1.2,
   autoScrollSpeed: 0.12,
@@ -751,14 +794,12 @@ function MobileCarousel() {
       100,
     )
     camera.position.z = 5
-    camera.up.set(-1, 0, 0)
-    camera.lookAt(0, 0, 0)
 
     const meshes: MobileSlideMesh[] = []
     const textures: THREE.Texture[] = []
     const textureLoader = new THREE.TextureLoader()
 
-    const totalSlides = slides.length
+    const totalSlides = mobileSlides.length
     const slideOffsets: number[] = []
 
     let loopLength = 0
@@ -828,10 +869,8 @@ function MobileCarousel() {
       texture.wrapS = THREE.ClampToEdgeWrapping
       texture.wrapT = THREE.ClampToEdgeWrapping
 
-      // The image is displayed rotated 90°, so its own width/height are
-      // swapped relative to the plane's width/height for cover-fit math.
-      const imageAspect = image.height / image.width
-      const planeAspect = mobileAlongSize / mobileCrossSize
+      const imageAspect = image.width / image.height
+      const planeAspect = mobileCrossSize / mobileAlongSize
       const ratio = imageAspect / planeAspect
 
       if (ratio > 1) {
@@ -841,14 +880,11 @@ function MobileCarousel() {
         texture.repeat.set(1, ratio)
         texture.offset.set(0, (1 - ratio) / 2)
       }
-
-      texture.center.set(0.5, 0.5)
-      texture.rotation = -Math.PI / 2
     }
 
     const preloadTextures = async () => {
       const loadedTextures = await Promise.all(
-        slides.map(({ image }) => textureLoader.loadAsync(image)),
+        mobileSlides.map(({ image }) => textureLoader.loadAsync(image)),
       )
 
       loadedTextures.forEach((texture) => {
@@ -858,7 +894,7 @@ function MobileCarousel() {
 
     const buildScene = () => {
       for (let index = 0; index < totalSlides; index += 1) {
-        const geometry = new THREE.PlaneGeometry(mobileAlongSize, mobileCrossSize)
+        const geometry = new THREE.PlaneGeometry(mobileCrossSize, mobileAlongSize)
         const material = new THREE.MeshBasicMaterial({
           color: '#ffffff',
           map: textures[index],
@@ -871,10 +907,10 @@ function MobileCarousel() {
         configureTexture(textures[index])
 
         mesh.userData = {
-          caseNumber: slides[index].caseNumber,
-          href: slides[index].href,
+          caseNumber: mobileSlides[index].caseNumber,
+          href: mobileSlides[index].href,
           index,
-          name: slides[index].name,
+          name: mobileSlides[index].name,
           offset: slideOffsets[index] ?? 0,
         }
 
@@ -1035,12 +1071,12 @@ function MobileCarousel() {
 
       meshes.forEach((mesh) => {
         const { offset } = mesh.userData
-        let x = offset - wrap(scrollPosition, loopLength)
+        let along = offset - wrap(scrollPosition, loopLength)
 
-        x = wrap(x + halfLoop, loopLength) - halfLoop
-        mesh.position.x = x
+        along = wrap(along + halfLoop, loopLength) - halfLoop
+        mesh.position.y = -along
 
-        const focus = 1 - Math.min(Math.abs(x) / (mobileAlongSize * 1.9), 1)
+        const focus = 1 - Math.min(Math.abs(along) / (mobileAlongSize * 1.9), 1)
         const opacity = THREE.MathUtils.lerp(
           mobileConfig.idleOpacity,
           mobileConfig.focusOpacity,
@@ -1055,18 +1091,18 @@ function MobileCarousel() {
         mesh.material.opacity = opacity
         mesh.scale.setScalar(scale)
 
-        if (Math.abs(x) < closestDistance) {
-          closestDistance = Math.abs(x)
+        if (Math.abs(along) < closestDistance) {
+          closestDistance = Math.abs(along)
           closestIndex = mesh.userData.index
         }
       })
 
       if (closestIndex !== activeSlideIndex) {
         activeSlideIndex = closestIndex
-        titleElement.textContent = slides[activeSlideIndex].name
-        countElement.textContent = zeroPad(slides[activeSlideIndex].caseNumber)
+        titleElement.textContent = mobileSlides[activeSlideIndex].name
+        countElement.textContent = zeroPad(mobileSlides[activeSlideIndex].caseNumber)
 
-        activeHref = slides[activeSlideIndex].href
+        activeHref = mobileSlides[activeSlideIndex].href
         canvas.style.cursor = activeHref ? 'pointer' : 'default'
         infoElement.classList.toggle('home-page__info--clickable', Boolean(activeHref))
       }
@@ -1092,9 +1128,9 @@ function MobileCarousel() {
         return
       }
 
-      titleElement.textContent = slides[0].name
+      titleElement.textContent = mobileSlides[0].name
       countElement.textContent = zeroPad(1)
-      activeHref = slides[0].href
+      activeHref = mobileSlides[0].href
       canvas.style.cursor = activeHref ? 'pointer' : 'default'
       infoElement.classList.toggle('home-page__info--clickable', Boolean(activeHref))
 
