@@ -27,11 +27,11 @@ type OpenMenu = 'contact' | 'language' | null
 
 const menuCloseDelay = 100
 
-function MenuIcon() {
+function MenuIcon({ className }: { className: string }) {
   return (
     <svg
       aria-hidden="true"
-      className="header__mobile-icon"
+      className={className}
       fill="none"
       height="18"
       viewBox="0 0 18 18"
@@ -90,11 +90,21 @@ export function Header() {
       return
     }
 
-    const previousOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
+    const scrollY = window.scrollY
+    const { body } = document
+    const previousPosition = body.style.position
+    const previousTop = body.style.top
+    const previousWidth = body.style.width
+
+    body.style.position = 'fixed'
+    body.style.top = `-${String(scrollY)}px`
+    body.style.width = '100%'
 
     return () => {
-      document.body.style.overflow = previousOverflow
+      body.style.position = previousPosition
+      body.style.top = previousTop
+      body.style.width = previousWidth
+      window.scrollTo(0, scrollY)
     }
   }, [isMobileMenuOpen])
 
@@ -295,7 +305,13 @@ export function Header() {
             type="button"
           >
             <span>{t('header.menu')}</span>
-            <MenuIcon />
+            <MenuIcon
+              className={
+                isMobileMenuOpen
+                  ? 'header__mobile-icon header__mobile-icon--open'
+                  : 'header__mobile-icon'
+              }
+            />
           </button>
         </div>
       </header>

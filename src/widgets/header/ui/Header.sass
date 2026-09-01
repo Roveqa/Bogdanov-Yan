@@ -143,6 +143,10 @@
 .header__mobile-icon
   flex-shrink: 0
   color: inherit
+  transition: transform 200ms ease
+
+.header__mobile-icon--open
+  transform: rotate(45deg)
 
 .header__mobile-panel
   position: fixed
@@ -156,6 +160,7 @@
   backdrop-filter: blur(40px)
   opacity: 0
   pointer-events: none
+  touch-action: none
   transition: opacity 200ms ease
 
 .header__mobile-panel--open
@@ -220,6 +225,12 @@
   .header__inner
     width: min(100% - 24px, 1280px)
     justify-content: space-between
+
+  .header__logo,
+  .header__mobile-trigger
+    font-size: 16px
+    line-height: 1.24
+    letter-spacing: -0.64px
 
   .header__nav
     display: none
