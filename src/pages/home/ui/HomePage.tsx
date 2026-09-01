@@ -71,9 +71,9 @@ const config = {
   wheelSpeed: 0.0065,
 } as const
 
-
 type SlideMesh = THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial> & {
   userData: {
+    baseRotation: number
     baseScaleX: number
     baseScaleY: number
     caseNumber: number
@@ -106,30 +106,12 @@ export function HomePage() {
       return
     }
 
+    // Mobile reuses the exact desktop scene, positions, and physics — every
+    // slide still moves along world X exactly like desktop. The only
+    // difference is the camera is rolled 90° so that world X reads as
+    // vertical on screen, and each mesh is counter-rotated so its own image
+    // content (photos, logo text) stays upright despite the camera roll.
     const isVertical = window.innerWidth <= 768
-    // On mobile several cards are visible on screen at once (unlike desktop, where
-    // only one dominant slide plus thin edge peeks are visible), so fading unfocused
-    // cards down to desktop's idleOpacity makes lighter images wash out to near-white
-    // against the page background, reading as an empty gap. Keep them clearly visible.
-    const axisConfig = isVertical ? { ...config, idleOpacity: 0.85 } : config
-
-    // The camera's world height at z=0 is fixed by its vertical FOV and distance,
-    // regardless of viewport aspect — only world width scales with aspect.
-    const worldHeight = 2 * Math.tan(THREE.MathUtils.degToRad(45) / 2) * 5
-    const worldWidth = worldHeight * (window.innerWidth / window.innerHeight)
-
-    // Match the Figma mobile card proportions exactly: a 292x360 card inset
-    // within a 380px-wide reference frame — not stretched to the viewport.
-    const crossSize = isVertical ? worldWidth * (292 / 380) : axisConfig.slideHeight
-    const axisSize = isVertical ? crossSize * (360 / 292) : axisConfig.slideWidth
-
-    // Desktop's distortion wave spans multiple adjacent slides because its radius
-    // is larger than a single slide. Scale the radius by the same ratio on mobile
-    // so the wave stays continuous across cards instead of collapsing into each
-    // card individually.
-    const distortionRadius = isVertical
-      ? axisSize * (axisConfig.distortionRadius / axisConfig.slideWidth)
-      : axisConfig.distortionRadius
 
     let activeHref: string | null = null
 
@@ -154,6 +136,20 @@ export function HomePage() {
     )
     camera.position.z = 5
 
+    if (isVertical) {
+      camera.up.set(1, 0, 0)
+      camera.lookAt(0, 0, 0)
+    }
+
+    const meshBaseRotation = isVertical ? -Math.PI / 2 : 0
+
+    // Each mesh is still slideWidth x slideHeight in its own local frame, just
+    // rotated -90° so its content reads upright under the rolled camera. That
+    // rotation swaps which of its own dimensions actually spans the world axis
+    // slides travel along, so layout spacing must use slideHeight instead of
+    // slideWidth once rotated.
+    const alongSize = isVertical ? config.slideHeight : config.slideWidth
+
     const meshes: SlideMesh[] = []
     const textures: THREE.Texture[] = []
     const textureLoader = new THREE.TextureLoader()
@@ -176,8 +172,8 @@ export function HomePage() {
     let velocityPeak = 0
     let scrollDirection = 0
     let directionTarget = 0
-    let touchStartPos = 0
-    let touchLastPos = 0
+    let touchStartY = 0
+    let touchLastY = 0
     let cursorTarget = 0
     let cursorOffset = 0
     let activeSlideIndex = -1
@@ -210,21 +206,21 @@ export function HomePage() {
     const updateSlideLayout = () => {
       slideOffsets.length = 0
 
-      const gap = getWorldUnitsFromPixels(axisConfig.gapPixels)
+      const gap = getWorldUnitsFromPixels(config.gapPixels)
       let stackPosition = 0
 
       for (let index = 0; index < totalSlides; index += 1) {
         if (index === 0) {
           slideOffsets.push(0)
-          stackPosition = axisSize / 2
+          stackPosition = alongSize / 2
         } else {
-          stackPosition += gap + axisSize / 2
+          stackPosition += gap + alongSize / 2
           slideOffsets.push(stackPosition)
-          stackPosition += axisSize / 2
+          stackPosition += alongSize / 2
         }
       }
 
-      loopLength = stackPosition + gap + axisSize / 2
+      loopLength = stackPosition + gap + alongSize / 2
       halfLoop = loopLength / 2
     }
 
@@ -265,13 +261,13 @@ export function HomePage() {
 
     const buildScene = () => {
       for (let index = 0; index < totalSlides; index += 1) {
-        const width = isVertical ? crossSize : axisSize
-        const height = isVertical ? axisSize : crossSize
+        const width = config.slideWidth
+        const height = config.slideHeight
         const geometry = new THREE.PlaneGeometry(width, height, 20, 10)
         const material = new THREE.MeshBasicMaterial({
           color: '#ffffff',
           map: textures[index],
-          opacity: axisConfig.idleOpacity,
+          opacity: config.idleOpacity,
           side: THREE.DoubleSide,
           transparent: true,
         })
@@ -280,6 +276,7 @@ export function HomePage() {
         configureTexture(textures[index], width, height)
 
         mesh.userData = {
+          baseRotation: meshBaseRotation,
           baseScaleX: 1,
           baseScaleY: 1,
           caseNumber: slides[index].caseNumber,
@@ -323,33 +320,24 @@ export function HomePage() {
 
     const applyDistortion = (
       mesh: SlideMesh,
-      positionAlong: number,
+      positionX: number,
       strength: number,
     ) => {
       const positions = mesh.geometry.attributes.position
       const original = mesh.userData.originalVertices
-      const distortion = axisConfig.distortionStrength * strength
-      const shear = axisConfig.shearStrength * strength
-      const halfCross = crossSize / 2
-      const alongComponent = isVertical ? 1 : 0
-      const crossComponent = isVertical ? 0 : 1
+      const distortion = config.distortionStrength * strength
+      const shear = config.shearStrength * strength
+      const halfHeight = config.slideHeight / 2
 
       for (let index = 0; index < positions.count; index += 1) {
-        const along = original[index * 3 + alongComponent] ?? 0
-        const cross = original[index * 3 + crossComponent] ?? 0
-        const distance = Math.sqrt((positionAlong + along) ** 2 + cross * cross)
-        const falloff = Math.max(0, 1 - distance / distortionRadius)
+        const x = original[index * 3] ?? 0
+        const y = original[index * 3 + 1] ?? 0
+        const distance = Math.sqrt((positionX + x) ** 2 + y * y)
+        const falloff = Math.max(0, 1 - distance / config.distortionRadius)
         const bend = Math.pow(Math.sin((falloff * Math.PI) / 2), 1.5)
-        const crossNormalized = halfCross === 0 ? 0 : cross / halfCross
+        const yNormalized = halfHeight === 0 ? 0 : y / halfHeight
 
-        // Shear shifts the along-scroll axis based on cross-axis position — this is
-        // what makes adjacent slides lean together continuously along the seam,
-        // instead of each slide skewing independently on its own cross axis.
-        if (isVertical) {
-          positions.setY(index, along + crossNormalized * shear)
-        } else {
-          positions.setX(index, along + crossNormalized * shear)
-        }
+        positions.setX(index, x + yNormalized * shear)
         positions.setZ(index, bend * distortion)
       }
 
@@ -374,10 +362,10 @@ export function HomePage() {
           : event.deltaY
 
       const clampedDelta =
-        Math.sign(rawDelta) * Math.min(Math.abs(rawDelta), axisConfig.wheelMax)
+        Math.sign(rawDelta) * Math.min(Math.abs(rawDelta), config.wheelMax)
 
       addDistortionBurst(Math.abs(clampedDelta) * 0.00045)
-      scrollTarget += clampedDelta * axisConfig.wheelSpeed
+      scrollTarget += clampedDelta * config.wheelSpeed
       isScrolling = true
 
       window.clearTimeout(scrollTimeoutId)
@@ -397,8 +385,8 @@ export function HomePage() {
         return
       }
 
-      touchStartPos = touch.clientY
-      touchLastPos = touchStartPos
+      touchStartY = touch.clientY
+      touchLastY = touchStartY
       isScrolling = false
       scrollMomentum = 0
     }
@@ -416,12 +404,12 @@ export function HomePage() {
         return
       }
 
-      const clientPos = touch.clientY
-      const delta = clientPos - touchLastPos
-      touchLastPos = clientPos
+      const clientY = touch.clientY
+      const deltaY = clientY - touchLastY
+      touchLastY = clientY
 
-      addDistortionBurst(Math.abs(delta) * 0.008)
-      scrollTarget += (isVertical ? delta : -delta) * axisConfig.touchSpeed
+      addDistortionBurst(Math.abs(deltaY) * 0.008)
+      scrollTarget -= deltaY * config.touchSpeed
       isScrolling = true
     }
 
@@ -430,10 +418,10 @@ export function HomePage() {
         return
       }
 
-      const swipeVelocity = (touchLastPos - touchStartPos) * 0.005
+      const swipeVelocity = (touchLastY - touchStartY) * 0.005
 
       if (Math.abs(swipeVelocity) > 0.5) {
-        scrollMomentum = (isVertical ? swipeVelocity : -swipeVelocity) * axisConfig.touchMomentum
+        scrollMomentum = -swipeVelocity * config.touchMomentum
         addDistortionBurst(Math.abs(swipeVelocity) * 0.2)
         isScrolling = true
         window.setTimeout(() => {
@@ -450,7 +438,7 @@ export function HomePage() {
       const normalizedX = event.clientX / window.innerWidth - 0.5
 
       cursorTarget =
-        getWorldUnitsFromPixels(axisConfig.cursorDriftPixels) * normalizedX * 2
+        getWorldUnitsFromPixels(config.cursorDriftPixels) * normalizedX * 2
     }
 
     const handleMouseLeave = () => {
@@ -484,9 +472,9 @@ export function HomePage() {
 
       if (isScrolling) {
         scrollTarget += scrollMomentum
-        scrollMomentum *= axisConfig.momentumFriction
+        scrollMomentum *= config.momentumFriction
 
-        if (Math.abs(scrollMomentum) < axisConfig.momentumThreshold) {
+        if (Math.abs(scrollMomentum) < config.momentumThreshold) {
           scrollMomentum = 0
         }
 
@@ -494,15 +482,15 @@ export function HomePage() {
       } else {
         idleTime += deltaTime
 
-        if (idleTime > axisConfig.autoScrollDelay) {
-          scrollTarget += axisConfig.autoScrollSpeed * deltaTime
+        if (idleTime > config.autoScrollDelay) {
+          scrollTarget += config.autoScrollSpeed * deltaTime
         }
       }
 
       scrollPosition = damp(
         scrollPosition,
         scrollTarget,
-        axisConfig.smoothing,
+        config.smoothing,
         deltaTime,
       )
 
@@ -546,13 +534,13 @@ export function HomePage() {
       distortionAmount = damp(
         distortionAmount,
         distortionTarget,
-        axisConfig.distortionSmoothing,
+        config.distortionSmoothing,
         deltaTime,
       )
       cursorOffset = damp(
         cursorOffset,
         cursorTarget,
-        axisConfig.cursorSmoothing,
+        config.cursorSmoothing,
         deltaTime,
       )
 
@@ -562,44 +550,38 @@ export function HomePage() {
 
       meshes.forEach((mesh) => {
         const { offset } = mesh.userData
-        let along = offset - wrap(scrollPosition, loopLength)
+        let x = offset - wrap(scrollPosition, loopLength)
 
-        along = wrap(along + halfLoop, loopLength) - halfLoop
+        x = wrap(x + halfLoop, loopLength) - halfLoop
+        mesh.position.x = x + cursorOffset
 
-        if (isVertical) {
-          mesh.position.y = -along
-          mesh.position.x = cursorOffset
-        } else {
-          mesh.position.x = along + cursorOffset
-        }
-
-        const focus = 1 - Math.min(Math.abs(along) / (axisSize * 1.9), 1)
+        const focus = 1 - Math.min(Math.abs(x) / (alongSize * 1.9), 1)
         const opacity = THREE.MathUtils.lerp(
-          axisConfig.idleOpacity,
-          axisConfig.focusOpacity,
+          config.idleOpacity,
+          config.focusOpacity,
           focus,
         )
         const scale = THREE.MathUtils.lerp(
-          axisConfig.idleScale,
-          axisConfig.focusScale,
+          config.idleScale,
+          config.focusScale,
           focus,
         )
-        const depth = -focus * axisConfig.depthStrength
-        const tilt = signedDistortion * axisConfig.tiltStrength * focus
+        const depth = -focus * config.depthStrength
+        const tilt = signedDistortion * config.tiltStrength * focus
 
         mesh.material.opacity = opacity
         mesh.position.z = depth
-        mesh.rotation.z = tilt
+        mesh.rotation.z = mesh.userData.baseRotation + tilt
         mesh.scale.x = mesh.userData.baseScaleX * scale
         mesh.scale.y = mesh.userData.baseScaleY * scale
 
-        if (Math.abs(along) < closestDistance) {
-          closestDistance = Math.abs(along)
+        if (Math.abs(x) < closestDistance) {
+          closestDistance = Math.abs(x)
           closestIndex = mesh.userData.index
         }
 
-        if (Math.abs(along) < halfLoop + axisSize) {
-          applyDistortion(mesh, along, signedDistortion)
+        if (Math.abs(x) < halfLoop + alongSize) {
+          applyDistortion(mesh, x, signedDistortion)
         }
       })
 
