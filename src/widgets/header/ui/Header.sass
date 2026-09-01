@@ -20,25 +20,28 @@
   align-items: center
   gap: 16px
 
-.header__logo,
+.header__logo
+  position: relative
+  color: #111111
+
+.header--invert .header__logo
+  color: #ffffff
+
 .header__link,
 .header__trigger
   position: relative
   color: rgba(17, 17, 17, 0.4)
   transition: color 180ms ease
 
-.header__logo--active,
 .header__link:hover,
 .header__link--active,
 .header__trigger:hover
   color: #111111
 
-.header--invert .header__logo,
 .header--invert .header__link,
 .header--invert .header__trigger
   color: rgba(255, 255, 255, 0.55)
 
-.header--invert .header__logo--active,
 .header--invert .header__link:hover,
 .header--invert .header__link--active,
 .header--invert .header__trigger:hover
@@ -126,17 +129,16 @@
 .header__mobile-trigger
   display: none
   align-items: center
-  gap: 6px
+  gap: 2px
   padding: 0
   border: 0
   background: transparent
-  color: rgba(17, 17, 17, 0.4)
+  color: #111111
   font: inherit
   cursor: pointer
-  transition: color 180ms ease
 
 .header--invert .header__mobile-trigger
-  color: rgba(255, 255, 255, 0.55)
+  color: #ffffff
 
 .header__mobile-icon
   flex-shrink: 0
@@ -149,7 +151,7 @@
   display: none
   flex-direction: column
   justify-content: space-between
-  padding: 44px 12px 28px
+  padding: 110px 12px 28px
   background: rgba(255, 255, 255, 0.2)
   backdrop-filter: blur(40px)
   opacity: 0

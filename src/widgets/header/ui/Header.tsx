@@ -185,13 +185,7 @@ export function Header() {
         ref={headerRef}
       >
         <div className="header__inner">
-          <NavLink
-            className={({ isActive }) =>
-              isActive ? 'header__logo header__logo--active' : 'header__logo'
-            }
-            end
-            to={navigationRoutes.home}
-          >
+          <NavLink className="header__logo" end to={navigationRoutes.home}>
             {t('header.logo')}
           </NavLink>
 
