@@ -227,6 +227,7 @@ export function HomePage() {
       texture: THREE.Texture,
       width: number,
       height: number,
+      rotate: boolean,
     ) => {
       const image = texture.image as { height: number; width: number }
 
@@ -235,7 +236,12 @@ export function HomePage() {
       texture.wrapS = THREE.ClampToEdgeWrapping
       texture.wrapT = THREE.ClampToEdgeWrapping
 
-      const imageAspect = image.width / image.height
+      // Cover-fit math for an image that will be displayed rotated 90° needs
+      // its width/height swapped, since the rotation swaps which of its own
+      // dimensions lines up with the plane's width/height.
+      const imageAspect = rotate
+        ? image.height / image.width
+        : image.width / image.height
       const planeAspect = width / height
       const ratio = imageAspect / planeAspect
 
@@ -245,6 +251,11 @@ export function HomePage() {
       } else {
         texture.repeat.set(1, ratio)
         texture.offset.set(0, (1 - ratio) / 2)
+      }
+
+      if (rotate) {
+        texture.center.set(0.5, 0.5)
+        texture.rotation = Math.PI / 2
       }
     }
 
@@ -272,7 +283,7 @@ export function HomePage() {
         })
         const mesh = new THREE.Mesh(geometry, material) as SlideMesh
 
-        configureTexture(textures[index], width, height)
+        configureTexture(textures[index], width, height, isVertical)
 
         mesh.userData = {
           baseRotation: meshBaseRotation,
