@@ -78,7 +78,9 @@ type SlideMesh = THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial> & {
     baseScaleY: number
     caseNumber: number
     href: string | null
+    imageHalfHeight: number
     imageMesh: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial>
+    imageOriginalVertices: number[]
     index: number
     name: string
     offset: number
@@ -281,7 +283,7 @@ export function HomePage() {
         // swapped to match the rotation.
         const imageWidth = isVertical ? height : width
         const imageHeight = isVertical ? width : height
-        const imageGeometry = new THREE.PlaneGeometry(imageWidth, imageHeight)
+        const imageGeometry = new THREE.PlaneGeometry(imageWidth, imageHeight, 20, 10)
         const imageMaterial = new THREE.MeshBasicMaterial({
           color: '#ffffff',
           map: textures[index],
@@ -301,7 +303,9 @@ export function HomePage() {
           baseScaleY: 1,
           caseNumber: slides[index].caseNumber,
           href: slides[index].href,
+          imageHalfHeight: imageHeight / 2,
           imageMesh,
+          imageOriginalVertices: [...imageGeometry.attributes.position.array],
           index,
           name: slides[index].name,
           offset: slideOffsets[index] ?? 0,
@@ -340,15 +344,15 @@ export function HomePage() {
     }
 
     const applyDistortion = (
-      mesh: SlideMesh,
+      geometry: THREE.PlaneGeometry,
+      original: number[],
+      halfHeight: number,
       positionX: number,
       strength: number,
     ) => {
-      const positions = mesh.geometry.attributes.position
-      const original = mesh.userData.originalVertices
+      const positions = geometry.attributes.position
       const distortion = config.distortionStrength * strength
       const shear = config.shearStrength * strength
-      const halfHeight = crossSize / 2
 
       for (let index = 0; index < positions.count; index += 1) {
         const x = original[index * 3] ?? 0
@@ -602,7 +606,13 @@ export function HomePage() {
         }
 
         if (Math.abs(x) < halfLoop + alongSize) {
-          applyDistortion(mesh, x, signedDistortion)
+          applyDistortion(
+            mesh.userData.imageMesh.geometry,
+            mesh.userData.imageOriginalVertices,
+            mesh.userData.imageHalfHeight,
+            x,
+            signedDistortion,
+          )
         }
       })
 
