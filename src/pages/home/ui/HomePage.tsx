@@ -338,10 +338,13 @@ export function HomePage() {
         const bend = Math.pow(Math.sin((falloff * Math.PI) / 2), 1.5)
         const crossNormalized = halfCross === 0 ? 0 : cross / halfCross
 
+        // Shear shifts the along-scroll axis based on cross-axis position — this is
+        // what makes adjacent slides lean together continuously along the seam,
+        // instead of each slide skewing independently on its own cross axis.
         if (isVertical) {
-          positions.setX(index, (original[index * 3] ?? 0) + crossNormalized * shear)
+          positions.setY(index, along + crossNormalized * shear)
         } else {
-          positions.setY(index, (original[index * 3 + 1] ?? 0) + crossNormalized * shear)
+          positions.setX(index, along + crossNormalized * shear)
         }
         positions.setZ(index, bend * distortion)
       }
