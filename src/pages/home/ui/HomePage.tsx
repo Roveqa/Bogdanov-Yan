@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import * as THREE from 'three'
@@ -44,7 +44,34 @@ const slides = cases.flatMap((caseItem) =>
   })),
 )
 
-const config = {
+function zeroPad(value: number) {
+  return String(value).padStart(2, '0')
+}
+
+function CarouselMarkup({
+  canvasRef,
+  countRef,
+  infoRef,
+  titleRef,
+}: {
+  canvasRef: React.RefObject<HTMLCanvasElement | null>
+  countRef: React.RefObject<HTMLParagraphElement | null>
+  infoRef: React.RefObject<HTMLDivElement | null>
+  titleRef: React.RefObject<HTMLParagraphElement | null>
+}) {
+  return (
+    <section className="home-page">
+      <div className="home-page__info" ref={infoRef}>
+        <p className="home-page__title" ref={titleRef} />
+        <p className="home-page__count" ref={countRef} />
+      </div>
+
+      <canvas className="home-page__canvas" ref={canvasRef} />
+    </section>
+  )
+}
+
+const desktopConfig = {
   autoScrollDelay: 1.2,
   autoScrollSpeed: 0.12,
   cursorDriftPixels: 36,
@@ -71,9 +98,8 @@ const config = {
   wheelSpeed: 0.0065,
 } as const
 
-type SlideMesh = THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial> & {
+type DesktopSlideMesh = THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial> & {
   userData: {
-    baseRotation: number
     baseScaleX: number
     baseScaleY: number
     caseNumber: number
@@ -85,11 +111,7 @@ type SlideMesh = THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial> & {
   }
 }
 
-function zeroPad(value: number) {
-  return String(value).padStart(2, '0')
-}
-
-export function HomePage() {
+function DesktopCarousel() {
   const navigate = useNavigate()
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const infoRef = useRef<HTMLDivElement | null>(null)
@@ -105,14 +127,6 @@ export function HomePage() {
     if (!canvas || !infoElement || !titleElement || !countElement) {
       return
     }
-
-    // Mobile reuses the exact desktop scene, positions, and physics — every
-    // slide still moves along world X exactly like desktop. The camera is
-    // rolled 90° so that world X reads as vertical on screen, and each
-    // slide's texture is UV-rotated 90° so its own image content stays
-    // upright. The scroll-velocity bend/shear distortion is skipped on
-    // mobile entirely (kept simple, no wave effect).
-    const isVertical = window.innerWidth <= 768
 
     let activeHref: string | null = null
 
@@ -137,20 +151,7 @@ export function HomePage() {
     )
     camera.position.z = 5
 
-    if (isVertical) {
-      camera.up.set(1, 0, 0)
-      camera.lookAt(0, 0, 0)
-    }
-
-    const meshBaseRotation = 0
-
-    // No per-mesh rotation: meshes keep their default orientation, so local X
-    // is still the along-scroll axis (matching offset spacing) and local Y is
-    // the cross axis (left/right on mobile, top/bottom on desktop).
-    const alongSize = isVertical ? config.slideHeight : config.slideWidth
-    const crossSize = isVertical ? config.slideWidth * 0.42 : config.slideHeight
-
-    const meshes: SlideMesh[] = []
+    const meshes: DesktopSlideMesh[] = []
     const textures: THREE.Texture[] = []
     const textureLoader = new THREE.TextureLoader()
     const velocityHistory = [0, 0, 0, 0, 0]
@@ -206,21 +207,21 @@ export function HomePage() {
     const updateSlideLayout = () => {
       slideOffsets.length = 0
 
-      const gap = getWorldUnitsFromPixels(config.gapPixels)
+      const gap = getWorldUnitsFromPixels(desktopConfig.gapPixels)
       let stackPosition = 0
 
       for (let index = 0; index < totalSlides; index += 1) {
         if (index === 0) {
           slideOffsets.push(0)
-          stackPosition = alongSize / 2
+          stackPosition = desktopConfig.slideWidth / 2
         } else {
-          stackPosition += gap + alongSize / 2
+          stackPosition += gap + desktopConfig.slideWidth / 2
           slideOffsets.push(stackPosition)
-          stackPosition += alongSize / 2
+          stackPosition += desktopConfig.slideWidth / 2
         }
       }
 
-      loopLength = stackPosition + gap + alongSize / 2
+      loopLength = stackPosition + gap + desktopConfig.slideWidth / 2
       halfLoop = loopLength / 2
     }
 
@@ -228,7 +229,6 @@ export function HomePage() {
       texture: THREE.Texture,
       width: number,
       height: number,
-      rotate: boolean,
     ) => {
       const image = texture.image as { height: number; width: number }
 
@@ -237,12 +237,7 @@ export function HomePage() {
       texture.wrapS = THREE.ClampToEdgeWrapping
       texture.wrapT = THREE.ClampToEdgeWrapping
 
-      // Cover-fit math for an image that will be displayed rotated 90° needs
-      // its width/height swapped, since the rotation swaps which of its own
-      // dimensions lines up with the plane's width/height.
-      const imageAspect = rotate
-        ? image.height / image.width
-        : image.width / image.height
+      const imageAspect = image.width / image.height
       const planeAspect = width / height
       const ratio = imageAspect / planeAspect
 
@@ -252,11 +247,6 @@ export function HomePage() {
       } else {
         texture.repeat.set(1, ratio)
         texture.offset.set(0, (1 - ratio) / 2)
-      }
-
-      if (rotate) {
-        texture.center.set(0.5, 0.5)
-        texture.rotation = Math.PI / 2
       }
     }
 
@@ -272,22 +262,21 @@ export function HomePage() {
 
     const buildScene = () => {
       for (let index = 0; index < totalSlides; index += 1) {
-        const width = alongSize
-        const height = crossSize
+        const width = desktopConfig.slideWidth
+        const height = desktopConfig.slideHeight
         const geometry = new THREE.PlaneGeometry(width, height, 20, 10)
         const material = new THREE.MeshBasicMaterial({
           color: '#ffffff',
           map: textures[index],
-          opacity: config.idleOpacity,
+          opacity: desktopConfig.idleOpacity,
           side: THREE.DoubleSide,
           transparent: true,
         })
-        const mesh = new THREE.Mesh(geometry, material) as SlideMesh
+        const mesh = new THREE.Mesh(geometry, material) as DesktopSlideMesh
 
-        configureTexture(textures[index], width, height, isVertical)
+        configureTexture(textures[index], width, height)
 
         mesh.userData = {
-          baseRotation: meshBaseRotation,
           baseScaleX: 1,
           baseScaleY: 1,
           caseNumber: slides[index].caseNumber,
@@ -330,21 +319,21 @@ export function HomePage() {
     }
 
     const applyDistortion = (
-      mesh: SlideMesh,
+      mesh: DesktopSlideMesh,
       positionX: number,
       strength: number,
     ) => {
       const positions = mesh.geometry.attributes.position
       const original = mesh.userData.originalVertices
-      const distortion = config.distortionStrength * strength
-      const shear = config.shearStrength * strength
-      const halfHeight = crossSize / 2
+      const distortion = desktopConfig.distortionStrength * strength
+      const shear = desktopConfig.shearStrength * strength
+      const halfHeight = desktopConfig.slideHeight / 2
 
       for (let index = 0; index < positions.count; index += 1) {
         const x = original[index * 3] ?? 0
         const y = original[index * 3 + 1] ?? 0
         const distance = Math.sqrt((positionX + x) ** 2 + y * y)
-        const falloff = Math.max(0, 1 - distance / config.distortionRadius)
+        const falloff = Math.max(0, 1 - distance / desktopConfig.distortionRadius)
         const bend = Math.pow(Math.sin((falloff * Math.PI) / 2), 1.5)
         const yNormalized = halfHeight === 0 ? 0 : y / halfHeight
 
@@ -366,17 +355,16 @@ export function HomePage() {
 
       event.preventDefault()
 
-      const rawDelta = isVertical
-        ? event.deltaY
-        : Math.abs(event.deltaX) > Math.abs(event.deltaY)
+      const rawDelta =
+        Math.abs(event.deltaX) > Math.abs(event.deltaY)
           ? event.deltaX
           : event.deltaY
 
       const clampedDelta =
-        Math.sign(rawDelta) * Math.min(Math.abs(rawDelta), config.wheelMax)
+        Math.sign(rawDelta) * Math.min(Math.abs(rawDelta), desktopConfig.wheelMax)
 
       addDistortionBurst(Math.abs(clampedDelta) * 0.00045)
-      scrollTarget += clampedDelta * config.wheelSpeed
+      scrollTarget += clampedDelta * desktopConfig.wheelSpeed
       isScrolling = true
 
       window.clearTimeout(scrollTimeoutId)
@@ -420,7 +408,7 @@ export function HomePage() {
       touchLastY = clientY
 
       addDistortionBurst(Math.abs(deltaY) * 0.008)
-      scrollTarget -= deltaY * config.touchSpeed
+      scrollTarget -= deltaY * desktopConfig.touchSpeed
       isScrolling = true
     }
 
@@ -432,7 +420,7 @@ export function HomePage() {
       const swipeVelocity = (touchLastY - touchStartY) * 0.005
 
       if (Math.abs(swipeVelocity) > 0.5) {
-        scrollMomentum = -swipeVelocity * config.touchMomentum
+        scrollMomentum = -swipeVelocity * desktopConfig.touchMomentum
         addDistortionBurst(Math.abs(swipeVelocity) * 0.2)
         isScrolling = true
         window.setTimeout(() => {
@@ -442,14 +430,14 @@ export function HomePage() {
     }
 
     const handleMouseMove = (event: MouseEvent) => {
-      if (!isReady || isVertical) {
+      if (!isReady) {
         return
       }
 
       const normalizedX = event.clientX / window.innerWidth - 0.5
 
       cursorTarget =
-        getWorldUnitsFromPixels(config.cursorDriftPixels) * normalizedX * 2
+        getWorldUnitsFromPixels(desktopConfig.cursorDriftPixels) * normalizedX * 2
     }
 
     const handleMouseLeave = () => {
@@ -483,9 +471,9 @@ export function HomePage() {
 
       if (isScrolling) {
         scrollTarget += scrollMomentum
-        scrollMomentum *= config.momentumFriction
+        scrollMomentum *= desktopConfig.momentumFriction
 
-        if (Math.abs(scrollMomentum) < config.momentumThreshold) {
+        if (Math.abs(scrollMomentum) < desktopConfig.momentumThreshold) {
           scrollMomentum = 0
         }
 
@@ -493,15 +481,15 @@ export function HomePage() {
       } else {
         idleTime += deltaTime
 
-        if (idleTime > config.autoScrollDelay) {
-          scrollTarget += config.autoScrollSpeed * deltaTime
+        if (idleTime > desktopConfig.autoScrollDelay) {
+          scrollTarget += desktopConfig.autoScrollSpeed * deltaTime
         }
       }
 
       scrollPosition = damp(
         scrollPosition,
         scrollTarget,
-        config.smoothing,
+        desktopConfig.smoothing,
         deltaTime,
       )
 
@@ -545,13 +533,13 @@ export function HomePage() {
       distortionAmount = damp(
         distortionAmount,
         distortionTarget,
-        config.distortionSmoothing,
+        desktopConfig.distortionSmoothing,
         deltaTime,
       )
       cursorOffset = damp(
         cursorOffset,
         cursorTarget,
-        config.cursorSmoothing,
+        desktopConfig.cursorSmoothing,
         deltaTime,
       )
 
@@ -566,23 +554,23 @@ export function HomePage() {
         x = wrap(x + halfLoop, loopLength) - halfLoop
         mesh.position.x = x + cursorOffset
 
-        const focus = 1 - Math.min(Math.abs(x) / (alongSize * 1.9), 1)
+        const focus = 1 - Math.min(Math.abs(x) / (desktopConfig.slideWidth * 1.9), 1)
         const opacity = THREE.MathUtils.lerp(
-          config.idleOpacity,
-          config.focusOpacity,
+          desktopConfig.idleOpacity,
+          desktopConfig.focusOpacity,
           focus,
         )
         const scale = THREE.MathUtils.lerp(
-          config.idleScale,
-          config.focusScale,
+          desktopConfig.idleScale,
+          desktopConfig.focusScale,
           focus,
         )
-        const depth = -focus * config.depthStrength
-        const tilt = signedDistortion * config.tiltStrength * focus
+        const depth = -focus * desktopConfig.depthStrength
+        const tilt = signedDistortion * desktopConfig.tiltStrength * focus
 
         mesh.material.opacity = opacity
         mesh.position.z = depth
-        mesh.rotation.z = mesh.userData.baseRotation + tilt
+        mesh.rotation.z = tilt
         mesh.scale.x = mesh.userData.baseScaleX * scale
         mesh.scale.y = mesh.userData.baseScaleY * scale
 
@@ -591,7 +579,7 @@ export function HomePage() {
           closestIndex = mesh.userData.index
         }
 
-        if (!isVertical && Math.abs(x) < halfLoop + alongSize) {
+        if (Math.abs(x) < halfLoop + desktopConfig.slideWidth) {
           applyDistortion(mesh, x, signedDistortion)
         }
       })
@@ -677,13 +665,489 @@ export function HomePage() {
   }, [navigate])
 
   return (
-    <section className="home-page">
-      <div className="home-page__info" ref={infoRef}>
-        <p className="home-page__title" ref={titleRef} />
-        <p className="home-page__count" ref={countRef} />
-      </div>
-
-      <canvas className="home-page__canvas" ref={canvasRef} />
-    </section>
+    <CarouselMarkup
+      canvasRef={canvasRef}
+      countRef={countRef}
+      infoRef={infoRef}
+      titleRef={titleRef}
+    />
   )
+}
+
+// The mobile carousel is a deliberately simpler engine than desktop's: same
+// infinite-loop scroll physics (momentum, autoscroll, focus fade/scale), but
+// the camera is rolled 90° so slides read top-to-bottom, each slide's texture
+// is UV-rotated 90° to stay upright, and there is no bend/shear distortion or
+// cursor-drift — fewer moving parts to keep this side easy to tweak.
+const mobileConfig = {
+  autoScrollDelay: 1.2,
+  autoScrollSpeed: 0.12,
+  crossSizeRatio: 0.42,
+  focusOpacity: 1,
+  focusScale: 1,
+  gapPixels: 1,
+  idleOpacity: 0.34,
+  idleScale: 1,
+  momentumFriction: 0.9,
+  momentumThreshold: 0.0006,
+  slideHeight: 2,
+  slideWidth: 3.67,
+  smoothing: 8.5,
+  touchMomentum: 0.06,
+  touchSpeed: 0.008,
+  wheelMax: 110,
+  wheelSpeed: 0.0065,
+} as const
+
+const mobileAlongSize = mobileConfig.slideHeight
+const mobileCrossSize = mobileConfig.slideWidth * mobileConfig.crossSizeRatio
+
+type MobileSlideMesh = THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial> & {
+  userData: {
+    caseNumber: number
+    href: string | null
+    index: number
+    name: string
+    offset: number
+  }
+}
+
+function MobileCarousel() {
+  const navigate = useNavigate()
+  const canvasRef = useRef<HTMLCanvasElement | null>(null)
+  const infoRef = useRef<HTMLDivElement | null>(null)
+  const titleRef = useRef<HTMLParagraphElement | null>(null)
+  const countRef = useRef<HTMLParagraphElement | null>(null)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    const infoElement = infoRef.current
+    const titleElement = titleRef.current
+    const countElement = countRef.current
+
+    if (!canvas || !infoElement || !titleElement || !countElement) {
+      return
+    }
+
+    let activeHref: string | null = null
+
+    const renderer = new THREE.WebGLRenderer({
+      antialias: true,
+      canvas,
+      powerPreference: 'high-performance',
+      preserveDrawingBuffer: true,
+    })
+    renderer.setSize(window.innerWidth, window.innerHeight)
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    renderer.outputColorSpace = THREE.SRGBColorSpace
+
+    const scene = new THREE.Scene()
+    scene.background = new THREE.Color('#ffffff')
+
+    const camera = new THREE.PerspectiveCamera(
+      45,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      100,
+    )
+    camera.position.z = 5
+    camera.up.set(1, 0, 0)
+    camera.lookAt(0, 0, 0)
+
+    const meshes: MobileSlideMesh[] = []
+    const textures: THREE.Texture[] = []
+    const textureLoader = new THREE.TextureLoader()
+
+    const totalSlides = slides.length
+    const slideOffsets: number[] = []
+
+    let loopLength = 0
+    let halfLoop = 0
+    let isReady = false
+    let animationFrameId = 0
+    let scrollPosition = 0
+    let scrollTarget = 0
+    let scrollMomentum = 0
+    let isScrolling = false
+    let lastFrameTime = 0
+    let touchStartY = 0
+    let touchLastY = 0
+    let activeSlideIndex = -1
+    let scrollTimeoutId = 0
+    let idleTime = 0
+
+    const wrap = (value: number, range: number) =>
+      ((value % range) + range) % range
+
+    const getWorldUnitsFromPixels = (pixels: number) => {
+      const verticalFov = THREE.MathUtils.degToRad(camera.fov)
+      const viewportHeight = 2 * Math.tan(verticalFov / 2) * camera.position.z
+
+      return (pixels / window.innerHeight) * viewportHeight
+    }
+
+    const damp = (
+      current: number,
+      target: number,
+      smoothing: number,
+      deltaTime: number,
+    ) =>
+      THREE.MathUtils.lerp(
+        current,
+        target,
+        1 - Math.exp(-smoothing * deltaTime),
+      )
+
+    const updateSlideLayout = () => {
+      slideOffsets.length = 0
+
+      const gap = getWorldUnitsFromPixels(mobileConfig.gapPixels)
+      let stackPosition = 0
+
+      for (let index = 0; index < totalSlides; index += 1) {
+        if (index === 0) {
+          slideOffsets.push(0)
+          stackPosition = mobileAlongSize / 2
+        } else {
+          stackPosition += gap + mobileAlongSize / 2
+          slideOffsets.push(stackPosition)
+          stackPosition += mobileAlongSize / 2
+        }
+      }
+
+      loopLength = stackPosition + gap + mobileAlongSize / 2
+      halfLoop = loopLength / 2
+    }
+
+    const configureTexture = (texture: THREE.Texture) => {
+      const image = texture.image as { height: number; width: number }
+
+      texture.colorSpace = THREE.SRGBColorSpace
+      texture.anisotropy = renderer.capabilities.getMaxAnisotropy()
+      texture.wrapS = THREE.ClampToEdgeWrapping
+      texture.wrapT = THREE.ClampToEdgeWrapping
+
+      // The image is displayed rotated 90°, so its own width/height are
+      // swapped relative to the plane's width/height for cover-fit math.
+      const imageAspect = image.height / image.width
+      const planeAspect = mobileAlongSize / mobileCrossSize
+      const ratio = imageAspect / planeAspect
+
+      if (ratio > 1) {
+        texture.repeat.set(1 / ratio, 1)
+        texture.offset.set((1 - 1 / ratio) / 2, 0)
+      } else {
+        texture.repeat.set(1, ratio)
+        texture.offset.set(0, (1 - ratio) / 2)
+      }
+
+      texture.center.set(0.5, 0.5)
+      texture.rotation = Math.PI / 2
+    }
+
+    const preloadTextures = async () => {
+      const loadedTextures = await Promise.all(
+        slides.map(({ image }) => textureLoader.loadAsync(image)),
+      )
+
+      loadedTextures.forEach((texture) => {
+        textures.push(texture)
+      })
+    }
+
+    const buildScene = () => {
+      for (let index = 0; index < totalSlides; index += 1) {
+        const geometry = new THREE.PlaneGeometry(mobileAlongSize, mobileCrossSize)
+        const material = new THREE.MeshBasicMaterial({
+          color: '#ffffff',
+          map: textures[index],
+          opacity: mobileConfig.idleOpacity,
+          side: THREE.DoubleSide,
+          transparent: true,
+        })
+        const mesh = new THREE.Mesh(geometry, material) as MobileSlideMesh
+
+        configureTexture(textures[index])
+
+        mesh.userData = {
+          caseNumber: slides[index].caseNumber,
+          href: slides[index].href,
+          index,
+          name: slides[index].name,
+          offset: slideOffsets[index] ?? 0,
+        }
+
+        scene.add(mesh)
+        meshes.push(mesh)
+      }
+    }
+
+    const renderFrame = () => {
+      renderer.render(scene, camera)
+    }
+
+    const warmupRenderer = async () => {
+      if (typeof renderer.compileAsync === 'function') {
+        await renderer.compileAsync(scene, camera)
+      } else {
+        renderer.compile(scene, camera)
+      }
+
+      if (typeof renderer.initTexture === 'function') {
+        textures.forEach((texture: THREE.Texture) => {
+          renderer.initTexture(texture)
+        })
+      }
+
+      renderFrame()
+      await new Promise<void>((resolve) => {
+        window.requestAnimationFrame(() => {
+          resolve()
+        })
+      })
+      renderFrame()
+    }
+
+    const handleWheel = (event: WheelEvent) => {
+      if (!isReady) {
+        return
+      }
+
+      event.preventDefault()
+
+      const clampedDelta =
+        Math.sign(event.deltaY) *
+        Math.min(Math.abs(event.deltaY), mobileConfig.wheelMax)
+
+      scrollTarget += clampedDelta * mobileConfig.wheelSpeed
+      isScrolling = true
+
+      window.clearTimeout(scrollTimeoutId)
+      scrollTimeoutId = window.setTimeout(() => {
+        isScrolling = false
+      }, 150)
+    }
+
+    const handleTouchStart = (event: TouchEvent) => {
+      if (!isReady) {
+        return
+      }
+
+      const touch = event.touches.item(0)
+
+      if (!touch) {
+        return
+      }
+
+      touchStartY = touch.clientY
+      touchLastY = touchStartY
+      isScrolling = false
+      scrollMomentum = 0
+    }
+
+    const handleTouchMove = (event: TouchEvent) => {
+      if (!isReady) {
+        return
+      }
+
+      event.preventDefault()
+
+      const touch = event.touches.item(0)
+
+      if (!touch) {
+        return
+      }
+
+      const clientY = touch.clientY
+      const deltaY = clientY - touchLastY
+      touchLastY = clientY
+
+      scrollTarget -= deltaY * mobileConfig.touchSpeed
+      isScrolling = true
+    }
+
+    const handleTouchEnd = () => {
+      if (!isReady) {
+        return
+      }
+
+      const swipeVelocity = (touchLastY - touchStartY) * 0.005
+
+      if (Math.abs(swipeVelocity) > 0.5) {
+        scrollMomentum = -swipeVelocity * mobileConfig.touchMomentum
+        isScrolling = true
+        window.setTimeout(() => {
+          isScrolling = false
+        }, 800)
+      }
+    }
+
+    const handleClick = () => {
+      if (activeHref) {
+        void navigate(activeHref)
+      }
+    }
+
+    const handleResize = () => {
+      camera.aspect = window.innerWidth / window.innerHeight
+      camera.updateProjectionMatrix()
+      renderer.setSize(window.innerWidth, window.innerHeight)
+      updateSlideLayout()
+
+      meshes.forEach((mesh, index) => {
+        mesh.userData.offset = slideOffsets[index] ?? 0
+      })
+    }
+
+    const animate = (time = 0) => {
+      animationFrameId = window.requestAnimationFrame(animate)
+
+      const deltaTime = lastFrameTime ? (time - lastFrameTime) / 1000 : 0.016
+      lastFrameTime = time
+
+      if (isScrolling) {
+        scrollTarget += scrollMomentum
+        scrollMomentum *= mobileConfig.momentumFriction
+
+        if (Math.abs(scrollMomentum) < mobileConfig.momentumThreshold) {
+          scrollMomentum = 0
+        }
+
+        idleTime = 0
+      } else {
+        idleTime += deltaTime
+
+        if (idleTime > mobileConfig.autoScrollDelay) {
+          scrollTarget += mobileConfig.autoScrollSpeed * deltaTime
+        }
+      }
+
+      scrollPosition = damp(
+        scrollPosition,
+        scrollTarget,
+        mobileConfig.smoothing,
+        deltaTime,
+      )
+
+      let closestDistance = Infinity
+      let closestIndex = 0
+
+      meshes.forEach((mesh) => {
+        const { offset } = mesh.userData
+        let x = offset - wrap(scrollPosition, loopLength)
+
+        x = wrap(x + halfLoop, loopLength) - halfLoop
+        mesh.position.x = x
+
+        const focus = 1 - Math.min(Math.abs(x) / (mobileAlongSize * 1.9), 1)
+        const opacity = THREE.MathUtils.lerp(
+          mobileConfig.idleOpacity,
+          mobileConfig.focusOpacity,
+          focus,
+        )
+        const scale = THREE.MathUtils.lerp(
+          mobileConfig.idleScale,
+          mobileConfig.focusScale,
+          focus,
+        )
+
+        mesh.material.opacity = opacity
+        mesh.scale.setScalar(scale)
+
+        if (Math.abs(x) < closestDistance) {
+          closestDistance = Math.abs(x)
+          closestIndex = mesh.userData.index
+        }
+      })
+
+      if (closestIndex !== activeSlideIndex) {
+        activeSlideIndex = closestIndex
+        titleElement.textContent = slides[activeSlideIndex].name
+        countElement.textContent = zeroPad(slides[activeSlideIndex].caseNumber)
+
+        activeHref = slides[activeSlideIndex].href
+        canvas.style.cursor = activeHref ? 'pointer' : 'default'
+        infoElement.classList.toggle('home-page__info--clickable', Boolean(activeHref))
+      }
+
+      renderFrame()
+    }
+
+    const cancelled: { current: boolean } = { current: false }
+    const isCancelled = () => cancelled.current
+
+    const init = async () => {
+      updateSlideLayout()
+      await preloadTextures()
+
+      if (isCancelled()) {
+        return
+      }
+
+      buildScene()
+      await warmupRenderer()
+
+      if (isCancelled()) {
+        return
+      }
+
+      titleElement.textContent = slides[0].name
+      countElement.textContent = zeroPad(1)
+      activeHref = slides[0].href
+      canvas.style.cursor = activeHref ? 'pointer' : 'default'
+      infoElement.classList.toggle('home-page__info--clickable', Boolean(activeHref))
+
+      isReady = true
+      animate()
+    }
+
+    window.addEventListener('wheel', handleWheel, { passive: false })
+    window.addEventListener('touchstart', handleTouchStart, { passive: false })
+    window.addEventListener('touchmove', handleTouchMove, { passive: false })
+    window.addEventListener('touchend', handleTouchEnd)
+    window.addEventListener('resize', handleResize)
+    canvas.addEventListener('click', handleClick)
+    infoElement.addEventListener('click', handleClick)
+
+    void init()
+
+    return () => {
+      cancelled.current = true
+      isReady = false
+      window.cancelAnimationFrame(animationFrameId)
+      window.clearTimeout(scrollTimeoutId)
+      window.removeEventListener('wheel', handleWheel)
+      window.removeEventListener('touchstart', handleTouchStart)
+      window.removeEventListener('touchmove', handleTouchMove)
+      window.removeEventListener('touchend', handleTouchEnd)
+      window.removeEventListener('resize', handleResize)
+      canvas.removeEventListener('click', handleClick)
+      infoElement.removeEventListener('click', handleClick)
+
+      meshes.forEach((mesh) => {
+        mesh.geometry.dispose()
+        mesh.material.dispose()
+      })
+      textures.forEach((texture) => {
+        texture.dispose()
+      })
+      renderer.dispose()
+      scene.clear()
+    }
+  }, [navigate])
+
+  return (
+    <CarouselMarkup
+      canvasRef={canvasRef}
+      countRef={countRef}
+      infoRef={infoRef}
+      titleRef={titleRef}
+    />
+  )
+}
+
+export function HomePage() {
+  const [isMobile] = useState(() => window.innerWidth <= 768)
+
+  return isMobile ? <MobileCarousel /> : <DesktopCarousel />
 }
