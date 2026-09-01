@@ -60,20 +60,20 @@ const mobileCases = [
     href: '/works/rennu',
     name: 'Rennu',
     images: [
-      withBase('/home-animation/mobile/rennu-1.jpg'),
-      withBase('/home-animation/mobile/rennu-2.jpg'),
-      withBase('/home-animation/mobile/rennu-3.jpg'),
-      withBase('/home-animation/mobile/rennu-4.jpg'),
+      withBase('/home-animation/mobile/rennu-1.png'),
+      withBase('/home-animation/mobile/rennu-2.png'),
+      withBase('/home-animation/mobile/rennu-3.png'),
+      withBase('/home-animation/mobile/rennu-4.png'),
     ],
   },
   {
     href: '/works/ecolos',
     name: 'Ecolos',
     images: [
-      withBase('/home-animation/mobile/ecolos-1.jpg'),
-      withBase('/home-animation/mobile/ecolos-2.jpg'),
-      withBase('/home-animation/mobile/ecolos-3.jpg'),
-      withBase('/home-animation/mobile/ecolos-4.jpg'),
+      withBase('/home-animation/mobile/ecolos-1.png'),
+      withBase('/home-animation/mobile/ecolos-2.png'),
+      withBase('/home-animation/mobile/ecolos-3.png'),
+      withBase('/home-animation/mobile/ecolos-4.png'),
     ],
   },
   {
