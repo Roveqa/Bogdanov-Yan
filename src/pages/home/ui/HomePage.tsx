@@ -71,11 +71,6 @@ const config = {
   wheelSpeed: 0.0065,
 } as const
 
-const mobileConfig = {
-  ...config,
-  slideHeight: 1.55,
-  slideWidth: 2.85,
-} as const
 
 type SlideMesh = THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial> & {
   userData: {
@@ -112,9 +107,20 @@ export function HomePage() {
     }
 
     const isVertical = window.innerWidth <= 768
-    const axisConfig = isVertical ? mobileConfig : config
-    const axisSize = isVertical ? axisConfig.slideHeight : axisConfig.slideWidth
-    const crossSize = isVertical ? axisConfig.slideWidth : axisConfig.slideHeight
+    const axisConfig = config
+
+    // The camera's world height at z=0 is fixed by its vertical FOV and distance,
+    // regardless of viewport aspect — only world width scales with aspect.
+    const worldHeight = 2 * Math.tan(THREE.MathUtils.degToRad(45) / 2) * 5
+    const worldWidth = worldHeight * (window.innerWidth / window.innerHeight)
+
+    // On desktop the scroll axis (width) is sized in fixed world units and the
+    // cross axis (height) is deliberately smaller, leaving a constant top/bottom
+    // margin. Mobile mirrors that: the scroll axis (height) fills the viewport
+    // so slides butt up seamlessly, and the cross axis (width) is a fraction of
+    // the actual world width, leaving a constant left/right margin instead.
+    const axisSize = isVertical ? worldHeight * 1.04 : axisConfig.slideWidth
+    const crossSize = isVertical ? worldWidth * 0.82 : axisConfig.slideHeight
 
     let activeHref: string | null = null
 
