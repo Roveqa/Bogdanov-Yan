@@ -317,7 +317,7 @@ export function Header() {
             end
             to={navigationRoutes.home}
           >
-            {t('header.logo')}
+            {t('header.home')}
           </NavLink>
 
           <NavLink

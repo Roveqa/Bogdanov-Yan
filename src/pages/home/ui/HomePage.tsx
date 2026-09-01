@@ -7,6 +7,28 @@ import { withBase } from '@shared/lib/browser/asset-url'
 
 import './HomePage.sass'
 
+const mobileCardWidth = 292
+
+function pctX(value: number) {
+  return `${String((value / mobileCardWidth) * 100)}%`
+}
+
+const mobileAssets = {
+  rennu1a: withBase('/home-mobile/rennu-1-a.png'),
+  rennu1b: withBase('/home-mobile/rennu-1-b.png'),
+  rennu2bg: withBase('/home-mobile/rennu-2-bg.png'),
+  rennu3: withBase('/home-mobile/rennu-3.png'),
+  rennu4bg: withBase('/home-mobile/rennu-4-bg.png'),
+  rennu4inset: withBase('/home-mobile/rennu-4-inset.png'),
+  rennuLogo: withBase('/home-mobile/rennu-logo.svg'),
+  ecolos1bg: withBase('/home-mobile/ecolos-1-bg.png'),
+  ecolos1mockup: withBase('/home-mobile/ecolos-1-mockup.png'),
+  ecolos1topbar: withBase('/home-mobile/ecolos-1-topbar.png'),
+  ecolos2: withBase('/home-mobile/ecolos-2.png'),
+  ecolos3: withBase('/home-mobile/ecolos-3.jpg'),
+  ecolos4: withBase('/home-mobile/ecolos-4.png'),
+}
+
 const cases = [
   {
     href: '/works/rennu',
@@ -105,9 +127,13 @@ export function HomePage() {
       const viewportCenter = window.innerHeight / 2
 
       mobileCardRefs.current.forEach((card) => {
-        const image = card?.querySelector<HTMLElement>('.home-page__mobile-image')
+        if (!card) {
+          return
+        }
 
-        if (!card || !image) {
+        const images = card.querySelectorAll<HTMLElement>('.home-page__mobile-parallax')
+
+        if (images.length === 0) {
           return
         }
 
@@ -115,8 +141,11 @@ export function HomePage() {
         const cardCenter = rect.top + rect.height / 2
         const rawProgress = (viewportCenter - cardCenter) / window.innerHeight
         const progress = Math.min(1, Math.max(-1, rawProgress))
+        const offset = progress * parallaxStrength
 
-        image.style.transform = `translate3d(0, ${String(progress * parallaxStrength)}px, 0)`
+        images.forEach((image) => {
+          image.style.transform = `translate3d(0, ${String(offset)}px, 0)`
+        })
       })
     }
 
@@ -700,23 +729,167 @@ export function HomePage() {
       <canvas className="home-page__canvas" ref={canvasRef} />
 
       <div className="home-page__mobile">
-        {slides.map((slide, index) => (
-          <NavLink
-            key={`${slide.href}-${String(slide.caseNumber)}`}
-            className="home-page__mobile-card"
-            ref={(node) => {
-              mobileCardRefs.current[index] = node
+        <NavLink
+          className="home-page__mobile-card home-page__mobile-card--gradient"
+          ref={(node) => {
+            mobileCardRefs.current[0] = node
+          }}
+          to="/works/rennu"
+        >
+          <img
+            alt=""
+            className="home-page__mobile-parallax"
+            loading="lazy"
+            src={mobileAssets.rennu1a}
+            style={{ left: pctX(-190), top: '0.12px', width: pctX(639), height: '360px' }}
+          />
+          <img
+            alt="Rennu"
+            className="home-page__mobile-parallax"
+            loading="lazy"
+            src={mobileAssets.rennu1b}
+            style={{ left: pctX(-190), top: '0.12px', width: pctX(639), height: '360px' }}
+          />
+        </NavLink>
+
+        <NavLink className="home-page__mobile-card" to="/works/rennu">
+          <img
+            alt=""
+            className="home-page__mobile-fill"
+            loading="lazy"
+            src={mobileAssets.rennu2bg}
+          />
+          <div className="home-page__mobile-logo">
+            <div className="home-page__mobile-logo-bars">
+              <span style={{ opacity: 0.2 }} />
+              <span style={{ opacity: 0.4 }} />
+              <span style={{ opacity: 0.6 }} />
+              <span style={{ opacity: 0.8 }} />
+              <span style={{ opacity: 1 }} />
+            </div>
+            <img alt="Rennu" src={mobileAssets.rennuLogo} />
+          </div>
+        </NavLink>
+
+        <NavLink
+          className="home-page__mobile-card"
+          ref={(node) => {
+            mobileCardRefs.current[1] = node
+          }}
+          to="/works/rennu"
+        >
+          <img
+            alt="Rennu"
+            className="home-page__mobile-parallax"
+            loading="lazy"
+            src={mobileAssets.rennu3}
+            style={{ left: 0, top: '70.45px', width: '100%', height: '219px' }}
+          />
+        </NavLink>
+
+        <NavLink
+          className="home-page__mobile-card"
+          ref={(node) => {
+            mobileCardRefs.current[2] = node
+          }}
+          to="/works/rennu"
+        >
+          <img
+            alt="Rennu"
+            className="home-page__mobile-parallax"
+            loading="lazy"
+            src={mobileAssets.rennu4bg}
+            style={{ left: pctX(-96), top: '38.12px', width: pctX(483), height: '322px' }}
+          />
+          <img
+            alt=""
+            loading="lazy"
+            src={mobileAssets.rennu4inset}
+            style={{
+              position: 'absolute',
+              left: pctX(-96 + 201.39 + 13.84),
+              top: '150.82px',
+              width: pctX(141.7),
+              height: '135.68px',
+              objectFit: 'cover',
             }}
-            to={slide.href}
+          />
+        </NavLink>
+
+        <NavLink
+          className="home-page__mobile-card home-page__mobile-card--gradient"
+          ref={(node) => {
+            mobileCardRefs.current[3] = node
+          }}
+          to="/works/ecolos"
+        >
+          <img
+            alt=""
+            className="home-page__mobile-parallax"
+            loading="lazy"
+            src={mobileAssets.ecolos1bg}
+            style={{ left: pctX(-76.3), top: '63.34px', width: pctX(444.65), height: '296.63px' }}
+          />
+          <div className="home-page__mobile-overlay" />
+          <div
+            className="home-page__mobile-mockup"
+            style={{ left: pctX(-76.3 + 106.08), top: '111.75px', width: pctX(235.56), height: '132.08px' }}
           >
-            <img
-              alt={slide.name}
-              className="home-page__mobile-image"
-              loading="lazy"
-              src={slide.image}
-            />
-          </NavLink>
-        ))}
+            <img alt="Ecolos" loading="lazy" src={mobileAssets.ecolos1mockup} />
+            <img alt="" className="home-page__mobile-mockup-topbar" loading="lazy" src={mobileAssets.ecolos1topbar} />
+            <p className="home-page__mobile-mockup-caption">
+              Оптимизируем смету. Вы экономите до 30%
+            </p>
+          </div>
+        </NavLink>
+
+        <NavLink
+          className="home-page__mobile-card"
+          ref={(node) => {
+            mobileCardRefs.current[4] = node
+          }}
+          to="/works/ecolos"
+        >
+          <img
+            alt="Ecolos"
+            className="home-page__mobile-parallax"
+            loading="lazy"
+            src={mobileAssets.ecolos2}
+            style={{ left: pctX(-99.45), top: '-0.33px', width: pctX(490.91), height: '360px' }}
+          />
+        </NavLink>
+
+        <NavLink
+          className="home-page__mobile-card"
+          ref={(node) => {
+            mobileCardRefs.current[5] = node
+          }}
+          to="/works/ecolos"
+        >
+          <img
+            alt="Ecolos"
+            className="home-page__mobile-parallax"
+            loading="lazy"
+            src={mobileAssets.ecolos3}
+            style={{ left: pctX(-124), top: '0.33px', width: pctX(540), height: '360px' }}
+          />
+        </NavLink>
+
+        <NavLink
+          className="home-page__mobile-card"
+          ref={(node) => {
+            mobileCardRefs.current[6] = node
+          }}
+          to="/works/ecolos"
+        >
+          <img
+            alt="Ecolos"
+            className="home-page__mobile-parallax"
+            loading="lazy"
+            src={mobileAssets.ecolos4}
+            style={{ left: pctX(-64.82), top: 0, width: pctX(421.64), height: '360px' }}
+          />
+        </NavLink>
       </div>
     </section>
   )
