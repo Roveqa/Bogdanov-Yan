@@ -120,7 +120,16 @@ export function HomePage() {
     // so slides butt up seamlessly, and the cross axis (width) is a fraction of
     // the actual world width, leaving a constant left/right margin instead.
     const axisSize = isVertical ? worldHeight * 1.04 : axisConfig.slideWidth
-    const crossSize = isVertical ? worldWidth * 0.82 : axisConfig.slideHeight
+    // Match the Figma mobile card proportions: 292px card inset within a 380px frame.
+    const crossSize = isVertical ? worldWidth * (292 / 380) : axisConfig.slideHeight
+
+    // Desktop's distortion wave spans multiple adjacent slides because its radius
+    // is larger than a single slide. Mobile's slide (axisSize) is a different
+    // absolute size, so scale the radius by the same ratio to keep the wave
+    // continuous across cards instead of collapsing into each card individually.
+    const distortionRadius = isVertical
+      ? axisSize * (axisConfig.distortionRadius / axisConfig.slideWidth)
+      : axisConfig.distortionRadius
 
     let activeHref: string | null = null
 
@@ -329,7 +338,7 @@ export function HomePage() {
         const along = original[index * 3 + alongComponent] ?? 0
         const cross = original[index * 3 + crossComponent] ?? 0
         const distance = Math.sqrt((positionAlong + along) ** 2 + cross * cross)
-        const falloff = Math.max(0, 1 - distance / axisConfig.distortionRadius)
+        const falloff = Math.max(0, 1 - distance / distortionRadius)
         const bend = Math.pow(Math.sin((falloff * Math.PI) / 2), 1.5)
         const crossNormalized = halfCross === 0 ? 0 : cross / halfCross
 
