@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 
 import * as THREE from 'three'
 
@@ -94,6 +94,51 @@ export function HomePage() {
   const infoRef = useRef<HTMLDivElement | null>(null)
   const titleRef = useRef<HTMLParagraphElement | null>(null)
   const countRef = useRef<HTMLParagraphElement | null>(null)
+  const mobileCardRefs = useRef<(HTMLAnchorElement | null)[]>([])
+
+  useEffect(() => {
+    const parallaxStrength = 40
+    let frame = 0
+
+    const update = () => {
+      frame = 0
+      const viewportCenter = window.innerHeight / 2
+
+      mobileCardRefs.current.forEach((card) => {
+        const image = card?.querySelector<HTMLElement>('.home-page__mobile-image')
+
+        if (!card || !image) {
+          return
+        }
+
+        const rect = card.getBoundingClientRect()
+        const cardCenter = rect.top + rect.height / 2
+        const rawProgress = (viewportCenter - cardCenter) / window.innerHeight
+        const progress = Math.min(1, Math.max(-1, rawProgress))
+
+        image.style.transform = `translate3d(0, ${String(progress * parallaxStrength)}px, 0)`
+      })
+    }
+
+    const onScroll = () => {
+      if (frame) {
+        return
+      }
+      frame = window.requestAnimationFrame(update)
+    }
+
+    update()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      if (frame) {
+        window.cancelAnimationFrame(frame)
+      }
+    }
+  }, [])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -102,6 +147,10 @@ export function HomePage() {
     const countElement = countRef.current
 
     if (!canvas || !infoElement || !titleElement || !countElement) {
+      return
+    }
+
+    if (window.innerWidth <= 768) {
       return
     }
 
@@ -649,6 +698,26 @@ export function HomePage() {
       </div>
 
       <canvas className="home-page__canvas" ref={canvasRef} />
+
+      <div className="home-page__mobile">
+        {slides.map((slide, index) => (
+          <NavLink
+            key={`${slide.href}-${String(slide.caseNumber)}`}
+            className="home-page__mobile-card"
+            ref={(node) => {
+              mobileCardRefs.current[index] = node
+            }}
+            to={slide.href}
+          >
+            <img
+              alt={slide.name}
+              className="home-page__mobile-image"
+              loading="lazy"
+              src={slide.image}
+            />
+          </NavLink>
+        ))}
+      </div>
     </section>
   )
 }

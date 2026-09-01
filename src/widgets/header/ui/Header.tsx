@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 
 import { useTranslation } from 'react-i18next'
 
@@ -30,11 +30,13 @@ const menuCloseDelay = 100
 export function Header() {
   const { t } = useTranslation('common')
   const { currentLocale, setLocale } = useLocale()
+  const location = useLocation()
   const headerRef = useRef<HTMLElement | null>(null)
   const closeTimeoutRef = useRef<number | null>(null)
   const [openMenu, setOpenMenu] = useState<OpenMenu>(null)
   const [isInverted, setIsInverted] = useState(false)
   const [currentTime, setCurrentTime] = useState(getCurrentTime)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const isContactOpen = openMenu === 'contact'
   const isLanguageOpen = openMenu === 'language'
@@ -61,6 +63,23 @@ export function Header() {
       }
     }
   }, [])
+
+  useEffect(() => {
+    setIsMobileMenuOpen(false)
+  }, [location.pathname])
+
+  useEffect(() => {
+    if (!isMobileMenuOpen) {
+      return
+    }
+
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    return () => {
+      document.body.style.overflow = previousOverflow
+    }
+  }, [isMobileMenuOpen])
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -143,7 +162,9 @@ export function Header() {
   return (
     <>
       <header
-        className={isInverted ? 'header header--invert' : 'header'}
+        className={
+          isInverted && !isMobileMenuOpen ? 'header header--invert' : 'header'
+        }
         ref={headerRef}
       >
         <div className="header__inner">
@@ -253,6 +274,25 @@ export function Header() {
               </div>
             </div>
           </nav>
+
+          <button
+            aria-expanded={isMobileMenuOpen}
+            className="header__mobile-trigger"
+            onClick={() => {
+              setIsMobileMenuOpen((open) => !open)
+            }}
+            type="button"
+          >
+            <span>{t('header.menu')}</span>
+            <span
+              aria-hidden="true"
+              className={
+                isMobileMenuOpen
+                  ? 'header__mobile-icon header__mobile-icon--open'
+                  : 'header__mobile-icon'
+              }
+            />
+          </button>
         </div>
       </header>
 
@@ -261,6 +301,77 @@ export function Header() {
           isContactOpen || isLanguageOpen ? 'header__overlay header__overlay--open' : 'header__overlay'
         }
       />
+
+      <div
+        className={
+          isMobileMenuOpen ? 'header__mobile-panel header__mobile-panel--open' : 'header__mobile-panel'
+        }
+      >
+        <nav aria-label="Mobile" className="header__mobile-nav">
+          <NavLink
+            className={({ isActive }) =>
+              isActive
+                ? 'header__mobile-nav-link header__mobile-nav-link--active'
+                : 'header__mobile-nav-link'
+            }
+            end
+            to={navigationRoutes.home}
+          >
+            {t('header.logo')}
+          </NavLink>
+
+          <NavLink
+            className={({ isActive }) =>
+              isActive
+                ? 'header__mobile-nav-link header__mobile-nav-link--active'
+                : 'header__mobile-nav-link'
+            }
+            to={navigationRoutes.about}
+          >
+            {t('header.about')}
+          </NavLink>
+
+          <NavLink
+            className={({ isActive }) =>
+              isActive
+                ? 'header__mobile-nav-link header__mobile-nav-link--active'
+                : 'header__mobile-nav-link'
+            }
+            to={navigationRoutes.works}
+          >
+            {t('header.works')}
+          </NavLink>
+        </nav>
+
+        <div className="header__mobile-footer">
+          <button
+            className="header__mobile-lang"
+            onClick={() => {
+              setLocale(alternateLocale)
+            }}
+            type="button"
+          >
+            {currentLocale} / <span className="header__mobile-lang-alt">{alternateLocale}</span>
+          </button>
+
+          <div className="header__mobile-contacts">
+            {contactLinks.map((link) => (
+              <a
+                key={link.label}
+                className="header__mobile-contact-link"
+                href={link.href}
+                rel="noreferrer"
+                target="_blank"
+              >
+                {link.label}
+              </a>
+            ))}
+            <a className="header__mobile-contact-link" href={`mailto:${contactEmail}`}>
+              {contactEmail}
+            </a>
+          </div>
+        </div>
+      </div>
     </>
   )
 }
