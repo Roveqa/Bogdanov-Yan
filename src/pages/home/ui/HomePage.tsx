@@ -1,42 +1,11 @@
 import { useEffect, useRef } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import * as THREE from 'three'
 
 import { withBase } from '@shared/lib/browser/asset-url'
 
 import './HomePage.sass'
-
-const mobileCardWidth = 292
-
-function pctX(value: number) {
-  return `${String((value / mobileCardWidth) * 100)}%`
-}
-
-const parallaxBleed = 45
-
-function parallaxBox(top: number, height: number) {
-  return {
-    top: `${String(top - parallaxBleed)}px`,
-    height: `${String(height + parallaxBleed * 2)}px`,
-  }
-}
-
-const mobileAssets = {
-  rennu1a: withBase('/home-mobile/rennu-1-a.png'),
-  rennu1b: withBase('/home-mobile/rennu-1-b.png'),
-  rennu2bg: withBase('/home-mobile/rennu-2-bg.png'),
-  rennu3: withBase('/home-mobile/rennu-3.png'),
-  rennu4bg: withBase('/home-mobile/rennu-4-bg.png'),
-  rennu4inset: withBase('/home-mobile/rennu-4-inset.png'),
-  rennuLogo: withBase('/home-mobile/rennu-logo.svg'),
-  ecolos1bg: withBase('/home-mobile/ecolos-1-bg.png'),
-  ecolos1mockup: withBase('/home-mobile/ecolos-1-mockup.png'),
-  ecolos1topbar: withBase('/home-mobile/ecolos-1-topbar.png'),
-  ecolos2: withBase('/home-mobile/ecolos-2.png'),
-  ecolos3: withBase('/home-mobile/ecolos-3.jpg'),
-  ecolos4: withBase('/home-mobile/ecolos-4.png'),
-}
 
 const cases = [
   {
@@ -102,6 +71,12 @@ const config = {
   wheelSpeed: 0.0065,
 } as const
 
+const mobileConfig = {
+  ...config,
+  slideHeight: 1.55,
+  slideWidth: 2.85,
+} as const
+
 type SlideMesh = THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial> & {
   userData: {
     baseScaleX: number
@@ -125,58 +100,6 @@ export function HomePage() {
   const infoRef = useRef<HTMLDivElement | null>(null)
   const titleRef = useRef<HTMLParagraphElement | null>(null)
   const countRef = useRef<HTMLParagraphElement | null>(null)
-  const mobileCardRefs = useRef<(HTMLAnchorElement | null)[]>([])
-
-  useEffect(() => {
-    const parallaxStrength = 40
-    let frame = 0
-
-    const update = () => {
-      frame = 0
-      const viewportCenter = window.innerHeight / 2
-
-      mobileCardRefs.current.forEach((card) => {
-        if (!card) {
-          return
-        }
-
-        const images = card.querySelectorAll<HTMLElement>('.home-page__mobile-parallax')
-
-        if (images.length === 0) {
-          return
-        }
-
-        const rect = card.getBoundingClientRect()
-        const cardCenter = rect.top + rect.height / 2
-        const rawProgress = (viewportCenter - cardCenter) / window.innerHeight
-        const progress = Math.min(1, Math.max(-1, rawProgress))
-        const offset = progress * parallaxStrength
-
-        images.forEach((image) => {
-          image.style.transform = `translate3d(0, ${String(offset)}px, 0)`
-        })
-      })
-    }
-
-    const onScroll = () => {
-      if (frame) {
-        return
-      }
-      frame = window.requestAnimationFrame(update)
-    }
-
-    update()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', onScroll)
-
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('resize', onScroll)
-      if (frame) {
-        window.cancelAnimationFrame(frame)
-      }
-    }
-  }, [])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -188,9 +111,10 @@ export function HomePage() {
       return
     }
 
-    if (window.innerWidth <= 768) {
-      return
-    }
+    const isVertical = window.innerWidth <= 768
+    const axisConfig = isVertical ? mobileConfig : config
+    const axisSize = isVertical ? axisConfig.slideHeight : axisConfig.slideWidth
+    const crossSize = isVertical ? axisConfig.slideWidth : axisConfig.slideHeight
 
     let activeHref: string | null = null
 
@@ -237,8 +161,8 @@ export function HomePage() {
     let velocityPeak = 0
     let scrollDirection = 0
     let directionTarget = 0
-    let touchStartY = 0
-    let touchLastY = 0
+    let touchStartPos = 0
+    let touchLastPos = 0
     let cursorTarget = 0
     let cursorOffset = 0
     let activeSlideIndex = -1
@@ -271,21 +195,21 @@ export function HomePage() {
     const updateSlideLayout = () => {
       slideOffsets.length = 0
 
-      const gap = getWorldUnitsFromPixels(config.gapPixels)
+      const gap = getWorldUnitsFromPixels(axisConfig.gapPixels)
       let stackPosition = 0
 
       for (let index = 0; index < totalSlides; index += 1) {
         if (index === 0) {
           slideOffsets.push(0)
-          stackPosition = config.slideWidth / 2
+          stackPosition = axisSize / 2
         } else {
-          stackPosition += gap + config.slideWidth / 2
+          stackPosition += gap + axisSize / 2
           slideOffsets.push(stackPosition)
-          stackPosition += config.slideWidth / 2
+          stackPosition += axisSize / 2
         }
       }
 
-      loopLength = stackPosition + gap + config.slideWidth / 2
+      loopLength = stackPosition + gap + axisSize / 2
       halfLoop = loopLength / 2
     }
 
@@ -326,13 +250,13 @@ export function HomePage() {
 
     const buildScene = () => {
       for (let index = 0; index < totalSlides; index += 1) {
-        const width = config.slideWidth
-        const height = config.slideHeight
+        const width = isVertical ? crossSize : axisSize
+        const height = isVertical ? axisSize : crossSize
         const geometry = new THREE.PlaneGeometry(width, height, 20, 10)
         const material = new THREE.MeshBasicMaterial({
           color: '#ffffff',
           map: textures[index],
-          opacity: config.idleOpacity,
+          opacity: axisConfig.idleOpacity,
           side: THREE.DoubleSide,
           transparent: true,
         })
@@ -384,24 +308,30 @@ export function HomePage() {
 
     const applyDistortion = (
       mesh: SlideMesh,
-      positionX: number,
+      positionAlong: number,
       strength: number,
     ) => {
       const positions = mesh.geometry.attributes.position
       const original = mesh.userData.originalVertices
-      const distortion = config.distortionStrength * strength
-      const shear = config.shearStrength * strength
-      const halfHeight = config.slideHeight / 2
+      const distortion = axisConfig.distortionStrength * strength
+      const shear = axisConfig.shearStrength * strength
+      const halfCross = crossSize / 2
+      const alongComponent = isVertical ? 1 : 0
+      const crossComponent = isVertical ? 0 : 1
 
       for (let index = 0; index < positions.count; index += 1) {
-        const x = original[index * 3] ?? 0
-        const y = original[index * 3 + 1] ?? 0
-        const distance = Math.sqrt((positionX + x) ** 2 + y * y)
-        const falloff = Math.max(0, 1 - distance / config.distortionRadius)
+        const along = original[index * 3 + alongComponent] ?? 0
+        const cross = original[index * 3 + crossComponent] ?? 0
+        const distance = Math.sqrt((positionAlong + along) ** 2 + cross * cross)
+        const falloff = Math.max(0, 1 - distance / axisConfig.distortionRadius)
         const bend = Math.pow(Math.sin((falloff * Math.PI) / 2), 1.5)
-        const yNormalized = halfHeight === 0 ? 0 : y / halfHeight
+        const crossNormalized = halfCross === 0 ? 0 : cross / halfCross
 
-        positions.setX(index, x + yNormalized * shear)
+        if (isVertical) {
+          positions.setX(index, (original[index * 3] ?? 0) + crossNormalized * shear)
+        } else {
+          positions.setY(index, (original[index * 3 + 1] ?? 0) + crossNormalized * shear)
+        }
         positions.setZ(index, bend * distortion)
       }
 
@@ -419,16 +349,17 @@ export function HomePage() {
 
       event.preventDefault()
 
-      const rawDelta =
-        Math.abs(event.deltaX) > Math.abs(event.deltaY)
+      const rawDelta = isVertical
+        ? event.deltaY
+        : Math.abs(event.deltaX) > Math.abs(event.deltaY)
           ? event.deltaX
           : event.deltaY
 
       const clampedDelta =
-        Math.sign(rawDelta) * Math.min(Math.abs(rawDelta), config.wheelMax)
+        Math.sign(rawDelta) * Math.min(Math.abs(rawDelta), axisConfig.wheelMax)
 
       addDistortionBurst(Math.abs(clampedDelta) * 0.00045)
-      scrollTarget += clampedDelta * config.wheelSpeed
+      scrollTarget += clampedDelta * axisConfig.wheelSpeed
       isScrolling = true
 
       window.clearTimeout(scrollTimeoutId)
@@ -448,8 +379,8 @@ export function HomePage() {
         return
       }
 
-      touchStartY = touch.clientY
-      touchLastY = touchStartY
+      touchStartPos = touch.clientY
+      touchLastPos = touchStartPos
       isScrolling = false
       scrollMomentum = 0
     }
@@ -467,12 +398,12 @@ export function HomePage() {
         return
       }
 
-      const clientY = touch.clientY
-      const deltaY = clientY - touchLastY
-      touchLastY = clientY
+      const clientPos = touch.clientY
+      const delta = clientPos - touchLastPos
+      touchLastPos = clientPos
 
-      addDistortionBurst(Math.abs(deltaY) * 0.008)
-      scrollTarget -= deltaY * config.touchSpeed
+      addDistortionBurst(Math.abs(delta) * 0.008)
+      scrollTarget += (isVertical ? delta : -delta) * axisConfig.touchSpeed
       isScrolling = true
     }
 
@@ -481,10 +412,10 @@ export function HomePage() {
         return
       }
 
-      const swipeVelocity = (touchLastY - touchStartY) * 0.005
+      const swipeVelocity = (touchLastPos - touchStartPos) * 0.005
 
       if (Math.abs(swipeVelocity) > 0.5) {
-        scrollMomentum = -swipeVelocity * config.touchMomentum
+        scrollMomentum = (isVertical ? swipeVelocity : -swipeVelocity) * axisConfig.touchMomentum
         addDistortionBurst(Math.abs(swipeVelocity) * 0.2)
         isScrolling = true
         window.setTimeout(() => {
@@ -494,14 +425,14 @@ export function HomePage() {
     }
 
     const handleMouseMove = (event: MouseEvent) => {
-      if (!isReady) {
+      if (!isReady || isVertical) {
         return
       }
 
       const normalizedX = event.clientX / window.innerWidth - 0.5
 
       cursorTarget =
-        getWorldUnitsFromPixels(config.cursorDriftPixels) * normalizedX * 2
+        getWorldUnitsFromPixels(axisConfig.cursorDriftPixels) * normalizedX * 2
     }
 
     const handleMouseLeave = () => {
@@ -535,9 +466,9 @@ export function HomePage() {
 
       if (isScrolling) {
         scrollTarget += scrollMomentum
-        scrollMomentum *= config.momentumFriction
+        scrollMomentum *= axisConfig.momentumFriction
 
-        if (Math.abs(scrollMomentum) < config.momentumThreshold) {
+        if (Math.abs(scrollMomentum) < axisConfig.momentumThreshold) {
           scrollMomentum = 0
         }
 
@@ -545,15 +476,15 @@ export function HomePage() {
       } else {
         idleTime += deltaTime
 
-        if (idleTime > config.autoScrollDelay) {
-          scrollTarget += config.autoScrollSpeed * deltaTime
+        if (idleTime > axisConfig.autoScrollDelay) {
+          scrollTarget += axisConfig.autoScrollSpeed * deltaTime
         }
       }
 
       scrollPosition = damp(
         scrollPosition,
         scrollTarget,
-        config.smoothing,
+        axisConfig.smoothing,
         deltaTime,
       )
 
@@ -597,13 +528,13 @@ export function HomePage() {
       distortionAmount = damp(
         distortionAmount,
         distortionTarget,
-        config.distortionSmoothing,
+        axisConfig.distortionSmoothing,
         deltaTime,
       )
       cursorOffset = damp(
         cursorOffset,
         cursorTarget,
-        config.cursorSmoothing,
+        axisConfig.cursorSmoothing,
         deltaTime,
       )
 
@@ -613,24 +544,30 @@ export function HomePage() {
 
       meshes.forEach((mesh) => {
         const { offset } = mesh.userData
-        let x = offset - wrap(scrollPosition, loopLength)
+        let along = offset - wrap(scrollPosition, loopLength)
 
-        x = wrap(x + halfLoop, loopLength) - halfLoop
-        mesh.position.x = x + cursorOffset
+        along = wrap(along + halfLoop, loopLength) - halfLoop
 
-        const focus = 1 - Math.min(Math.abs(x) / (config.slideWidth * 1.9), 1)
+        if (isVertical) {
+          mesh.position.y = -along
+          mesh.position.x = cursorOffset
+        } else {
+          mesh.position.x = along + cursorOffset
+        }
+
+        const focus = 1 - Math.min(Math.abs(along) / (axisSize * 1.9), 1)
         const opacity = THREE.MathUtils.lerp(
-          config.idleOpacity,
-          config.focusOpacity,
+          axisConfig.idleOpacity,
+          axisConfig.focusOpacity,
           focus,
         )
         const scale = THREE.MathUtils.lerp(
-          config.idleScale,
-          config.focusScale,
+          axisConfig.idleScale,
+          axisConfig.focusScale,
           focus,
         )
-        const depth = -focus * config.depthStrength
-        const tilt = signedDistortion * config.tiltStrength * focus
+        const depth = -focus * axisConfig.depthStrength
+        const tilt = signedDistortion * axisConfig.tiltStrength * focus
 
         mesh.material.opacity = opacity
         mesh.position.z = depth
@@ -638,13 +575,13 @@ export function HomePage() {
         mesh.scale.x = mesh.userData.baseScaleX * scale
         mesh.scale.y = mesh.userData.baseScaleY * scale
 
-        if (Math.abs(x) < closestDistance) {
-          closestDistance = Math.abs(x)
+        if (Math.abs(along) < closestDistance) {
+          closestDistance = Math.abs(along)
           closestIndex = mesh.userData.index
         }
 
-        if (Math.abs(x) < halfLoop + config.slideWidth) {
-          applyDistortion(mesh, x, signedDistortion)
+        if (Math.abs(along) < halfLoop + axisSize) {
+          applyDistortion(mesh, along, signedDistortion)
         }
       })
 
@@ -736,170 +673,6 @@ export function HomePage() {
       </div>
 
       <canvas className="home-page__canvas" ref={canvasRef} />
-
-      <div className="home-page__mobile">
-        <NavLink
-          className="home-page__mobile-card home-page__mobile-card--gradient"
-          ref={(node) => {
-            mobileCardRefs.current[0] = node
-          }}
-          to="/works/rennu"
-        >
-          <img
-            alt=""
-            className="home-page__mobile-parallax"
-            loading="lazy"
-            src={mobileAssets.rennu1a}
-            style={{ left: pctX(-190), width: pctX(639), ...parallaxBox(0.12, 360) }}
-          />
-          <img
-            alt="Rennu"
-            className="home-page__mobile-parallax"
-            loading="lazy"
-            src={mobileAssets.rennu1b}
-            style={{ left: pctX(-190), width: pctX(639), ...parallaxBox(0.12, 360) }}
-          />
-        </NavLink>
-
-        <NavLink className="home-page__mobile-card" to="/works/rennu">
-          <img
-            alt=""
-            className="home-page__mobile-fill"
-            loading="lazy"
-            src={mobileAssets.rennu2bg}
-          />
-          <div className="home-page__mobile-logo">
-            <div className="home-page__mobile-logo-bars">
-              <span style={{ opacity: 0.2 }} />
-              <span style={{ opacity: 0.4 }} />
-              <span style={{ opacity: 0.6 }} />
-              <span style={{ opacity: 0.8 }} />
-              <span style={{ opacity: 1 }} />
-            </div>
-            <img alt="Rennu" src={mobileAssets.rennuLogo} />
-          </div>
-        </NavLink>
-
-        <NavLink
-          className="home-page__mobile-card"
-          ref={(node) => {
-            mobileCardRefs.current[1] = node
-          }}
-          to="/works/rennu"
-        >
-          <img
-            alt="Rennu"
-            className="home-page__mobile-parallax"
-            loading="lazy"
-            src={mobileAssets.rennu3}
-            style={{ left: 0, width: '100%', ...parallaxBox(70.45, 219) }}
-          />
-        </NavLink>
-
-        <NavLink
-          className="home-page__mobile-card"
-          ref={(node) => {
-            mobileCardRefs.current[2] = node
-          }}
-          to="/works/rennu"
-        >
-          <img
-            alt="Rennu"
-            className="home-page__mobile-parallax"
-            loading="lazy"
-            src={mobileAssets.rennu4bg}
-            style={{ left: pctX(-96), width: pctX(483), ...parallaxBox(38.12, 322) }}
-          />
-          <img
-            alt=""
-            loading="lazy"
-            src={mobileAssets.rennu4inset}
-            style={{
-              position: 'absolute',
-              left: pctX(-96 + 201.39 + 13.84),
-              top: '150.82px',
-              width: pctX(141.7),
-              height: '135.68px',
-              objectFit: 'cover',
-            }}
-          />
-        </NavLink>
-
-        <NavLink
-          className="home-page__mobile-card home-page__mobile-card--gradient"
-          ref={(node) => {
-            mobileCardRefs.current[3] = node
-          }}
-          to="/works/ecolos"
-        >
-          <img
-            alt=""
-            className="home-page__mobile-parallax"
-            loading="lazy"
-            src={mobileAssets.ecolos1bg}
-            style={{ left: pctX(-76.3), width: pctX(444.65), ...parallaxBox(63.34, 296.63) }}
-          />
-          <div className="home-page__mobile-overlay" />
-          <div
-            className="home-page__mobile-mockup"
-            style={{ left: pctX(-76.3 + 106.08), top: '111.75px', width: pctX(235.56), height: '132.08px' }}
-          >
-            <img alt="Ecolos" loading="lazy" src={mobileAssets.ecolos1mockup} />
-            <img alt="" className="home-page__mobile-mockup-topbar" loading="lazy" src={mobileAssets.ecolos1topbar} />
-            <p className="home-page__mobile-mockup-caption">
-              Оптимизируем смету. Вы экономите до 30%
-            </p>
-          </div>
-        </NavLink>
-
-        <NavLink
-          className="home-page__mobile-card"
-          ref={(node) => {
-            mobileCardRefs.current[4] = node
-          }}
-          to="/works/ecolos"
-        >
-          <img
-            alt="Ecolos"
-            className="home-page__mobile-parallax"
-            loading="lazy"
-            src={mobileAssets.ecolos2}
-            style={{ left: pctX(-99.45), width: pctX(490.91), ...parallaxBox(-0.33, 360) }}
-          />
-        </NavLink>
-
-        <NavLink
-          className="home-page__mobile-card"
-          ref={(node) => {
-            mobileCardRefs.current[5] = node
-          }}
-          to="/works/ecolos"
-        >
-          <img
-            alt="Ecolos"
-            className="home-page__mobile-parallax"
-            loading="lazy"
-            src={mobileAssets.ecolos3}
-            style={{ left: pctX(-124), width: pctX(540), ...parallaxBox(0.33, 360) }}
-          />
-        </NavLink>
-
-        <NavLink
-          className="home-page__mobile-card"
-          ref={(node) => {
-            mobileCardRefs.current[6] = node
-          }}
-          to="/works/ecolos"
-        >
-          <img
-            alt="Ecolos"
-            className="home-page__mobile-parallax"
-            loading="lazy"
-            src={mobileAssets.ecolos4}
-            style={{ left: pctX(-64.82), width: pctX(421.64), ...parallaxBox(0, 360) }}
-          />
-        </NavLink>
-      </div>
     </section>
   )
 }
