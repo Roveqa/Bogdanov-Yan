@@ -139,30 +139,8 @@
   color: rgba(255, 255, 255, 0.55)
 
 .header__mobile-icon
-  position: relative
-  width: 18px
-  height: 18px
   flex-shrink: 0
-
-.header__mobile-icon::before,
-.header__mobile-icon::after
-  content: ''
-  position: absolute
-  left: 0
-  top: 50%
-  width: 100%
-  height: 1px
-  background: currentcolor
-  transition: transform 200ms ease
-
-.header__mobile-icon::after
-  transform: rotate(90deg)
-
-.header__mobile-icon--open::before
-  transform: rotate(45deg)
-
-.header__mobile-icon--open::after
-  transform: rotate(-45deg)
+  color: inherit
 
 .header__mobile-panel
   position: fixed
@@ -171,7 +149,7 @@
   display: none
   flex-direction: column
   justify-content: space-between
-  padding: 96px 12px 28px
+  padding: 44px 12px 28px
   background: rgba(255, 255, 255, 0.2)
   backdrop-filter: blur(40px)
   opacity: 0
@@ -182,11 +160,18 @@
   opacity: 1
   pointer-events: auto
 
+.header__mobile-top
+  display: flex
+  flex-direction: column
+  align-items: flex-end
+  width: 100%
+
 .header__mobile-nav
   display: flex
   flex-direction: column
   align-items: flex-end
   gap: 20px
+  padding-right: 20px
 
 .header__mobile-nav-link
   color: #111111
@@ -232,6 +217,7 @@
 @media (max-width: 768px)
   .header__inner
     width: min(100% - 24px, 1280px)
+    justify-content: space-between
 
   .header__nav
     display: none

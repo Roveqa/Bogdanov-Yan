@@ -27,6 +27,23 @@ type OpenMenu = 'contact' | 'language' | null
 
 const menuCloseDelay = 100
 
+function MenuIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      className="header__mobile-icon"
+      fill="none"
+      height="18"
+      viewBox="0 0 18 18"
+      width="18"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M3.74941 9H14.2494" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M9 3.74996V14.25" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
 export function Header() {
   const { t } = useTranslation('common')
   const { currentLocale, setLocale } = useLocale()
@@ -284,14 +301,7 @@ export function Header() {
             type="button"
           >
             <span>{t('header.menu')}</span>
-            <span
-              aria-hidden="true"
-              className={
-                isMobileMenuOpen
-                  ? 'header__mobile-icon header__mobile-icon--open'
-                  : 'header__mobile-icon'
-              }
-            />
+            <MenuIcon />
           </button>
         </div>
       </header>
@@ -307,41 +317,43 @@ export function Header() {
           isMobileMenuOpen ? 'header__mobile-panel header__mobile-panel--open' : 'header__mobile-panel'
         }
       >
-        <nav aria-label="Mobile" className="header__mobile-nav">
-          <NavLink
-            className={({ isActive }) =>
-              isActive
-                ? 'header__mobile-nav-link header__mobile-nav-link--active'
-                : 'header__mobile-nav-link'
-            }
-            end
-            to={navigationRoutes.home}
-          >
-            {t('header.home')}
-          </NavLink>
+        <div className="header__mobile-top">
+          <nav aria-label="Mobile" className="header__mobile-nav">
+            <NavLink
+              className={({ isActive }) =>
+                isActive
+                  ? 'header__mobile-nav-link header__mobile-nav-link--active'
+                  : 'header__mobile-nav-link'
+              }
+              end
+              to={navigationRoutes.home}
+            >
+              {t('header.home')}
+            </NavLink>
 
-          <NavLink
-            className={({ isActive }) =>
-              isActive
-                ? 'header__mobile-nav-link header__mobile-nav-link--active'
-                : 'header__mobile-nav-link'
-            }
-            to={navigationRoutes.about}
-          >
-            {t('header.about')}
-          </NavLink>
+            <NavLink
+              className={({ isActive }) =>
+                isActive
+                  ? 'header__mobile-nav-link header__mobile-nav-link--active'
+                  : 'header__mobile-nav-link'
+              }
+              to={navigationRoutes.about}
+            >
+              {t('header.about')}
+            </NavLink>
 
-          <NavLink
-            className={({ isActive }) =>
-              isActive
-                ? 'header__mobile-nav-link header__mobile-nav-link--active'
-                : 'header__mobile-nav-link'
-            }
-            to={navigationRoutes.works}
-          >
-            {t('header.works')}
-          </NavLink>
-        </nav>
+            <NavLink
+              className={({ isActive }) =>
+                isActive
+                  ? 'header__mobile-nav-link header__mobile-nav-link--active'
+                  : 'header__mobile-nav-link'
+              }
+              to={navigationRoutes.works}
+            >
+              {t('header.works')}
+            </NavLink>
+          </nav>
+        </div>
 
         <div className="header__mobile-footer">
           <button

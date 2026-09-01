@@ -13,6 +13,15 @@ function pctX(value: number) {
   return `${String((value / mobileCardWidth) * 100)}%`
 }
 
+const parallaxBleed = 45
+
+function parallaxBox(top: number, height: number) {
+  return {
+    top: `${String(top - parallaxBleed)}px`,
+    height: `${String(height + parallaxBleed * 2)}px`,
+  }
+}
+
 const mobileAssets = {
   rennu1a: withBase('/home-mobile/rennu-1-a.png'),
   rennu1b: withBase('/home-mobile/rennu-1-b.png'),
@@ -741,14 +750,14 @@ export function HomePage() {
             className="home-page__mobile-parallax"
             loading="lazy"
             src={mobileAssets.rennu1a}
-            style={{ left: pctX(-190), top: '0.12px', width: pctX(639), height: '360px' }}
+            style={{ left: pctX(-190), width: pctX(639), ...parallaxBox(0.12, 360) }}
           />
           <img
             alt="Rennu"
             className="home-page__mobile-parallax"
             loading="lazy"
             src={mobileAssets.rennu1b}
-            style={{ left: pctX(-190), top: '0.12px', width: pctX(639), height: '360px' }}
+            style={{ left: pctX(-190), width: pctX(639), ...parallaxBox(0.12, 360) }}
           />
         </NavLink>
 
@@ -783,7 +792,7 @@ export function HomePage() {
             className="home-page__mobile-parallax"
             loading="lazy"
             src={mobileAssets.rennu3}
-            style={{ left: 0, top: '70.45px', width: '100%', height: '219px' }}
+            style={{ left: 0, width: '100%', ...parallaxBox(70.45, 219) }}
           />
         </NavLink>
 
@@ -799,7 +808,7 @@ export function HomePage() {
             className="home-page__mobile-parallax"
             loading="lazy"
             src={mobileAssets.rennu4bg}
-            style={{ left: pctX(-96), top: '38.12px', width: pctX(483), height: '322px' }}
+            style={{ left: pctX(-96), width: pctX(483), ...parallaxBox(38.12, 322) }}
           />
           <img
             alt=""
@@ -828,7 +837,7 @@ export function HomePage() {
             className="home-page__mobile-parallax"
             loading="lazy"
             src={mobileAssets.ecolos1bg}
-            style={{ left: pctX(-76.3), top: '63.34px', width: pctX(444.65), height: '296.63px' }}
+            style={{ left: pctX(-76.3), width: pctX(444.65), ...parallaxBox(63.34, 296.63) }}
           />
           <div className="home-page__mobile-overlay" />
           <div
@@ -855,7 +864,7 @@ export function HomePage() {
             className="home-page__mobile-parallax"
             loading="lazy"
             src={mobileAssets.ecolos2}
-            style={{ left: pctX(-99.45), top: '-0.33px', width: pctX(490.91), height: '360px' }}
+            style={{ left: pctX(-99.45), width: pctX(490.91), ...parallaxBox(-0.33, 360) }}
           />
         </NavLink>
 
@@ -871,7 +880,7 @@ export function HomePage() {
             className="home-page__mobile-parallax"
             loading="lazy"
             src={mobileAssets.ecolos3}
-            style={{ left: pctX(-124), top: '0.33px', width: pctX(540), height: '360px' }}
+            style={{ left: pctX(-124), width: pctX(540), ...parallaxBox(0.33, 360) }}
           />
         </NavLink>
 
@@ -887,7 +896,7 @@ export function HomePage() {
             className="home-page__mobile-parallax"
             loading="lazy"
             src={mobileAssets.ecolos4}
-            style={{ left: pctX(-64.82), top: 0, width: pctX(421.64), height: '360px' }}
+            style={{ left: pctX(-64.82), width: pctX(421.64), ...parallaxBox(0, 360) }}
           />
         </NavLink>
       </div>
