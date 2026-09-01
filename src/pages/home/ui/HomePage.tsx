@@ -78,9 +78,6 @@ type SlideMesh = THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial> & {
     baseScaleY: number
     caseNumber: number
     href: string | null
-    imageHalfHeight: number
-    imageMesh: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial>
-    imageOriginalVertices: number[]
     index: number
     name: string
     offset: number
@@ -110,10 +107,11 @@ export function HomePage() {
     }
 
     // Mobile reuses the exact desktop scene, positions, and physics — every
-    // slide still moves along world X exactly like desktop. The only
-    // difference is the camera is rolled 90° so that world X reads as
-    // vertical on screen, and each mesh is counter-rotated so its own image
-    // content (photos, logo text) stays upright despite the camera roll.
+    // slide still moves along world X exactly like desktop. The camera is
+    // rolled 90° so that world X reads as vertical on screen, and each
+    // slide's texture is UV-rotated 90° so its own image content stays
+    // upright. The scroll-velocity bend/shear distortion is skipped on
+    // mobile entirely (kept simple, no wave effect).
     const isVertical = window.innerWidth <= 768
 
     let activeHref: string | null = null
@@ -230,6 +228,7 @@ export function HomePage() {
       texture: THREE.Texture,
       width: number,
       height: number,
+      rotate: boolean,
     ) => {
       const image = texture.image as { height: number; width: number }
 
@@ -238,7 +237,12 @@ export function HomePage() {
       texture.wrapS = THREE.ClampToEdgeWrapping
       texture.wrapT = THREE.ClampToEdgeWrapping
 
-      const imageAspect = image.width / image.height
+      // Cover-fit math for an image that will be displayed rotated 90° needs
+      // its width/height swapped, since the rotation swaps which of its own
+      // dimensions lines up with the plane's width/height.
+      const imageAspect = rotate
+        ? image.height / image.width
+        : image.width / image.height
       const planeAspect = width / height
       const ratio = imageAspect / planeAspect
 
@@ -248,6 +252,11 @@ export function HomePage() {
       } else {
         texture.repeat.set(1, ratio)
         texture.offset.set(0, (1 - ratio) / 2)
+      }
+
+      if (rotate) {
+        texture.center.set(0.5, 0.5)
+        texture.rotation = Math.PI / 2
       }
     }
 
@@ -265,37 +274,17 @@ export function HomePage() {
       for (let index = 0; index < totalSlides; index += 1) {
         const width = alongSize
         const height = crossSize
-
-        // Parent mesh: invisible, holds only the distorted geometry that
-        // drives position/shape. It carries no texture, so it never needs to
-        // rotate — the visible image lives on a separate child mesh instead.
         const geometry = new THREE.PlaneGeometry(width, height, 20, 10)
         const material = new THREE.MeshBasicMaterial({
-          depthWrite: false,
-          transparent: true,
-          opacity: 0,
-        })
-        const mesh = new THREE.Mesh(geometry, material) as SlideMesh
-
-        // Child mesh: the actual visible image. Rotated 90° on mobile so its
-        // own content reads upright, independent of the parent's shape/bend.
-        // Its own geometry is flat (no distortion) and sized with width/height
-        // swapped to match the rotation.
-        const imageWidth = isVertical ? height : width
-        const imageHeight = isVertical ? width : height
-        const imageGeometry = new THREE.PlaneGeometry(imageWidth, imageHeight, 20, 10)
-        const imageMaterial = new THREE.MeshBasicMaterial({
           color: '#ffffff',
           map: textures[index],
           opacity: config.idleOpacity,
           side: THREE.DoubleSide,
           transparent: true,
         })
-        const imageMesh = new THREE.Mesh(imageGeometry, imageMaterial)
-        imageMesh.rotation.z = isVertical ? Math.PI / 2 : 0
-        mesh.add(imageMesh)
+        const mesh = new THREE.Mesh(geometry, material) as SlideMesh
 
-        configureTexture(textures[index], imageWidth, imageHeight)
+        configureTexture(textures[index], width, height, isVertical)
 
         mesh.userData = {
           baseRotation: meshBaseRotation,
@@ -303,9 +292,6 @@ export function HomePage() {
           baseScaleY: 1,
           caseNumber: slides[index].caseNumber,
           href: slides[index].href,
-          imageHalfHeight: imageHeight / 2,
-          imageMesh,
-          imageOriginalVertices: [...imageGeometry.attributes.position.array],
           index,
           name: slides[index].name,
           offset: slideOffsets[index] ?? 0,
@@ -344,15 +330,15 @@ export function HomePage() {
     }
 
     const applyDistortion = (
-      geometry: THREE.PlaneGeometry,
-      original: number[],
-      halfHeight: number,
+      mesh: SlideMesh,
       positionX: number,
       strength: number,
     ) => {
-      const positions = geometry.attributes.position
+      const positions = mesh.geometry.attributes.position
+      const original = mesh.userData.originalVertices
       const distortion = config.distortionStrength * strength
       const shear = config.shearStrength * strength
+      const halfHeight = crossSize / 2
 
       for (let index = 0; index < positions.count; index += 1) {
         const x = original[index * 3] ?? 0
@@ -594,7 +580,7 @@ export function HomePage() {
         const depth = -focus * config.depthStrength
         const tilt = signedDistortion * config.tiltStrength * focus
 
-        mesh.userData.imageMesh.material.opacity = opacity
+        mesh.material.opacity = opacity
         mesh.position.z = depth
         mesh.rotation.z = mesh.userData.baseRotation + tilt
         mesh.scale.x = mesh.userData.baseScaleX * scale
@@ -605,14 +591,8 @@ export function HomePage() {
           closestIndex = mesh.userData.index
         }
 
-        if (Math.abs(x) < halfLoop + alongSize) {
-          applyDistortion(
-            mesh.userData.imageMesh.geometry,
-            mesh.userData.imageOriginalVertices,
-            mesh.userData.imageHalfHeight,
-            x,
-            signedDistortion,
-          )
+        if (!isVertical && Math.abs(x) < halfLoop + alongSize) {
+          applyDistortion(mesh, x, signedDistortion)
         }
       })
 
@@ -687,8 +667,6 @@ export function HomePage() {
       meshes.forEach((mesh) => {
         mesh.geometry.dispose()
         mesh.material.dispose()
-        mesh.userData.imageMesh.geometry.dispose()
-        mesh.userData.imageMesh.material.dispose()
       })
       textures.forEach((texture) => {
         texture.dispose()
