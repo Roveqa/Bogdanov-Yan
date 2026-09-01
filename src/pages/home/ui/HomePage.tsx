@@ -150,17 +150,6 @@ export function HomePage() {
     // slideWidth once rotated.
     const alongSize = isVertical ? config.slideHeight : config.slideWidth
 
-    // Desktop leaves a margin above/below because slideHeight only covers part
-    // of the camera's fixed vertical world extent. Mirror that same ratio for
-    // the mobile cross axis (left/right) against the viewport's actual world
-    // width, instead of reusing slideWidth as-is (which spans nearly the whole
-    // width with no margin at all).
-    const worldHeightConst = 2 * Math.tan(THREE.MathUtils.degToRad(45) / 2) * 5
-    const desktopCrossRatio = config.slideHeight / worldHeightConst
-    const crossSize = isVertical
-      ? worldHeightConst * (window.innerWidth / window.innerHeight) * desktopCrossRatio
-      : config.slideHeight
-
     const meshes: SlideMesh[] = []
     const textures: THREE.Texture[] = []
     const textureLoader = new THREE.TextureLoader()
@@ -272,10 +261,12 @@ export function HomePage() {
 
     const buildScene = () => {
       for (let index = 0; index < totalSlides; index += 1) {
-        // Rotating the mesh -90° swaps which of its own local axes ends up
-        // spanning the world along/cross axes, so swap width/height here too.
-        const width = isVertical ? crossSize : alongSize
-        const height = isVertical ? alongSize : crossSize
+        // Rotating the mesh -90° puts its own "width" dimension on the cross
+        // (left/right) axis on mobile, so shrink just that number to leave a
+        // side margin — same width value used for stacking spacing (alongSize)
+        // is untouched.
+        const width = isVertical ? config.slideWidth * 0.42 : config.slideWidth
+        const height = config.slideHeight
         const geometry = new THREE.PlaneGeometry(width, height, 20, 10)
         const material = new THREE.MeshBasicMaterial({
           color: '#ffffff',
