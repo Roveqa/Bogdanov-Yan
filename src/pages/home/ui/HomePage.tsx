@@ -725,7 +725,10 @@ function DesktopCarousel() {
 const mobileConfig = {
   autoScrollDelay: 1.2,
   autoScrollSpeed: 0.12,
-  crossSizeRatio: 0.42,
+  // Card size in world units, tuned to roughly match the Figma card
+  // proportions (292x360) on a typical phone viewport.
+  cardHeight: 1.77,
+  cardWidth: 1.43,
   focusOpacity: 1,
   focusScale: 1,
   gapPixels: 1,
@@ -733,17 +736,16 @@ const mobileConfig = {
   idleScale: 1,
   momentumFriction: 0.9,
   momentumThreshold: 0.0006,
-  slideHeight: 2,
-  slideWidth: 3.67,
   smoothing: 8.5,
   touchMomentum: 0.06,
+  touchSmoothing: 40,
   touchSpeed: 0.008,
   wheelMax: 110,
   wheelSpeed: 0.0065,
 } as const
 
-const mobileAlongSize = mobileConfig.slideHeight
-const mobileCrossSize = mobileConfig.slideWidth * mobileConfig.crossSizeRatio
+const mobileAlongSize = mobileConfig.cardHeight
+const mobileCrossSize = mobileConfig.cardWidth
 
 type MobileSlideMesh = THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial> & {
   userData: {
@@ -1062,9 +1064,12 @@ function MobileCarousel() {
         }
       }
 
-      scrollPosition = isTouching
-        ? scrollTarget
-        : damp(scrollPosition, scrollTarget, mobileConfig.smoothing, deltaTime)
+      scrollPosition = damp(
+        scrollPosition,
+        scrollTarget,
+        isTouching ? mobileConfig.touchSmoothing : mobileConfig.smoothing,
+        deltaTime,
+      )
 
       let closestDistance = Infinity
       let closestIndex = 0
