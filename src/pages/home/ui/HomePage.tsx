@@ -769,6 +769,7 @@ function MobileCarousel() {
     let scrollTarget = 0
     let scrollMomentum = 0
     let isScrolling = false
+    let isTouching = false
     let lastFrameTime = 0
     let touchStartY = 0
     let touchLastY = 0
@@ -942,6 +943,7 @@ function MobileCarousel() {
       touchStartY = touch.clientY
       touchLastY = touchStartY
       isScrolling = false
+      isTouching = true
       scrollMomentum = 0
     }
 
@@ -967,6 +969,8 @@ function MobileCarousel() {
     }
 
     const handleTouchEnd = () => {
+      isTouching = false
+
       if (!isReady) {
         return
       }
@@ -1022,12 +1026,9 @@ function MobileCarousel() {
         }
       }
 
-      scrollPosition = damp(
-        scrollPosition,
-        scrollTarget,
-        mobileConfig.smoothing,
-        deltaTime,
-      )
+      scrollPosition = isTouching
+        ? scrollTarget
+        : damp(scrollPosition, scrollTarget, mobileConfig.smoothing, deltaTime)
 
       let closestDistance = Infinity
       let closestIndex = 0
