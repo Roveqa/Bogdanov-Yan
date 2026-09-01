@@ -114,19 +114,15 @@ export function HomePage() {
     const worldHeight = 2 * Math.tan(THREE.MathUtils.degToRad(45) / 2) * 5
     const worldWidth = worldHeight * (window.innerWidth / window.innerHeight)
 
-    // On desktop the scroll axis (width) is sized in fixed world units and the
-    // cross axis (height) is deliberately smaller, leaving a constant top/bottom
-    // margin. Mobile mirrors that: the scroll axis (height) fills the viewport
-    // so slides butt up seamlessly, and the cross axis (width) is a fraction of
-    // the actual world width, leaving a constant left/right margin instead.
-    const axisSize = isVertical ? worldHeight * 1.04 : axisConfig.slideWidth
-    // Match the Figma mobile card proportions: 292px card inset within a 380px frame.
+    // Match the Figma mobile card proportions exactly: a 292x360 card inset
+    // within a 380px-wide reference frame — not stretched to the viewport.
     const crossSize = isVertical ? worldWidth * (292 / 380) : axisConfig.slideHeight
+    const axisSize = isVertical ? crossSize * (360 / 292) : axisConfig.slideWidth
 
     // Desktop's distortion wave spans multiple adjacent slides because its radius
-    // is larger than a single slide. Mobile's slide (axisSize) is a different
-    // absolute size, so scale the radius by the same ratio to keep the wave
-    // continuous across cards instead of collapsing into each card individually.
+    // is larger than a single slide. Scale the radius by the same ratio on mobile
+    // so the wave stays continuous across cards instead of collapsing into each
+    // card individually.
     const distortionRadius = isVertical
       ? axisSize * (axisConfig.distortionRadius / axisConfig.slideWidth)
       : axisConfig.distortionRadius
