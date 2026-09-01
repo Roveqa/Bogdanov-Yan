@@ -107,7 +107,11 @@ export function HomePage() {
     }
 
     const isVertical = window.innerWidth <= 768
-    const axisConfig = config
+    // On mobile several cards are visible on screen at once (unlike desktop, where
+    // only one dominant slide plus thin edge peeks are visible), so fading unfocused
+    // cards down to desktop's idleOpacity makes lighter images wash out to near-white
+    // against the page background, reading as an empty gap. Keep them clearly visible.
+    const axisConfig = isVertical ? { ...config, idleOpacity: 0.85 } : config
 
     // The camera's world height at z=0 is fixed by its vertical FOV and distance,
     // regardless of viewport aspect — only world width scales with aspect.
