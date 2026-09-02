@@ -210,14 +210,12 @@ export function AboutPage() {
 
     const update = () => {
       frame = 0
-      // Flip early enough that the backdrop has already switched by the
-      // time the dark section could scroll into view, even during a
-      // fast fling — otherwise the still-white backdrop can briefly
-      // show through as the dark content enters from the bottom of the
-      // screen. Half a viewport is enough runway without flipping so
-      // early that it visibly happens while skills content still fills
-      // the screen.
-      const earlyOffset = window.innerHeight / 2
+      // Mobile flips earlier than desktop's original fixed offset so the
+      // backdrop has already switched by the time the dark section could
+      // scroll into view during a fast fling — otherwise the still-white
+      // backdrop can briefly show through as dark content enters from the
+      // bottom of the screen. Desktop is untouched from its original value.
+      const earlyOffset = isMobile ? window.innerHeight / 2 - 30 : 250
       const skillsBottom = skillsSection.getBoundingClientRect().bottom + window.scrollY
       setIsDark(window.scrollY >= skillsBottom - earlyOffset)
     }
@@ -240,7 +238,7 @@ export function AboutPage() {
         window.cancelAnimationFrame(frame)
       }
     }
-  }, [])
+  }, [isMobile])
 
   return (
     <div className="about-page">
