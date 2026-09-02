@@ -28,7 +28,7 @@ const experience = [
     isLink: true,
     period: '2024 — Present',
     paragraphs: [
-      'I joined the studio as a mid-level UI/UX designer and grew into the lead role, now shaping how design is done across the team as much as doing it myself. My work spans client websites and landing pages — from generating imagery and running UI/UX audits, to designing interfaces of varying complexity, building guidelines, and putting together presentations.',
+      'I joined the studio as a middle UI/UX designer and grew into the lead role, now shaping how design is done across the team as much as doing it myself. My work spans client websites and landing pages — from generating imagery and running UI/UX audits, to designing interfaces of varying complexity, building guidelines, and putting together presentations.',
       'I stay closely involved in design support after launch, and often code directly on Tilda to bridge the gap between the visual idea and its real implementation.',
     ],
     listItems: null,
