@@ -210,12 +210,14 @@ export function AboutPage() {
 
     const update = () => {
       frame = 0
-      // Flip a full viewport-height early so the backdrop has already
-      // switched by the time the dark section could scroll into view,
-      // even during a fast fling — otherwise the still-white backdrop
-      // can briefly show through as the dark content enters from the
-      // bottom of the screen.
-      const earlyOffset = window.innerHeight
+      // Flip early enough that the backdrop has already switched by the
+      // time the dark section could scroll into view, even during a
+      // fast fling — otherwise the still-white backdrop can briefly
+      // show through as the dark content enters from the bottom of the
+      // screen. Half a viewport is enough runway without flipping so
+      // early that it visibly happens while skills content still fills
+      // the screen.
+      const earlyOffset = window.innerHeight / 2
       const skillsBottom = skillsSection.getBoundingClientRect().bottom + window.scrollY
       setIsDark(window.scrollY >= skillsBottom - earlyOffset)
     }
