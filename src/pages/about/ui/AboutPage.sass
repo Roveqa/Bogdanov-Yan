@@ -125,7 +125,7 @@ $section-gap: 320px
 .about-page__experience-head-meta
   display: flex
   width: 239px
-  gap: 1px
+  gap: 8px
 
 .about-page__experience-head-meta span:first-child
   width: 138px
@@ -148,7 +148,7 @@ $section-gap: 320px
 .about-page__experience-meta
   display: flex
   width: 239px
-  gap: 1px
+  gap: 8px
 
 .about-page__experience-content
   width: 100%
@@ -162,6 +162,8 @@ $section-gap: 320px
   line-height: 1.24
   letter-spacing: -0.56px
   color: #111111
+
+.about-page__experience-company--link
   text-decoration: underline
   text-underline-offset: 2px
 
@@ -320,14 +322,15 @@ $section-gap: 320px
 
 @media (max-width: 768px)
   .about-page__hero
-    aspect-ratio: 390 / 403
+    aspect-ratio: 380 / 660
 
   .about-page__dark-block
-    padding: 0 16px
+    padding: 0 12px
 
   .about-page__row
     grid-template-columns: 1fr
     gap: 32px
+    padding: 0 12px
 
   .about-page__experience-row
     grid-template-columns: 1fr
@@ -350,6 +353,7 @@ $section-gap: 320px
 
   .about-page__experience
     margin-top: 160px
+    padding: 0 12px
 
   .about-page__experience-divider
     display: none
@@ -359,23 +363,24 @@ $section-gap: 320px
 
   .about-page__experience-meta
     width: auto
-    flex-direction: column
-    gap: 2px
+    gap: 8px
 
   .about-page__experience-company
     width: auto
 
   .about-page__portrait
+    max-width: calc(100% - 32px)
     margin-top: 160px
 
   .about-page__row--skills
     margin-top: 160px
 
   .about-page__dark-spacer
-    height: 900px
+    height: 400px
 
   .about-page__dark
-    gap: 260px
+    gap: 400px
+    padding-top: 160px
 
   .about-page__dark-head,
   .about-page__dark-divider
@@ -391,3 +396,6 @@ $section-gap: 320px
 
   .about-page__dark-copy
     flex: 1 1 auto
+
+  .about-page__vinyl-preview
+    display: none

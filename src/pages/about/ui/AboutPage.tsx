@@ -25,6 +25,7 @@ const freelanceListItems = [
 const experience = [
   {
     company: 'maryco',
+    isLink: true,
     period: '2024 — Present',
     paragraphs: [
       'I joined the studio as a mid-level UI/UX designer and grew into the lead role, now shaping how design is done across the team as much as doing it myself. My work spans client websites and landing pages — from generating imagery and running UI/UX audits, to designing interfaces of varying complexity, building guidelines, and putting together presentations.',
@@ -35,6 +36,7 @@ const experience = [
   },
   {
     company: 'Freelance',
+    isLink: false,
     period: '2022 — Present',
     paragraphs: [
       "For the past few years I've worked as a freelance UX/UI designer, helping businesses and private clients launch and grow digital products. What I bring to freelance work is less about executing a brief line by line, and more about thinking through the product itself — asking the right questions early, shaping the concept, and making sure the design actually solves the problem behind the request.",
@@ -281,7 +283,15 @@ export function AboutPage() {
 
             <div className="about-page__experience-row">
               <div className="about-page__experience-meta">
-                <p className="about-page__experience-company">{entry.company}</p>
+                <p
+                  className={
+                    entry.isLink
+                      ? 'about-page__experience-company about-page__experience-company--link'
+                      : 'about-page__experience-company'
+                  }
+                >
+                  {entry.company}
+                </p>
                 <p className="about-page__experience-period">{entry.period}</p>
               </div>
 
