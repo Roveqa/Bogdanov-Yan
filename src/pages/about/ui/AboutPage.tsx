@@ -192,7 +192,7 @@ function VinylTable() {
 }
 
 const heroImage = withBase('/about/hero.jpg')
-const heroImageMobile = withBase('/about/mobile/hero.jpg')
+const heroImageMobile = withBase('/about/mobile/hero.png')
 
 export function AboutPage() {
   const skillsSectionRef = useRef<HTMLElement | null>(null)
