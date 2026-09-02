@@ -10,9 +10,16 @@ import './BaseLayout.sass'
 const caseStudySlugs = ['ecolos', 'rennu', 'oyster']
 
 function hasFooter(pathname: string) {
-  if (pathname === navigationRoutes.works) return true
+  // GitHub Pages 301-redirects extensionless paths to add a trailing
+  // slash before falling back to 404.html, so a hard refresh or direct
+  // link lands here with e.g. "/works/" instead of "/works" — normalize
+  // before comparing.
+  const normalized =
+    pathname.length > 1 && pathname.endsWith('/') ? pathname.slice(0, -1) : pathname
 
-  const caseStudyMatch = /^\/works\/([^/]+)$/.exec(pathname)
+  if (normalized === navigationRoutes.works) return true
+
+  const caseStudyMatch = /^\/works\/([^/]+)$/.exec(normalized)
   if (caseStudyMatch) return caseStudySlugs.includes(caseStudyMatch[1])
 
   return false
