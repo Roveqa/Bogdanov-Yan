@@ -13,6 +13,7 @@ interface ProjectCardProps {
 
 export function ProjectCard({ project }: ProjectCardProps) {
   const [isMobile] = useState(() => window.innerWidth <= 768)
+  const [isImageLoaded, setIsImageLoaded] = useState(false)
 
   const {
     title,
@@ -50,12 +51,28 @@ export function ProjectCard({ project }: ProjectCardProps) {
           } as CSSProperties
         }
       >
+        <div
+          className={
+            isImageLoaded ? 'project-card__skeleton project-card__skeleton--hidden' : 'project-card__skeleton'
+          }
+        />
+
         <div className="project-card__zoom" style={{ background }}>
           <img
+            ref={(node) => {
+              if (node?.complete) {
+                setIsImageLoaded(true)
+              }
+            }}
             alt={activeMedia.alt ?? ''}
-            className="project-card__image"
+            className={
+              isImageLoaded ? 'project-card__image project-card__image--loaded' : 'project-card__image'
+            }
             loading="lazy"
             src={activeMedia.src}
+            onLoad={() => {
+              setIsImageLoaded(true)
+            }}
           />
 
           {overlayMedia ? (

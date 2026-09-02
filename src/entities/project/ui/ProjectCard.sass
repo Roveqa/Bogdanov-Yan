@@ -32,6 +32,33 @@
   object-position: center
   pointer-events: none
 
+.project-card__image
+  opacity: 0
+  transition: opacity 300ms ease
+
+.project-card__image--loaded
+  opacity: 1
+
+.project-card__skeleton
+  position: absolute
+  inset: 0
+  z-index: 1
+  background: linear-gradient(100deg, #e5e8ec 30%, #eef0f2 50%, #e5e8ec 70%)
+  background-size: 200% 100%
+  animation: project-card-skeleton 1.6s ease-in-out infinite
+  opacity: 1
+  transition: opacity 300ms ease
+  pointer-events: none
+
+.project-card__skeleton--hidden
+  opacity: 0
+
+@keyframes project-card-skeleton
+  0%
+    background-position: 200% 0
+  100%
+    background-position: -200% 0
+
 .project-card__hover-overlay
   position: absolute
   inset: 0
