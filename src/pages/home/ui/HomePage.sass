@@ -11,6 +11,26 @@
   height: 100%
   display: block
 
+.home-page__skeleton
+  position: fixed
+  inset: 0
+  z-index: 1
+  background: linear-gradient(100deg, #eef0f2 30%, #f6f7f8 50%, #eef0f2 70%)
+  background-size: 200% 100%
+  animation: home-page-skeleton 1.6s ease-in-out infinite
+  opacity: 1
+  transition: opacity 300ms ease
+  pointer-events: none
+
+.home-page__skeleton--hidden
+  opacity: 0
+
+@keyframes home-page-skeleton
+  0%
+    background-position: 200% 0
+  100%
+    background-position: -200% 0
+
 .home-page__info
   position: absolute
   top: 50%

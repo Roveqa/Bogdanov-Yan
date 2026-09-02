@@ -94,11 +94,13 @@ function CarouselMarkup({
   canvasRef,
   countRef,
   infoRef,
+  isLoading,
   titleRef,
 }: {
   canvasRef: React.RefObject<HTMLCanvasElement | null>
   countRef: React.RefObject<HTMLParagraphElement | null>
   infoRef: React.RefObject<HTMLDivElement | null>
+  isLoading: boolean
   titleRef: React.RefObject<HTMLParagraphElement | null>
 }) {
   return (
@@ -107,6 +109,12 @@ function CarouselMarkup({
         <p className="home-page__title" ref={titleRef} />
         <p className="home-page__count" ref={countRef} />
       </div>
+
+      <div
+        className={
+          isLoading ? 'home-page__skeleton' : 'home-page__skeleton home-page__skeleton--hidden'
+        }
+      />
 
       <canvas className="home-page__canvas" ref={canvasRef} />
     </section>
@@ -159,6 +167,7 @@ function DesktopCarousel() {
   const infoRef = useRef<HTMLDivElement | null>(null)
   const titleRef = useRef<HTMLParagraphElement | null>(null)
   const countRef = useRef<HTMLParagraphElement | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -664,6 +673,7 @@ function DesktopCarousel() {
       infoElement.classList.toggle('home-page__info--clickable', Boolean(activeHref))
 
       isReady = true
+      setIsLoading(false)
       animate()
     }
 
@@ -711,6 +721,7 @@ function DesktopCarousel() {
       canvasRef={canvasRef}
       countRef={countRef}
       infoRef={infoRef}
+      isLoading={isLoading}
       titleRef={titleRef}
     />
   )
@@ -763,6 +774,7 @@ function MobileCarousel() {
   const infoRef = useRef<HTMLDivElement | null>(null)
   const titleRef = useRef<HTMLParagraphElement | null>(null)
   const countRef = useRef<HTMLParagraphElement | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -1140,6 +1152,7 @@ function MobileCarousel() {
       infoElement.classList.toggle('home-page__info--clickable', Boolean(activeHref))
 
       isReady = true
+      setIsLoading(false)
       animate()
     }
 
@@ -1183,6 +1196,7 @@ function MobileCarousel() {
       canvasRef={canvasRef}
       countRef={countRef}
       infoRef={infoRef}
+      isLoading={isLoading}
       titleRef={titleRef}
     />
   )
