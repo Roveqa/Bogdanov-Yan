@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 
 import type { CSSProperties, ElementType } from 'react'
@@ -11,10 +12,13 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project }: ProjectCardProps) {
+  const [isMobile] = useState(() => window.innerWidth <= 768)
+
   const {
     title,
     description,
     media,
+    mobileMedia,
     overlayMedia,
     background,
     designWidth,
@@ -24,6 +28,8 @@ export function ProjectCard({ project }: ProjectCardProps) {
     siteUrl,
     soon,
   } = project
+
+  const activeMedia = isMobile && mobileMedia ? mobileMedia : media
 
   const Root: ElementType = href ? NavLink : siteUrl ? 'a' : 'div'
   const rootProps = href
@@ -46,10 +52,10 @@ export function ProjectCard({ project }: ProjectCardProps) {
       >
         <div className="project-card__zoom" style={{ background }}>
           <img
-            alt={media.alt ?? ''}
+            alt={activeMedia.alt ?? ''}
             className="project-card__image"
             loading="lazy"
-            src={media.src}
+            src={activeMedia.src}
           />
 
           {overlayMedia ? (

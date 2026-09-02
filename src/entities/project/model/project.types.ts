@@ -8,6 +8,7 @@ export interface Project {
   title: string
   description: string
   media: ProjectMedia
+  mobileMedia?: ProjectMedia
   overlayMedia?: ProjectMedia
   background?: string
   designWidth: number
