@@ -191,9 +191,13 @@ function VinylTable() {
   )
 }
 
+const heroImage = withBase('/about/hero.jpg')
+const heroImageMobile = withBase('/about/mobile/hero.jpg')
+
 export function AboutPage() {
   const skillsSectionRef = useRef<HTMLElement | null>(null)
   const [isDark, setIsDark] = useState(false)
+  const [isMobile] = useState(() => window.innerWidth <= 768)
 
   useEffect(() => {
     const skillsSection = skillsSectionRef.current
@@ -243,7 +247,11 @@ export function AboutPage() {
       />
 
       <div className="about-page__hero" data-header-invert="true">
-        <img alt="Yan Bogdanov" className="about-page__hero-image" src={withBase('/about/hero.jpg')} />
+        <img
+          alt="Yan Bogdanov"
+          className="about-page__hero-image"
+          src={isMobile ? heroImageMobile : heroImage}
+        />
       </div>
 
       <section className="about-page__row about-page__row--intro">
