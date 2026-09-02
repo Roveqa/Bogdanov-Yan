@@ -285,7 +285,7 @@ export function AboutPage() {
             <span>Date</span>
           </div>
           <div className="about-page__experience-head-content">
-            <span>Link</span>
+            <span>Description</span>
           </div>
         </div>
 
