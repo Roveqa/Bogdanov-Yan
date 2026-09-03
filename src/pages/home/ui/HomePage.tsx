@@ -96,12 +96,14 @@ function CarouselMarkup({
   infoRef,
   isLoading,
   titleRef,
+  variant,
 }: {
   canvasRef: React.RefObject<HTMLCanvasElement | null>
   countRef: React.RefObject<HTMLParagraphElement | null>
   infoRef: React.RefObject<HTMLDivElement | null>
   isLoading: boolean
   titleRef: React.RefObject<HTMLParagraphElement | null>
+  variant: 'desktop' | 'mobile'
 }) {
   return (
     <section className="home-page">
@@ -112,7 +114,9 @@ function CarouselMarkup({
 
       <div
         className={
-          isLoading ? 'home-page__skeleton' : 'home-page__skeleton home-page__skeleton--hidden'
+          isLoading
+            ? `home-page__skeleton home-page__skeleton--${variant}`
+            : `home-page__skeleton home-page__skeleton--${variant} home-page__skeleton--hidden`
         }
       />
 
@@ -723,6 +727,7 @@ function DesktopCarousel() {
       infoRef={infoRef}
       isLoading={isLoading}
       titleRef={titleRef}
+      variant="desktop"
     />
   )
 }
@@ -1198,6 +1203,7 @@ function MobileCarousel() {
       infoRef={infoRef}
       isLoading={isLoading}
       titleRef={titleRef}
+      variant="mobile"
     />
   )
 }
