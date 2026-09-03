@@ -1,7 +1,6 @@
 import { NavLink } from 'react-router-dom'
 
 import { withBase } from '@shared/lib/browser/asset-url'
-import { navigationRoutes } from '@content/site/navigation'
 
 const stats = [
   {
@@ -178,7 +177,7 @@ export function EcolosCaseStudy() {
       </div>
 
       <div className="case-study__next">
-        <NavLink className="case-study__next-link" to={navigationRoutes.works}>
+        <NavLink className="case-study__next-link" to="/works/oyster">
           Next Case →
         </NavLink>
       </div>
