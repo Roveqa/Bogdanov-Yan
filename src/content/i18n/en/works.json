@@ -1,1 +1,20 @@
-{}
+{
+  "common": {
+    "soon": "Soon"
+  },
+  "venstra": {
+    "description": "Design system, live in Figma and code"
+  },
+  "axiom": {
+    "description": "Design system and website design"
+  },
+  "ecolos": {
+    "description": "Landing for a wastewater treatment company’s cost-audit service"
+  },
+  "oyster": {
+    "description": "Rebuilt the design in Tilda with a full mobile adaptation"
+  },
+  "rennu": {
+    "description": "Built a tool for generating gradients"
+  }
+}

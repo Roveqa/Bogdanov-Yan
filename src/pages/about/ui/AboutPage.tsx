@@ -1,77 +1,18 @@
 import { useEffect, useRef, useState } from 'react'
 
+import { useTranslation } from 'react-i18next'
+
 import { withBase } from '@shared/lib/browser/asset-url'
 import { Footer } from '@widgets/footer'
 
 import './AboutPage.sass'
 
-const introParagraphs = [
-  "I'm a UI/UX designer who approaches interfaces as systems — I think through their structure, logic, and visual language to make sure a product feels intuitive and stays cohesive. I'm drawn to clean, minimalist design, free of unnecessary noise, but I love adding expressive details where they genuinely improve the experience and make a product memorable.",
-  "Lately I've been focusing on design systems — building them from scratch: tokens, components, states, and the rules that keep things consistent and scalable. I try not to think only about the current screens, but about how the system will grow and adapt as the product evolves. I work with new ideas as well as existing products, from launching from zero to ongoing design support. What matters to me is that a system stays flexible, clear, and resilient as it grows.",
-  "My approach blends visual design with logic. With a background in front-end development, I think not just about how an interface looks, but how it's built and how it behaves in real use. Outside of client work, I like inventing small ideas of my own and bringing them to life — it's a way for me to explore solutions freely, without a brief.",
-  'I believe in clear processes, honest communication, and design that solves real problems — not just looks good.',
+const experienceConfig = [
+  { slug: 'maryco', isLink: true, hasList: false, hasClosing: false },
+  { slug: 'freelance', isLink: false, hasList: true, hasClosing: true },
 ] as const
 
-const freelanceListItems = [
-  'landing pages for product and service launches',
-  'adaptive interface design',
-  'visual concepts and prototypes',
-  'design presentations',
-  'infographics',
-  'work on the Tilda platform, as well as React/HTML/CSS layout',
-  'direct communication with clients and involvement in briefings',
-] as const
-
-const experience = [
-  {
-    company: 'maryco',
-    isLink: true,
-    period: '2024 — Present',
-    paragraphs: [
-      'I joined the studio as a middle UI/UX designer and grew into the lead role, now shaping how design is done across the team as much as doing it myself. My work spans client websites and landing pages — from generating imagery and running UI/UX audits, to designing interfaces of varying complexity, building guidelines, and putting together presentations.',
-      'I stay closely involved in design support after launch, and often code directly on Tilda to bridge the gap between the visual idea and its real implementation.',
-    ],
-    listItems: null,
-    closingParagraph: null,
-  },
-  {
-    company: 'Freelance',
-    isLink: false,
-    period: '2022 — Present',
-    paragraphs: [
-      "For the past few years I've worked as a freelance UX/UI designer, helping businesses and private clients launch and grow digital products. What I bring to freelance work is less about executing a brief line by line, and more about thinking through the product itself — asking the right questions early, shaping the concept, and making sure the design actually solves the problem behind the request.",
-      'That mindset has shown up across a wide range of formats:',
-    ],
-    listItems: freelanceListItems,
-    closingParagraph:
-      'Freelancing pushed my flexibility and responsibility, and taught me to hold the full picture of a project — not just the screens, but the reasoning behind them.',
-  },
-] as const
-
-const skillGroups = [
-  {
-    label: 'Technology stack',
-    paragraphs: [
-      'Figma, Photoshop, Midjourney, Tilda, Webflow, Framer, HTML, Sass, React, Claude, Codex, Cursor',
-    ],
-  },
-  {
-    label: 'Hard skills',
-    paragraphs: [
-      'I work in Figma — from UX to interfaces to design systems — building solutions that stay consistent and scalable. My current focus is design systems: tokens, components, states, and the logic behind how they interact. I think not just about individual screens, but about how the system will evolve within the product. I have a solid grasp of UX — hierarchy, grids, adaptability — and aim to build interfaces where visuals and logic work together.',
-      "I also build projects in Tilda, Webflow, and Framer, handling both customization and code. I'm comfortable with HTML and CSS and have a working understanding of React, which helps me think about implementation from the design stage. From time to time I build small tools and Figma plugins to speed up workflows and explore ideas more freely.",
-      "I care about details — spacing, rhythm, the small visual decisions that don't announce themselves but shape how a product actually feels to use.",
-    ],
-  },
-  {
-    label: 'Soft skills',
-    paragraphs: [
-      'Communication with developers, managers, and clients stays straightforward and collaborative, with an emphasis on shared understanding throughout the process.',
-      "Currently working as lead designer — overseeing project execution, structuring workflows, and staying hands-on when needed. I'm also involved in shaping internal UI/UX methodology within the studio.",
-      'I approach tasks in a structured way: planning early, asking the right questions upfront, and reducing uncertainty before execution begins. Feedback is treated as a practical tool — translated into concrete changes through discussion and refinement. I work calmly and systematically, and value processes that hold up under growth and complexity.',
-    ],
-  },
-] as const
+const skillGroupSlugs = ['technologyStack', 'hardSkills', 'softSkills'] as const
 
 const vinylRecords = [
   {
@@ -125,26 +66,24 @@ const vinylRecords = [
 ] as const
 
 function VinylTable() {
+  const { t } = useTranslation('about')
   const [hoveredVinylCover, setHoveredVinylCover] = useState<string | null>(null)
 
   return (
     <>
       <div className="about-page__dark-row">
         <div className="about-page__dark-copy">
-          <span className="about-page__dark-mobile-label">Vinyl</span>
+          <span className="about-page__dark-mobile-label">{t('vinyl.label')}</span>
           <p className="about-page__paragraph about-page__paragraph--light">
-            It&rsquo;s a small collection of records that I&rsquo;m gradually building up.
-            It&rsquo;s music for different moods—ranging from calm, atmospheric tracks to more
-            energetic and rhythmic sounds.
+            {t('vinyl.paragraphs.0')}
           </p>
           <p className="about-page__paragraph about-page__paragraph--light">
-            For me, vinyl isn&rsquo;t about quantity, but about the feeling and the process:
-            choosing, listening, and revisiting records I already know.
+            {t('vinyl.paragraphs.1')}
           </p>
         </div>
 
         <div className="about-page__dark-list-col">
-          <span className="about-page__dark-mobile-label">Name</span>
+          <span className="about-page__dark-mobile-label">{t('vinyl.nameLabel')}</span>
 
           <ul className="about-page__list">
             {vinylRecords.map((record) => (
@@ -195,6 +134,7 @@ const heroImage = withBase('/about/hero.jpg')
 const heroImageMobile = withBase('/about/mobile/hero.png')
 
 export function AboutPage() {
+  const { t } = useTranslation('about')
   const skillsSectionRef = useRef<HTMLElement | null>(null)
   const [isDark, setIsDark] = useState(false)
   const [isMobile] = useState(() => window.innerWidth <= 768)
@@ -240,6 +180,25 @@ export function AboutPage() {
     }
   }, [isMobile])
 
+  const introParagraphs = t('intro.paragraphs', { returnObjects: true }) as string[]
+
+  const experience = experienceConfig.map((entry) => ({
+    ...entry,
+    company: t(`experience.${entry.slug}.name`),
+    period: t(`experience.${entry.slug}.period`),
+    paragraphs: t(`experience.${entry.slug}.paragraphs`, { returnObjects: true }) as string[],
+    listItems: entry.hasList
+      ? (t(`experience.${entry.slug}.listItems`, { returnObjects: true }) as string[])
+      : null,
+    closingParagraph: entry.hasClosing ? t(`experience.${entry.slug}.closingParagraph`) : null,
+  }))
+
+  const skillGroups = skillGroupSlugs.map((slug) => ({
+    slug,
+    label: t(`skills.${slug}.label`),
+    paragraphs: t(`skills.${slug}.paragraphs`, { returnObjects: true }) as string[],
+  }))
+
   return (
     <div className="about-page">
       <div
@@ -252,7 +211,7 @@ export function AboutPage() {
 
       <div className="about-page__hero" data-header-invert="true">
         <img
-          alt="Yan Bogdanov"
+          alt={t('hero.alt')}
           className="about-page__hero-image"
           src={isMobile ? heroImageMobile : heroImage}
         />
@@ -262,7 +221,7 @@ export function AboutPage() {
         <h1 className="about-page__heading">Yan Bogdanov</h1>
 
         <div className="about-page__row-content">
-          <p className="about-page__row-label">Personal information</p>
+          <p className="about-page__row-label">{t('intro.personalInformation')}</p>
 
           <div className="about-page__col about-page__col--spaced">
             {introParagraphs.map((paragraph) => (
@@ -281,16 +240,16 @@ export function AboutPage() {
       <section className="about-page__experience">
         <div className="about-page__experience-head">
           <div className="about-page__experience-head-meta">
-            <span>Name</span>
-            <span>Date</span>
+            <span>{t('experience.headName')}</span>
+            <span>{t('experience.headDate')}</span>
           </div>
           <div className="about-page__experience-head-content">
-            <span>Description</span>
+            <span>{t('experience.headDescription')}</span>
           </div>
         </div>
 
         {experience.map((entry) => (
-          <div key={entry.company} className="about-page__experience-entry">
+          <div key={entry.slug} className="about-page__experience-entry">
             <div className="about-page__experience-divider" />
 
             <div className="about-page__experience-row">
@@ -336,11 +295,11 @@ export function AboutPage() {
       </section>
 
       <section ref={skillsSectionRef} className="about-page__row about-page__row--skills">
-        <h2 className="about-page__heading">Skills</h2>
+        <h2 className="about-page__heading">{t('skills.heading')}</h2>
 
         <div className="about-page__skills">
           {skillGroups.map((group) => (
-            <div key={group.label} className="about-page__skill-group">
+            <div key={group.slug} className="about-page__skill-group">
               <p className="about-page__row-label">{group.label}</p>
               <div className="about-page__col about-page__col--spaced">
                 {group.paragraphs.map((paragraph) => (
@@ -353,9 +312,9 @@ export function AboutPage() {
           ))}
 
           <div className="about-page__skill-group">
-            <p className="about-page__row-label">CV</p>
+            <p className="about-page__row-label">{t('skills.cv.label')}</p>
             <a className="about-page__link" href="#">
-              Download
+              {t('skills.cv.download')}
             </a>
           </div>
         </div>
@@ -366,9 +325,9 @@ export function AboutPage() {
       <section className="about-page__dark" data-header-invert="true">
         <div className="about-page__dark-block">
           <div className="about-page__dark-head">
-            <span className="about-page__dark-head-label">Vinyl</span>
+            <span className="about-page__dark-head-label">{t('vinyl.label')}</span>
             <div className="about-page__dark-head-right">
-              <span>Name</span>
+              <span>{t('vinyl.nameLabel')}</span>
             </div>
           </div>
           <div className="about-page__dark-divider" />

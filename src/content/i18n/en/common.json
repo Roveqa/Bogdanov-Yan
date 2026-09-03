@@ -6,5 +6,11 @@
     "logo": "Bgdnv.design",
     "menu": "Menu",
     "works": "Works"
+  },
+  "footer": {
+    "rights": "All rights reserved"
+  },
+  "notFound": {
+    "backHome": "Back home →"
   }
 }

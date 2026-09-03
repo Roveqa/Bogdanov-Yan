@@ -1,1 +1,31 @@
-{}
+{
+  "common": {
+    "information": "Information",
+    "website": "Website",
+    "goal": "Goal",
+    "tasks": "Tasks",
+    "problems": "Problems",
+    "nextCase": "Next Case →",
+    "export": "Export"
+  },
+  "rennu": {
+    "description": "Rennu is a personal project — a free online generator of Japanese-inspired gradients. Atmospheric, noisy, alive. Built because nothing like it existed.",
+    "figmaPlugin": "Figma Plugin",
+    "goal": "Most gradient tools produce clean, predictable results. Rennu was built for something different — gradients that carry mood, texture and a sense of place. The goal was to create a tool that feels as considered as the output it produces.",
+    "tasks": "Design and develop a web-based gradient generator from scratch. Build a Figma plugin with the same functionality. Create a design system, component library and visual identity for the product. Launch and distribute across design communities.",
+    "problems": "No reference existed — the tool had to be imagined before it could be built. The core challenge was translating a feeling into a controllable, exportable output."
+  },
+  "ecolos": {
+    "description": "Ecolos — landing page for a water treatment company, focused on their cost audit service. Design and Tilda build from scratch, visual language developed alongside the layout — no brandbook existed. Clean and minimal: precise for an industrial niche, modern enough to stand apart.",
+    "goal": "The client needed a landing page as part of an advertising campaign that stood out in a niche where every competitor looks identical. The goal was to create a visual identity that feels as precise and reliable as the work the company delivers.",
+    "tasks": "Design a landing page from scratch. Develop concept, full layout, tablet and mobile adaptives. Transfer the final design to Tilda with custom code for forms and interactions.",
+    "problems": "No strong visual references existed in the water treatment niche. The core challenge was translating industrial precision into a modern digital product without losing the technical character of the brand."
+  },
+  "oyster": {
+    "description": "Oister — landing page for a young Russian accessories brand built around seasonal drops. Built on Tilda from a finished Figma layout, with custom CSS and JS where the platform's native blocks fell short.",
+    "designer": "Designer",
+    "goal": "The client was launching a new accessories brand and needed a landing page for the first drop — to present the product and give the brand a home online alongside its social media.",
+    "tasks": "Transfer the finished Figma layout to Tilda accurately. Develop a mobile version from scratch — no mobile design existed, adaptive layout was built independently based on the desktop.",
+    "problems": "No mobile design was provided, so all adaptive decisions had to be made independently — maintaining the visual logic of the original while making it work across screen sizes."
+  }
+}

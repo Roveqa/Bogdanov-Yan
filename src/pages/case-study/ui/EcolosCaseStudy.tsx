@@ -1,25 +1,20 @@
 import { NavLink } from 'react-router-dom'
 
+import { useTranslation } from 'react-i18next'
+
 import { withBase } from '@shared/lib/browser/asset-url'
 
 import { CaseStudyImage } from './CaseStudyImage'
 
-const stats = [
-  {
-    label: 'Goal',
-    text: 'The client needed a landing page as part of an advertising campaign that stood out in a niche where every competitor looks identical. The goal was to create a visual identity that feels as precise and reliable as the work the company delivers.',
-  },
-  {
-    label: 'Tasks',
-    text: 'Design a landing page from scratch. Develop concept, full layout, tablet and mobile adaptives. Transfer the final design to Tilda with custom code for forms and interactions.',
-  },
-  {
-    label: 'Problems',
-    text: 'No strong visual references existed in the water treatment niche. The core challenge was translating industrial precision into a modern digital product without losing the technical character of the brand.',
-  },
-] as const
-
 export function EcolosCaseStudy() {
+  const { t } = useTranslation('case-study')
+
+  const stats = [
+    { label: t('common.goal'), text: t('ecolos.goal') },
+    { label: t('common.tasks'), text: t('ecolos.tasks') },
+    { label: t('common.problems'), text: t('ecolos.problems') },
+  ]
+
   return (
     <div className="case-study">
       <div className="case-study__intro">
@@ -27,13 +22,8 @@ export function EcolosCaseStudy() {
 
         <div className="case-study__intro-panel">
           <div className="case-study__intro-block">
-            <p className="case-study__label">Information</p>
-            <p className="case-study__text">
-              Ecolos — landing page for a water treatment company, focused on their cost audit
-              service. Design and Tilda build from scratch, visual language developed alongside
-              the layout — no brandbook existed. Clean and minimal: precise for an industrial
-              niche, modern enough to stand apart.
-            </p>
+            <p className="case-study__label">{t('common.information')}</p>
+            <p className="case-study__text">{t('ecolos.description')}</p>
           </div>
 
           <div className="case-study__intro-links">
@@ -43,7 +33,7 @@ export function EcolosCaseStudy() {
               rel="noopener noreferrer"
               target="_blank"
             >
-              Website
+              {t('common.website')}
             </a>
           </div>
         </div>
@@ -167,7 +157,7 @@ export function EcolosCaseStudy() {
 
       <div className="case-study__next">
         <NavLink className="case-study__next-link" to="/works/oyster">
-          Next Case →
+          {t('common.nextCase')}
         </NavLink>
       </div>
     </div>

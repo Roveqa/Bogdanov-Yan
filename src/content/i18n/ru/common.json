@@ -6,5 +6,11 @@
     "logo": "Bgdnv.design",
     "menu": "Меню",
     "works": "Проекты"
+  },
+  "footer": {
+    "rights": "Все права защищены"
+  },
+  "notFound": {
+    "backHome": "На главную →"
   }
 }

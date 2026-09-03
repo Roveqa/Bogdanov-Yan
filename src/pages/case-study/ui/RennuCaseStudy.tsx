@@ -1,25 +1,20 @@
 import { NavLink } from 'react-router-dom'
 
+import { useTranslation } from 'react-i18next'
+
 import { withBase } from '@shared/lib/browser/asset-url'
 
 import { CaseStudyImage } from './CaseStudyImage'
 
-const stats = [
-  {
-    label: 'Goal',
-    text: 'Most gradient tools produce clean, predictable results. Rennu was built for something different — gradients that carry mood, texture and a sense of place. The goal was to create a tool that feels as considered as the output it produces.',
-  },
-  {
-    label: 'Tasks',
-    text: 'Design and develop a web-based gradient generator from scratch. Build a Figma plugin with the same functionality. Create a design system, component library and visual identity for the product. Launch and distribute across design communities.',
-  },
-  {
-    label: 'Problems',
-    text: 'No reference existed — the tool had to be imagined before it could be built. The core challenge was translating a feeling into a controllable, exportable output.',
-  },
-] as const
-
 export function RennuCaseStudy() {
+  const { t } = useTranslation('case-study')
+
+  const stats = [
+    { label: t('common.goal'), text: t('rennu.goal') },
+    { label: t('common.tasks'), text: t('rennu.tasks') },
+    { label: t('common.problems'), text: t('rennu.problems') },
+  ]
+
   return (
     <div className="case-study">
       <div className="case-study__intro">
@@ -27,12 +22,8 @@ export function RennuCaseStudy() {
 
         <div className="case-study__intro-panel">
           <div className="case-study__intro-block">
-            <p className="case-study__label">Information</p>
-            <p className="case-study__text">
-              {
-                'Rennu is a personal project — a free online generator of Japanese-inspired gradients. Atmospheric, noisy, alive. Built because nothing like it existed.'
-              }
-            </p>
+            <p className="case-study__label">{t('common.information')}</p>
+            <p className="case-study__text">{t('rennu.description')}</p>
           </div>
 
           <div className="case-study__intro-links">
@@ -42,7 +33,7 @@ export function RennuCaseStudy() {
               rel="noopener noreferrer"
               target="_blank"
             >
-              Website
+              {t('common.website')}
             </a>
             <a
               className="case-study__link"
@@ -50,7 +41,7 @@ export function RennuCaseStudy() {
               rel="noopener noreferrer"
               target="_blank"
             >
-              Figma Plugin
+              {t('rennu.figmaPlugin')}
             </a>
           </div>
         </div>
@@ -123,7 +114,7 @@ export function RennuCaseStudy() {
             className="case-study__section-photo"
             src={withBase('/case-studies/rennu/images/texture-green.png')}
           />
-          <CaseStudyImage alt="Export" className="case-study__component case-study__component--button-export" src={withBase('/case-studies/rennu/images/button-export.svg')} />
+          <CaseStudyImage alt={t('common.export')} className="case-study__component case-study__component--button-export" src={withBase('/case-studies/rennu/images/button-export.svg')} />
         </div>
 
         <div className="case-study__icons">
@@ -159,7 +150,7 @@ export function RennuCaseStudy() {
 
       <div className="case-study__next">
         <NavLink className="case-study__next-link" to="/works/ecolos">
-          Next Case →
+          {t('common.nextCase')}
         </NavLink>
       </div>
     </div>

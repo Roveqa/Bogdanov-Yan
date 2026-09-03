@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 
 import type { CSSProperties, ElementType } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import type { Project } from '@entities/project/model/project.types'
 
@@ -12,6 +13,7 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project }: ProjectCardProps) {
+  const { t } = useTranslation('works')
   const [isMobile] = useState(() => window.innerWidth <= 768)
   const [isImageLoaded, setIsImageLoaded] = useState(false)
 
@@ -88,7 +90,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
         {soon ? (
           <div className="project-card__hover-overlay">
             <span className="project-card__site-link project-card__site-link--plain">
-              Soon
+              {t('common.soon')}
             </span>
           </div>
         ) : null}

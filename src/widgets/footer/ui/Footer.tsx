@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next'
+
 import './Footer.sass'
 
 interface FooterProps {
@@ -5,9 +7,11 @@ interface FooterProps {
 }
 
 export function Footer({ variant = 'light' }: FooterProps) {
+  const { t } = useTranslation('common')
+
   return (
     <footer className={variant === 'dark' ? 'footer footer--dark' : 'footer'}>
-      <p className="footer__text">All rights reserved</p>
+      <p className="footer__text">{t('footer.rights')}</p>
     </footer>
   )
 }

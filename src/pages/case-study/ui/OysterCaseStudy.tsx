@@ -1,25 +1,20 @@
 import { NavLink } from 'react-router-dom'
 
+import { useTranslation } from 'react-i18next'
+
 import { withBase } from '@shared/lib/browser/asset-url'
 
 import { CaseStudyImage } from './CaseStudyImage'
 
-const stats = [
-  {
-    label: 'Goal',
-    text: 'The client was launching a new accessories brand and needed a landing page for the first drop — to present the product and give the brand a home online alongside its social media.',
-  },
-  {
-    label: 'Tasks',
-    text: 'Transfer the finished Figma layout to Tilda accurately. Develop a mobile version from scratch — no mobile design existed, adaptive layout was built independently based on the desktop.',
-  },
-  {
-    label: 'Problems',
-    text: 'No mobile design was provided, so all adaptive decisions had to be made independently — maintaining the visual logic of the original while making it work across screen sizes.',
-  },
-] as const
-
 export function OysterCaseStudy() {
+  const { t } = useTranslation('case-study')
+
+  const stats = [
+    { label: t('common.goal'), text: t('oyster.goal') },
+    { label: t('common.tasks'), text: t('oyster.tasks') },
+    { label: t('common.problems'), text: t('oyster.problems') },
+  ]
+
   return (
     <div className="case-study">
       <div className="case-study__intro">
@@ -27,17 +22,13 @@ export function OysterCaseStudy() {
 
         <div className="case-study__intro-panel">
           <div className="case-study__intro-block">
-            <p className="case-study__label">Information</p>
-            <p className="case-study__text">
-              Oister — landing page for a young Russian accessories brand built around seasonal
-              drops. Built on Tilda from a finished Figma layout, with custom CSS and JS where the
-              platform&apos;s native blocks fell short.
-            </p>
+            <p className="case-study__label">{t('common.information')}</p>
+            <p className="case-study__text">{t('oyster.description')}</p>
           </div>
 
           <div className="case-study__intro-links">
-            <span className="case-study__link">Website</span>
-            <span className="case-study__link">Designer</span>
+            <span className="case-study__link">{t('common.website')}</span>
+            <span className="case-study__link">{t('oyster.designer')}</span>
           </div>
         </div>
       </div>
@@ -61,7 +52,7 @@ export function OysterCaseStudy() {
 
       <div className="case-study__next">
         <NavLink className="case-study__next-link" to="/works/rennu">
-          Next Case →
+          {t('common.nextCase')}
         </NavLink>
       </div>
     </div>
