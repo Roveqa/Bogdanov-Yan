@@ -16,6 +16,10 @@ const skillGroupSlugs = ['technologyStack', 'hardSkills', 'softSkills'] as const
 
 const vinylRecords = [
   {
+    title: 'AL-90 — Murmansk-60',
+    cover: withBase('/about/vinyl/al-90-murmansk-60.jpg'),
+  },
+  {
     title: 'Joji — Piss in the Wind',
     cover: withBase('/about/vinyl/joji-piss-in-the-wind.jpg'),
   },
