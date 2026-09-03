@@ -115,10 +115,18 @@ function CarouselMarkup({
       <div
         className={
           isLoading
-            ? `home-page__skeleton home-page__skeleton--${variant}`
-            : `home-page__skeleton home-page__skeleton--${variant} home-page__skeleton--hidden`
+            ? `home-page__skeleton-row home-page__skeleton-row--${variant}`
+            : `home-page__skeleton-row home-page__skeleton-row--${variant} home-page__skeleton-row--hidden`
         }
-      />
+      >
+        <div
+          className={`home-page__skeleton-card home-page__skeleton-card--${variant} home-page__skeleton-card--dim`}
+        />
+        <div className={`home-page__skeleton-card home-page__skeleton-card--${variant}`} />
+        <div
+          className={`home-page__skeleton-card home-page__skeleton-card--${variant} home-page__skeleton-card--dim`}
+        />
+      </div>
 
       <canvas className="home-page__canvas" ref={canvasRef} />
     </section>
