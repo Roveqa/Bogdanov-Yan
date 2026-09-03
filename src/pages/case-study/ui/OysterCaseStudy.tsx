@@ -2,6 +2,8 @@ import { NavLink } from 'react-router-dom'
 
 import { withBase } from '@shared/lib/browser/asset-url'
 
+import { CaseStudyImage } from './CaseStudyImage'
+
 const stats = [
   {
     label: 'Goal',
@@ -41,10 +43,9 @@ export function OysterCaseStudy() {
       </div>
 
       <div className="case-study__body">
-        <img
+        <CaseStudyImage
           alt=""
           className="case-study__section-image"
-          loading="lazy"
           src={withBase('/case-studies/oyster/images/hero.png')}
         />
 

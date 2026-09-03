@@ -2,6 +2,8 @@ import { NavLink } from 'react-router-dom'
 
 import { withBase } from '@shared/lib/browser/asset-url'
 
+import { CaseStudyImage } from './CaseStudyImage'
+
 const stats = [
   {
     label: 'Goal',
@@ -55,7 +57,7 @@ export function RennuCaseStudy() {
       </div>
 
       <div className="case-study__body">
-        <img alt="" className="case-study__section-image" loading="lazy" src={withBase('/case-studies/rennu/images/hero.png')} />
+        <CaseStudyImage alt="" className="case-study__section-image" src={withBase('/case-studies/rennu/images/hero.png')} />
 
         <div className="case-study__stats">
           {stats.map((stat) => (
@@ -67,43 +69,40 @@ export function RennuCaseStudy() {
         </div>
 
         <div className="case-study__section">
-          <img
+          <CaseStudyImage
             alt=""
             className="case-study__section-photo"
-            loading="lazy"
             src={withBase('/case-studies/rennu/images/texture-pink.png')}
           />
-          <img alt="Rennu" className="case-study__logo" src={withBase('/case-studies/rennu/images/logo-rennu.svg')} />
+          <CaseStudyImage alt="Rennu" className="case-study__logo" src={withBase('/case-studies/rennu/images/logo-rennu.svg')} />
         </div>
 
-        <img
+        <CaseStudyImage
           alt=""
           className="case-study__section-image case-study__section-image--crop"
-          loading="lazy"
           src={withBase('/case-studies/rennu/images/laptop-export.jpg')}
         />
-        <img
+        <CaseStudyImage
           alt=""
           className="case-study__section-image"
-          loading="lazy"
           src={withBase('/case-studies/rennu/images/phones-group.png')}
         />
 
         <div className="case-study__split">
           <div className="case-study__split-panel">
-            <img alt="" className="case-study__split-photo" loading="lazy" src={withBase('/case-studies/rennu/images/panel-phone-1.png')} />
+            <CaseStudyImage alt="" className="case-study__split-photo" src={withBase('/case-studies/rennu/images/panel-phone-1.png')} />
           </div>
           <div className="case-study__split-panel">
-            <img alt="" className="case-study__split-photo" loading="lazy" src={withBase('/case-studies/rennu/images/panel-select.png')} />
+            <CaseStudyImage alt="" className="case-study__split-photo" src={withBase('/case-studies/rennu/images/panel-select.png')} />
           </div>
         </div>
 
         <div className="case-study__split case-study__split--reverse-mobile">
           <div className="case-study__split-panel">
-            <img alt="" className="case-study__split-photo" loading="lazy" src={withBase('/case-studies/rennu/images/panel-slider.png')} />
+            <CaseStudyImage alt="" className="case-study__split-photo" src={withBase('/case-studies/rennu/images/panel-slider.png')} />
           </div>
           <div className="case-study__split-panel">
-            <img alt="" className="case-study__split-photo" loading="lazy" src={withBase('/case-studies/rennu/images/panel-phone-2.png')} />
+            <CaseStudyImage alt="" className="case-study__split-photo" src={withBase('/case-studies/rennu/images/panel-phone-2.png')} />
           </div>
         </div>
 
@@ -119,13 +118,12 @@ export function RennuCaseStudy() {
         </div>
 
         <div className="case-study__section case-study__section--export" data-header-invert="true">
-          <img
+          <CaseStudyImage
             alt=""
             className="case-study__section-photo"
-            loading="lazy"
             src={withBase('/case-studies/rennu/images/texture-green.png')}
           />
-          <img alt="Export" className="case-study__component case-study__component--button-export" src={withBase('/case-studies/rennu/images/button-export.svg')} />
+          <CaseStudyImage alt="Export" className="case-study__component case-study__component--button-export" src={withBase('/case-studies/rennu/images/button-export.svg')} />
         </div>
 
         <div className="case-study__icons">
@@ -140,22 +138,21 @@ export function RennuCaseStudy() {
         </div>
 
         <div className="case-study__tagline" data-header-invert="true">
-          <img alt="" className="case-study__section-photo" loading="lazy" src={withBase('/case-studies/rennu/images/tagline-monitor.png')} />
+          <CaseStudyImage alt="" className="case-study__section-photo" src={withBase('/case-studies/rennu/images/tagline-monitor.png')} />
         </div>
 
         <div className="case-study__split">
           <div className="case-study__split-panel">
-            <img alt="" className="case-study__split-photo" loading="lazy" src={withBase('/case-studies/rennu/images/panel-apply.png')} />
+            <CaseStudyImage alt="" className="case-study__split-photo" src={withBase('/case-studies/rennu/images/panel-apply.png')} />
           </div>
           <div className="case-study__split-panel">
-            <img alt="" className="case-study__split-photo" loading="lazy" src={withBase('/case-studies/rennu/images/panel-frame.png')} />
+            <CaseStudyImage alt="" className="case-study__split-photo" src={withBase('/case-studies/rennu/images/panel-frame.png')} />
           </div>
         </div>
 
-        <img
+        <CaseStudyImage
           alt=""
           className="case-study__section-image"
-          loading="lazy"
           src={withBase('/case-studies/rennu/images/closing-laptop.png')}
         />
       </div>
