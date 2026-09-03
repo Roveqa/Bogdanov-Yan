@@ -251,9 +251,7 @@ export function Header() {
                 </div>
 
                 <div className="header__contact-column">
-                  <a className="header__contact-link" href={`mailto:${contactEmail}`}>
-                    {contactEmail}
-                  </a>
+                  <span className="header__contact-link">{contactEmail}</span>
                 </div>
 
                 <div className="header__contact-column">
@@ -388,9 +386,7 @@ export function Header() {
                 {link.label}
               </a>
             ))}
-            <a className="header__mobile-contact-link" href={`mailto:${contactEmail}`}>
-              {contactEmail}
-            </a>
+            <span className="header__mobile-contact-link">{contactEmail}</span>
           </div>
         </div>
       </div>
