@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import { useTranslation } from 'react-i18next'
 
+import { useLocale } from '@shared/hooks'
 import { withBase } from '@shared/lib/browser/asset-url'
 import { Footer } from '@widgets/footer'
 
@@ -139,9 +140,11 @@ const heroImageMobile = withBase('/about/mobile/hero.png')
 
 export function AboutPage() {
   const { t } = useTranslation('about')
+  const { currentLocale } = useLocale()
   const skillsSectionRef = useRef<HTMLElement | null>(null)
   const [isDark, setIsDark] = useState(false)
   const [isMobile] = useState(() => window.innerWidth <= 768)
+  const cvHref = withBase(`/about/cv/yan-bogdanov-cv-${currentLocale}.pdf`)
 
   useEffect(() => {
     const skillsSection = skillsSectionRef.current
@@ -317,7 +320,7 @@ export function AboutPage() {
 
           <div className="about-page__skill-group">
             <p className="about-page__row-label">{t('skills.cv.label')}</p>
-            <a className="about-page__link" href="#">
+            <a className="about-page__link" download href={cvHref}>
               {t('skills.cv.download')}
             </a>
           </div>
