@@ -8,6 +8,7 @@ import {
   isSupportedLocale,
   supportedLocales,
 } from '@shared/constants/locales'
+import { localeStorageKey } from '@shared/lib/i18n/locale-detector'
 
 export function useLocale() {
   const { i18n } = useTranslation()
@@ -20,6 +21,7 @@ export function useLocale() {
   const setLocale = useCallback(
     (locale: AppLocale) => {
       void i18n.changeLanguage(locale)
+      window.localStorage.setItem(localeStorageKey, locale)
     },
     [i18n],
   )
