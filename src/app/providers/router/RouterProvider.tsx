@@ -8,9 +8,11 @@ import { HomePage } from '@pages/home'
 import { NotFoundPage } from '@pages/not-found'
 import { WorksPage } from '@pages/works'
 
+const basename = import.meta.env.BASE_URL.replace(/\/$/, '') || undefined
+
 export function AppRouter() {
   return (
-    <BrowserRouter basename="/Bogdanov-Yan">
+    <BrowserRouter basename={basename}>
       <Routes>
         <Route element={<BaseLayout />}>
           <Route path={routePaths.home} element={<HomePage />} />
