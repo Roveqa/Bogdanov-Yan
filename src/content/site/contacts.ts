@@ -17,7 +17,7 @@ export const contactLinks = [
   },
 ] as const
 
-export const contactEmail = 'bogdanovyanwork@gmail.com'
+export const contactEmail = 'hello@bogdanovyan.ru'
 
 export const contactTimezone = {
   label: '(GMT+7)',
